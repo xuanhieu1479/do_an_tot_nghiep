@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use Hash;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,7 @@ class TaiKhoan extends Model
         return (TaiKhoan::where('email', '=', $email)->exists());
     }
 
-    public function taoMoi($email, $matkhau) {
+    public function taoMoi($email, $matkhau) {        
         if ($this->daTonTai($email)) {
             return response()->json([
                 'message' => 'Tài khoản này đã tồn tại',
@@ -27,7 +28,7 @@ class TaiKhoan extends Model
         } else {
             TaiKhoan::create([
                 'email' => $email,
-                'matkhau' => $matkhau,
+                'matkhau' => Hash::make($matkhau),
             ]);
             return response()->json([
                 'message' => 'Tạo tài khoản thành công',
