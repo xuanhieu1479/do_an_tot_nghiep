@@ -16,7 +16,7 @@ class CreateTaiKhoanTable extends Migration
         Schema::create('taikhoan', function (Blueprint $table) {
             $table->string('email');
             $table->string('matkhau');
-            $table->integer('maloaitk');
+            $table->integer('maloaitk')->default(0);
             $table->string('sdt')->nullable();
             $table->primary('email');
             $table->foreign('maloaitk')->references('maloaitk')->on('loaitaikhoan')->onDelete('cascade');

@@ -1,38 +1,26 @@
 <?php
 
 namespace App;
-use Hash;
 
-use Illuminate\Database\Eloquent\Model;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class TaiKhoan extends Model
+class TaiKhoan extends Authenticatable
 {
+    use Notifiable, HasApiTokens;
     protected $table = 'taikhoan';
     protected $primaryKey = 'email';
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $attributes = [
-        'maloaitk' => 0,
-    ];
     protected $fillable = ['email', 'matkhau'];
+
+    public function getAuthPassword()
+    {
+        return $this->matkhau;
+    }
 
     public function daTonTai($email) {
         return (TaiKhoan::where('email', '=', $email)->exists());
-    }
-
-    public function taoMoi($email, $matkhau) {        
-        if ($this->daTonTai($email)) {
-            return response()->json([
-                'message' => 'Tài khoản này đã tồn tại',
-            ], 400, [], JSON_UNESCAPED_UNICODE);
-        } else {
-            TaiKhoan::create([
-                'email' => $email,
-                'matkhau' => Hash::make($matkhau),
-            ]);
-            return response()->json([
-                'message' => 'Tạo tài khoản thành công',
-            ], 201, [], JSON_UNESCAPED_UNICODE);
-        }
     }
 }

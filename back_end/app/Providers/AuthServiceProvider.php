@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -25,6 +26,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        \Illuminate\Support\Facades\Auth::provider('taikhoanprovider', function($app, array $config) {
+            return new TaiKhoanProvider($app['hash'], $config['model']);
+        });
+
+        Passport::routes();
     }
 }

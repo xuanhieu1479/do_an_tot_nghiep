@@ -38,13 +38,13 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'taikhoan',
         ],
 
         'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
+            'driver' => 'passport',
+            'provider' => 'taikhoan',
+            'hash' => true,
         ],
     ],
 
@@ -69,6 +69,12 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'taikhoan' => [
+            'driver' => 'taikhoanprovider',
+            'model' => App\TaiKhoan::class,
+            'table' => 'taikhoan',
         ],
 
         // 'users' => [
