@@ -73,4 +73,17 @@ class TaiKhoanController extends Controller
         }
 
     }
+
+    public function dangXuat(Request $request) {
+        $request->user()->token()->revoke();
+
+        return response()->json([
+            'message' => 'Đăng xuất thành công',
+        ], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function getTaiKhoan(Request $request)
+    {
+        return response()->json($request->user());
+    }
 }

@@ -17,9 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('dangky', 'TaiKhoanController@dangKy');
+
+Route::post('dangnhap', 'TaiKhoanController@dangnhap');
+
 Route::group([
-    'prefix' => 'auth'
+    'middleware' => 'auth:api'
 ], function() {
-    Route::post('dangky', 'TaiKhoanController@dangKy');
-    Route::post('dangnhap', 'TaiKhoanController@dangnhap');
+    Route::get('dangxuat', 'TaiKhoanController@dangXuat');
+    Route::get('thongtintaikhoan', 'TaiKhoanController@getTaiKhoan');
 });

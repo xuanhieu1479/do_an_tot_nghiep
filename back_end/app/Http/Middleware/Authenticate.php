@@ -16,6 +16,8 @@ class Authenticate extends Middleware
     {
         if (! $request->expectsJson()) {
             return route('login');
+            //mỗi khi vào trang nào cần đăng nhập chưa đăng nhập thì redirect tới trang đăng nhập bên front end
+            //khi nào trang đăng nhập front end làm xong + push lên heroku r thì update sau
         }
     }
 }
