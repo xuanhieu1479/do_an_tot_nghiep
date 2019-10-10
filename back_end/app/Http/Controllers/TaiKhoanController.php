@@ -3,13 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\TaiKhoan;
 use Hash;
+use App\Mail\ResetMatKhau;
+use App\TaiKhoan;
 
 class TaiKhoanController extends Controller
 {
+
+    public function taoToken(Request $request, $msg) {
+
+        $user = $request->user();
+        $tokenResult = $user->createToken('Token đăng nhập');
+        $token = $tokenResult->token;
+        $token->save();
+        
+        return response()->json([
+            'message' => $msg,
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
+        ], 200, [], JSON_UNESCAPED_UNICODE);
+
+    }
     
     public function dangKy(Request $request) {
 
@@ -32,9 +52,8 @@ class TaiKhoanController extends Controller
         }
 
         $taikhoan->save();
-        return response()->json([
-            'message' => 'Tạo tài khoản thành công',
-        ], 201, [], JSON_UNESCAPED_UNICODE);
+        Auth::attempt(['email' => $email, 'matkhau' => $matkhau]);
+        return $this->taoToken($request, 'Tạo tài khoản thành công');
 
     }
 
@@ -57,33 +76,41 @@ class TaiKhoanController extends Controller
                 'message' => 'Mật khẩu không chính xác',
             ], 401, [], JSON_UNESCAPED_UNICODE);
         } else {
-            $user = $request->user();
-            $tokenResult = $user->createToken('Token đăng nhập');
-            $token = $tokenResult->token;
-            $token->save();
-            
-            return response()->json([
-                'message' => 'Đăng nhập thành công',
-                'access_token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'expires_at' => Carbon::parse(
-                    $tokenResult->token->expires_at
-                )->toDateTimeString()
-            ], 200, [], JSON_UNESCAPED_UNICODE);
+            return $this->taoToken($request, 'Đăng nhập thành công');
         }
 
     }
 
     public function dangXuat(Request $request) {
+
         $request->user()->token()->revoke();
 
         return response()->json([
             'message' => 'Đăng xuất thành công',
         ], 200, [], JSON_UNESCAPED_UNICODE);
+
     }
 
     public function getTaiKhoan(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function resetMatKhau(Request $request) {      
+
+        $email = $request->input('email');
+        $taikhoan = new TaiKhoan();
+        if (!$taikhoan->daTonTai($email)) {
+            return response()->json([
+                'message' => 'Email này không tồn tại',
+            ], 401, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            $matKhauMoi = $taikhoan->resetMatKhau($email);
+            Mail::to($email)->send(new ResetMatKhau($matKhauMoi));
+            return response()->json([
+                'message' => 'Gửi mail thành công',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        }
+
     }
 }

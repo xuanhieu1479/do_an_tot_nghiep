@@ -27,3 +27,5 @@ Route::group([
     Route::get('dangxuat', 'TaiKhoanController@dangXuat');
     Route::get('thongtintaikhoan', 'TaiKhoanController@getTaiKhoan');
 });
+
+Route::post('quenmatkhau', 'TaiKhoanController@resetMatKhau');
