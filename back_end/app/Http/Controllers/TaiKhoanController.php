@@ -58,7 +58,6 @@ class TaiKhoanController extends Controller
     }
 
     public function dangNhap(Request $request) {
-
         $email = $request->input('email');
         $matkhau = $request->input('matkhau');
 
