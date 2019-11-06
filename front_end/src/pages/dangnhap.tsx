@@ -36,7 +36,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
             email: this.state.email,
             matkhau: this.state.password,
         }
-        callApi('Http://Homestead.test/api/dangnhap', "POST", loginInfo).then(
+        callApi(process.env.REACT_APP_DOMAIN + 'api/dangnhap', "POST", loginInfo).then(
             response => {
                 const { statusCode, data } = response;
                 if (statusCode === 200) {
