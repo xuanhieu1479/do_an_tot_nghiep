@@ -58,7 +58,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
-                
+                {process.env.NODE_ENV}
                 <Form onSubmit={this.doLogin} style={{width: 540}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
