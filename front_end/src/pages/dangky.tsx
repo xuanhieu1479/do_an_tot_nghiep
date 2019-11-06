@@ -86,7 +86,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                 </Form>
 
                 <Modal show={this.state.show}>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                     <Modal.Title>Đăng ký thành công</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>Bắt đầu quản lý thời gian một cách hiệu quả hơn.</Modal.Body>
