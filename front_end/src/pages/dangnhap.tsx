@@ -2,6 +2,7 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Alert } from "react-bootstrap";
 import callApi from "../utils/apiCaller";
+import { Redirect } from "react-router";
 
 interface LoginScreenState {
     email: string;
@@ -20,7 +21,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
 
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-        this.doLogin = this.doLogin.bind(this);
+        this.doLogin = this.doLogin.bind(this);        
     }
 
     onChangeEmail(event: any) {
@@ -41,7 +42,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                 const { statusCode, data } = response;
                 if (statusCode === 200) {
                     localStorage.setItem('access_token', data.access_token);
-                    this.props.history.push("./home");                    
+                    this.props.history.push("./home");
                 } else {
                     this.setState({errorMessage: data.message});
                 }                
@@ -50,6 +51,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
     }
 
     render(): React.ReactNode {
+        if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
         let isHidden = this.state.errorMessage ? false : true;
         return (
             <div style={{

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Alert, Modal } from "react-bootstrap";
 import callApi from "../utils/apiCaller";
+import { Redirect } from "react-router";
 
 interface LoginScreenState {
     email: string;
@@ -57,6 +58,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
     }
 
     render(): React.ReactNode {
+        if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
         let isHidden = this.state.errorMessage ? false : true;
         return (
             <div style={{
