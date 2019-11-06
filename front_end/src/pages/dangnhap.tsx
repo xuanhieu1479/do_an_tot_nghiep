@@ -31,7 +31,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
         this.setState({password: event.target.value});
     }
 
-    async doLogin() {
+    doLogin() {
         let loginInfo = {
             email: this.state.email,
             matkhau: this.state.password,
