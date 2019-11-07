@@ -58,7 +58,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
     }
 
     render(): React.ReactNode {
-        if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
+        if(localStorage.getItem('access_token') && this.state.show === false) return (<Redirect to="/home" />);
         let isHidden = this.state.errorMessage ? false : true;
         return (
             <div style={{
