@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "react-bootstrap";
 import { Redirect } from "react-router";
 import SideBar from "../components/sidebar/sidebar";
 import NavBar from "../components/navbar/navbar";
+import TaskDeck from "../components/task_section/task_deck";
 
 export default class PageSchedule extends React.Component<any, any> {
 
@@ -14,9 +14,7 @@ export default class PageSchedule extends React.Component<any, any> {
                 <SideBar 
                     mainContent=
                     {
-                        <Button variant="primary">
-                            Schedule
-                        </Button>
+                        <TaskDeck />
                     }
                     activeTab="#schedule"
                     transitions={false}

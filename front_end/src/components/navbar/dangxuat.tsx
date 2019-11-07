@@ -15,11 +15,9 @@ export default class ButtonDangXuat extends React.Component<ButtonDangXuatProps,
 
     render(): React.ReactNode {
         return (
-            <div>
-                <Link to='/'>
-                    <Button variant="secondary" hidden={!this.props.isHidden} onClick={this.clearAccessToken}>Đăng xuất</Button>
-                </Link>   
-            </div>
+            <Link to='/'>
+                <Button variant="secondary" hidden={!this.props.isHidden} onClick={this.clearAccessToken}>Đăng xuất</Button>
+            </Link>
         );
     }
 }

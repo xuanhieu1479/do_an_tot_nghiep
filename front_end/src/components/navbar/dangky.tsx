@@ -11,11 +11,9 @@ export default class ButtonDangKy extends React.Component<ButtonDangKyProps, any
 
     render(): React.ReactNode {
         return (
-            <div>
-                <Link to='/dangky'>
-                    <Button variant="success" hidden={this.props.isHidden}>Đăng ký</Button>
-                </Link>                
-            </div>
+            <Link to='/dangky'>
+                <Button variant="success" hidden={this.props.isHidden}>Đăng ký</Button>
+            </Link>
         );
     }
 }

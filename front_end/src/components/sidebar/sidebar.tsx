@@ -42,10 +42,14 @@ export default class SideBar extends React.Component<SideBarProps, any> {
         this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
     }
 
-    render() {
+    render(): React.ReactNode {
         const sideBarCustomStyle = {
             root: {
                 'margin-top': '56px',
+            },
+            content: {
+                'margin-top': '40px',
+                'margin-left': '40px',
             }
         }
 
