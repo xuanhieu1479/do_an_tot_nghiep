@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { Redirect } from "react-router";
 import SideBar from "../components/sidebar/sidebar";
 
-export default class PageHome extends React.Component<any, any> {
+export default class PageCalendar extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
 
@@ -23,10 +23,11 @@ export default class PageHome extends React.Component<any, any> {
                     mainContent=
                     {
                         <Button variant="primary" onClick={this.clearAccessToken}>
-                            Home
+                            Calendar
                         </Button>
                     }
-                    activeTab="#home"
+                    activeTab="#calendar"
+                    transitions={false}
                 />                
             </div>
         );
