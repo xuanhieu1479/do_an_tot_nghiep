@@ -43,10 +43,15 @@ export default class SideBar extends React.Component<SideBarProps, any> {
     }
 
     render() {
-        return (
+        const sideBarCustomStyle = {
+            root: {
+                'margin-top': '56px',
+            }
+        }
+
+        return (            
             <Sidebar
-                sidebar=
-                {
+                sidebar= {
                     <ListGroup defaultActiveKey={this.props.activeTab}>
                         <ListGroup.Item action href="#home">
                             Task
@@ -63,6 +68,7 @@ export default class SideBar extends React.Component<SideBarProps, any> {
                 docked={this.state.sidebarDocked}
                 onSetOpen={this.onSetSidebarOpen}
                 transitions={this.props.transitions}
+                styles={sideBarCustomStyle}
             >
                 <b>{this.props.mainContent}</b>
             </Sidebar>

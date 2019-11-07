@@ -3,12 +3,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-export default class ButtonDangNhap extends React.Component {
+interface ButtonDangNhapProps {
+    isHidden: boolean;
+}
+
+export default class ButtonDangNhap extends React.Component<ButtonDangNhapProps, any> {
+
     render(): React.ReactNode {
         return (
             <div>
                 <Link to='/dangnhap'>
-                    <Button variant="success">Đăng nhập</Button>
+                    <Button variant="primary" hidden={this.props.isHidden}>Đăng nhập</Button>
                 </Link>   
             </div>
         );

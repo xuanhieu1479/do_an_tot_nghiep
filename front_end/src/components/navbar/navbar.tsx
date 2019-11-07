@@ -3,8 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, NavDropdown,  } from "react-bootstrap";
 import ButtonDangKy from "./dangky";
 import ButtonDangNhap from "./dangnhap";
+import ButtonDangXuat from "./dangxuat";
 
 export default class NavBar extends React.Component {
+    isLoggedIn = (localStorage.getItem('access_token')) ? true : false;
+
     render(): React.ReactNode {
         return (
             <div>
@@ -24,8 +27,9 @@ export default class NavBar extends React.Component {
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
-                    <ButtonDangNhap />   
-                    <ButtonDangKy />            
+                    <ButtonDangNhap isHidden={this.isLoggedIn} />   
+                    <ButtonDangKy isHidden={this.isLoggedIn} />
+                    <ButtonDangXuat isHidden={this.isLoggedIn} />            
                 </Navbar>                
             </div>
         );
