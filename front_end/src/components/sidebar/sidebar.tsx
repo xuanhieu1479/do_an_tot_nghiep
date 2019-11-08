@@ -48,7 +48,7 @@ export default class SideBar extends React.Component<SideBarProps, any> {
                 'margin-top': '56px',
             },
             content: {
-                'margin-top': '40px',
+                'margin-top': '20px',
                 'margin-left': '40px',
             }
         }

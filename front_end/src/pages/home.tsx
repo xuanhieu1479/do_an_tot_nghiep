@@ -3,6 +3,7 @@ import { Redirect } from "react-router";
 import SideBar from "../components/sidebar/sidebar";
 import NavBar from "../components/navbar/navbar";
 import TaskDeck from "../components/task_section/task_deck";
+import ButtonAddkTask from "../components/task_section/add_task";
 
 export default class PageHome extends React.Component<any, any> {
 
@@ -14,7 +15,10 @@ export default class PageHome extends React.Component<any, any> {
                 <SideBar 
                     mainContent=
                     {
-                        <TaskDeck />
+                        <div style={{height: '100%'}}>
+                            <div style={{marginBottom: 20}}><ButtonAddkTask /></div>
+                            <TaskDeck />                            
+                        </div>
                     }
                     activeTab="#home"
                 />                

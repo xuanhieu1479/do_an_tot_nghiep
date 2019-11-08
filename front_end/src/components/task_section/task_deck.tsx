@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardDeck, ListGroup  } from "react-bootstrap";
+import { Card, CardDeck, ListGroup } from "react-bootstrap";
 import TaskItem from "./task_item";
 import Task from "../../models/task";
 import dummyTask from "../../dummy_data/task.json";
@@ -18,48 +18,36 @@ export default class TaskDeck extends React.Component<any, TaskDeckState> {
 
     render(): React.ReactNode {
         return (
-            <CardDeck style={{height: "100%", width: "100%"}}>
-                <Card style={{height: "90%"}}>
+            <CardDeck style={{height: "90%", width: "100%"}}>
+                <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
-                    <Card.Title>Chưa hoàn thành</Card.Title>
+                    <Card.Title>Quá thời gian</Card.Title>
                         <ListGroup>
-                            {this.state.taskList.map(task => {
-                                return (
-                                    <TaskItem task={task} />
-                                );
-                            })}
+                            A
                         </ListGroup>
                     </Card.Body>
-                    <Card.Footer>
-                    <small className="text-muted">Last updated 3 mins ago</small>
-                    </Card.Footer>
                 </Card>
-                <Card style={{height: "90%"}}>
+                <Card style={{height: "100%"}}>
                     <Card.Body>
                     <Card.Title>Hôm nay</Card.Title>
-                    B
+                        {this.state.taskList.map(task => {
+                            return (
+                                <TaskItem task={task} />
+                            );
+                        })}
                     </Card.Body>
-                    <Card.Footer>
-                    <small className="text-muted">Last updated 3 mins ago</small>
-                    </Card.Footer>
                 </Card>
-                <Card style={{height: "90%"}}>
+                <Card style={{height: "100%"}}>
                     <Card.Body>
                     <Card.Title>Ngày mai</Card.Title>
-                    C
+                        C
                     </Card.Body>
-                    <Card.Footer>
-                    <small className="text-muted">Last updated 3 mins ago</small>
-                    </Card.Footer>
                 </Card>
-                <Card style={{height: "90%"}}>
+                <Card style={{height: "100%"}}>
                     <Card.Body>
                     <Card.Title>Các task khác</Card.Title>
-                    D
+                        D
                     </Card.Body>
-                    <Card.Footer>
-                    <small className="text-muted">Last updated 3 mins ago</small>
-                    </Card.Footer>
                 </Card>
             </CardDeck>
         );
