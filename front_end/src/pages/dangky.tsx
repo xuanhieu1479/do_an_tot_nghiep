@@ -68,6 +68,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                 justifyContent: 'center',
             }}>
                 <Form style={{width: 540}}>
+                    <h1 style={{marginBottom: 50, textAlign: 'center'}}>Đăng ký</h1>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" placeholder="Nhập email" value={this.state.email} onChange={this.onChangeEmail} />
