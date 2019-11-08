@@ -1,0 +1,48 @@
+{
+    "tasks": [
+        {
+            "makehoach": "A01",
+            "email": "asdasd@gmail.com",
+            "tenkehoach": "Giặt đồ",
+            "thoigian": "8:00",
+            "ghichu": "Đây là cái ghi chú thứ 1",
+            "mauutien": 0,
+            "maloai": 0,
+            "cothongbao": 0,
+            "dahoanthanh": false
+        },
+        {
+            "makehoach": "B01",
+            "email": "asdasd@gmail.com",
+            "tenkehoach": "Đi chợ",
+            "thoigian": "12:00",
+            "ghichu": "Đây là cái ghi chú thứ 2",
+            "mauutien": 0,
+            "maloai": 0,
+            "cothongbao": 0,
+            "dahoanthanh": true
+        },
+        {
+            "makehoach": "C01",
+            "email": "asdasd@gmail.com",
+            "tenkehoach": "Nấu ăn",
+            "thoigian": "13:00",
+            "ghichu": "Đây là cái ghi chú thứ 3",
+            "mauutien": 0,
+            "maloai": 0,
+            "cothongbao": 0,
+            "dahoanthanh": false
+        },
+        {
+            "makehoach": "D01",
+            "email": "asdasd@gmail.com",
+            "tenkehoach": "Chăm con",
+            "thoigian": "18:00",
+            "ghichu": "Đây là cái ghi chú thứ 4",
+            "mauutien": 0,
+            "maloai": 0,
+            "cothongbao": 0,
+            "dahoanthanh": true
+        }
+    ]
+}

@@ -22,7 +22,7 @@ class CreateKeHoachTable extends Migration
             $table->integer('mauutien');
             $table->integer('maloai');
             $table->integer('cothongbao');
-            $table->integer('dahoanthanh');            
+            $table->boolean('dahoanthanh');            
             $table->primary('makehoach');
             $table->foreign('email')->references('email')->on('taikhoan')->onDelete('cascade');
             $table->foreign('maloai')->references('maloai')->on('loaikehoach')->onDelete('cascade');
