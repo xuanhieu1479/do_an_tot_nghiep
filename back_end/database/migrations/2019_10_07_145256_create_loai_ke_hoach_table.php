@@ -14,10 +14,9 @@ class CreateLoaiKeHoachTable extends Migration
     public function up()
     {
         Schema::create('loaikehoach', function (Blueprint $table) {
-            $table->integer('maloai');
+            $table->bigIncrements('maloai');
             $table->string('email');
-            $table->string('tenloai');            
-            $table->primary('maloai');
+            $table->string('tenloai');
             $table->timestamps();
         });
     }

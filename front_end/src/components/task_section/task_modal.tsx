@@ -94,15 +94,15 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         let task = {
             email: userEmail,
             tenkehoach: this.state.tenkehoach,
-            thoigian: this.state.thoigian,
+            thoigian: this.state.thoigian.toString(),
             ghichu: this.state.ghichu,
-            mauutien: this.state.mauutien,
-            maloai: this.state.maloai,
+            mauutien: this.state.mauutien + 1, //Vì auto increment dưới database bắt đầu = 1
+            maloai: this.state.maloai + 1,
             cothongbao: this.state.cothongbao,
             dahoanthanh: this.state.dahoanthanh,
         }
 
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/addtask', 'PUT', task).then(
+        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task).then(
             response => {                
                 this.hideTaskModal();
             }
@@ -154,6 +154,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                                     <DateTimePicker 
                                         onChange={this.onChangeThoiGian}
                                         value={this.state.thoigian}
+                                        format="dd-MM-y h:mm:ss a"
                                     />
                                 </div>
                             </Form.Group>

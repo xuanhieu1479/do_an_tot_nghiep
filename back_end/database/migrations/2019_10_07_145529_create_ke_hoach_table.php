@@ -14,16 +14,15 @@ class CreateKeHoachTable extends Migration
     public function up()
     {
         Schema::create('kehoach', function (Blueprint $table) {
-            $table->string('makehoach');
+            $table->bigIncrements('makehoach');
             $table->string('email');
             $table->string('tenkehoach');
             $table->dateTime('thoigian');
             $table->string('ghichu');
-            $table->integer('mauutien');
-            $table->integer('maloai');
+            $table->bigInteger('mauutien');
+            $table->bigInteger('maloai');
             $table->boolean('cothongbao');
-            $table->boolean('dahoanthanh');            
-            $table->primary('makehoach');
+            $table->boolean('dahoanthanh');
             $table->foreign('email')->references('email')->on('taikhoan')->onDelete('cascade');
             $table->foreign('maloai')->references('maloai')->on('loaikehoach')->onDelete('cascade');
             $table->foreign('mauutien')->references('mauutien')->on('mucdouutien')->onDelete('cascade');

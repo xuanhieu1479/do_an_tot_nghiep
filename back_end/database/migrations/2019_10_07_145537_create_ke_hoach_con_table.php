@@ -15,7 +15,7 @@ class CreateKeHoachConTable extends Migration
     {
         Schema::create('kehoachcon', function (Blueprint $table) {
             $table->string('makhc');
-            $table->string('makehoach');
+            $table->bigInteger('makehoach');
             $table->string('tenkhc');
             $table->primary('makhc');
             $table->foreign('makehoach')->references('makehoach')->on('kehoach')->onDelete('cascade');

@@ -12,7 +12,6 @@ use App\TaiKhoan;
 
 class TaiKhoanController extends Controller
 {
-
     public function taoToken(Request $request, $msg) {
 
         $user = $request->user();
@@ -58,6 +57,7 @@ class TaiKhoanController extends Controller
     }
 
     public function dangNhap(Request $request) {
+        
         $email = $request->input('email');
         $matkhau = $request->input('matkhau');
 

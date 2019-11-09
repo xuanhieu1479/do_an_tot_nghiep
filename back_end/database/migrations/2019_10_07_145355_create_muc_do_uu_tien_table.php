@@ -14,9 +14,8 @@ class CreateMucDoUuTienTable extends Migration
     public function up()
     {
         Schema::create('mucdouutien', function (Blueprint $table) {
-            $table->integer('mauutien');
-            $table->string('loaiuutien');            
-            $table->primary('mauutien');
+            $table->bigIncrements('mauutien');
+            $table->string('loaiuutien');
             $table->timestamps();
         });
     }
