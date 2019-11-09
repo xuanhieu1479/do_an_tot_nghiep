@@ -26,7 +26,7 @@ export default class SideBar extends React.Component<SideBarProps, any> {
         transitions: true,
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         mql.addListener(this.mediaQueryChanged);
     }
 

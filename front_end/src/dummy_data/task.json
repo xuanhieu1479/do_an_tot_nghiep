@@ -8,7 +8,7 @@
             "ghichu": "Đây là cái ghi chú thứ 1",
             "mauutien": 0,
             "maloai": 0,
-            "cothongbao": 0,
+            "cothongbao": false,
             "dahoanthanh": false
         },
         {
@@ -19,7 +19,7 @@
             "ghichu": "Đây là cái ghi chú thứ 2",
             "mauutien": 0,
             "maloai": 0,
-            "cothongbao": 0,
+            "cothongbao": false,
             "dahoanthanh": true
         },
         {
@@ -30,7 +30,7 @@
             "ghichu": "Đây là cái ghi chú thứ 3",
             "mauutien": 0,
             "maloai": 0,
-            "cothongbao": 0,
+            "cothongbao": false,
             "dahoanthanh": false
         },
         {
@@ -41,7 +41,7 @@
             "ghichu": "Đây là cái ghi chú thứ 4",
             "mauutien": 0,
             "maloai": 0,
-            "cothongbao": 0,
+            "cothongbao": false,
             "dahoanthanh": true
         }
     ]

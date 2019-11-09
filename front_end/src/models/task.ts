@@ -6,6 +6,6 @@ export default interface Task {
     ghichu: string;
     mauutien: number;
     maloai: number;
-    cothongbao: number;
+    cothongbao: boolean;
     dahoanthanh: boolean;
 }

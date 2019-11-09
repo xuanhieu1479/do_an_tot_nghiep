@@ -21,7 +21,7 @@ class CreateKeHoachTable extends Migration
             $table->string('ghichu');
             $table->integer('mauutien');
             $table->integer('maloai');
-            $table->integer('cothongbao');
+            $table->boolean('cothongbao');
             $table->boolean('dahoanthanh');            
             $table->primary('makehoach');
             $table->foreign('email')->references('email')->on('taikhoan')->onDelete('cascade');
