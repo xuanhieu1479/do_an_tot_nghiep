@@ -86,8 +86,8 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.setState({dahoanthanh: event.target.checked});
     }
 
-    async loadTaskPriority() {
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(
+    loadTaskPriority() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(
             response => {
                 localStorage.setItem('mucdouutien', JSON.stringify(response.data));
             }
