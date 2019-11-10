@@ -9,14 +9,15 @@ interface ButtonDangXuatProps {
 
 export default class ButtonDangXuat extends React.Component<ButtonDangXuatProps, any> {
 
-    clearAccessToken() {
+    clearLocalStorage() {
         localStorage.removeItem('access_token');
+        localStorage.removeItem('mucdouutien');
     }
 
     render(): React.ReactNode {
         return (
             <Link to='/'>
-                <Button variant="secondary" hidden={!this.props.isHidden} onClick={this.clearAccessToken}>Đăng xuất</Button>
+                <Button variant="secondary" hidden={!this.props.isHidden} onClick={this.clearLocalStorage}>Đăng xuất</Button>
             </Link>
         );
     }

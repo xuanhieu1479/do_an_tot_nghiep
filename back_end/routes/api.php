@@ -23,6 +23,7 @@ Route::group([
     Route::post('dangky', 'TaiKhoanController@dangKy');
     Route::post('dangnhap', 'TaiKhoanController@dangNhap');
     Route::post('themkehoach', 'KeHoachController@themKeHoach');
+    Route::get('mucdouutien', 'MucDoUuTienController@getMucDoUuTien');
 });
 
 Route::group([

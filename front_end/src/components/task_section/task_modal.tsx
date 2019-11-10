@@ -86,6 +86,14 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.setState({dahoanthanh: event.target.checked});
     }
 
+    async loadTaskPriority() {
+        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(
+            response => {
+                localStorage.setItem('mucdouutien', JSON.stringify(response.data));
+            }
+        );
+    }
+
     async saveTask() {
         let token: string = localStorage.getItem('access_token') as string;
         let decodedToken: object = jwt_decode(token);
@@ -110,6 +118,10 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     render(): React.ReactNode {
+        if(localStorage.getItem('mucdouutien') === null) {
+            this.loadTaskPriority();
+        }
+        let mucdouutien = JSON.parse(localStorage.getItem('mucdouutien')!);
         return(
             <Modal 
                 show={this.state.show} 
@@ -125,11 +137,15 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <Form.Group as={Col} controlId="formGridPrioritiy">
                             <Form.Label>Mức độ ưu tiên</Form.Label>
                             <Form.Control as="select" onChange={this.onChangeMaUuTien}>
-                                <option>Cứ từ từ</option>
-                                <option>Để mai cũng được</option>
-                                <option>Bình thường</option>
-                                <option>Làm không kẻo muộn</option>
-                                <option>Vắt giò lên cổ chạy</option>
+                                {(mucdouutien) ? 
+                                    mucdouutien.mucdouutien.map((mdut :string) => {     //Sau khi parse thì nó vẫn là object, map chỉ dùng đc với array
+                                        return (                                        //Array cần tìm nằm trong mucdouutien
+                                            <option>{mdut}</option>
+                                        );
+                                    })
+                                    :
+                                    <div></div>
+                                }
                             </Form.Control>
                             </Form.Group>
 
@@ -138,7 +154,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <InputGroup className="mb-3">
                                 <Form.Control as="select" onChange={this.onChangeMaLoai}>
                                     <option>Công việc</option>
-                                    <option>Ăn chơi</option>
                                 </Form.Control>
                                 <InputGroup.Append>
                                     <Button variant="outline-secondary">+</Button>
