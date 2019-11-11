@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use App\KeHoach;
 use App\LoaiKeHoach;
 
@@ -50,5 +52,18 @@ class KeHoachController extends Controller
                 'message' => $e->getMessage(),
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }
+    }
+
+    public function test(Request $request) {
+        $time = $request->input('time');
+        $clientTime = DateTime::createFromFormat('D M d Y H:i:s e+', $time);
+        $serverTime = new DateTime();
+        $convert = new DateTime();
+        $convert->setTimezone(new DateTimeZone('+07:00'));
+        return response()->json([
+            'client' => $clientTime,
+            'server' => $serverTime,
+            'convert_to_client_timezone' => $convert,
+        ]);
     }
 }

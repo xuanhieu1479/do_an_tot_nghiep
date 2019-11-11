@@ -25,6 +25,8 @@ Route::group([
     Route::get('mucdouutien', 'MucDoUuTienController@getMucDoUuTien');
 });
 
+Route::post('test', 'KeHoachController@test');
+
 Route::group([
     'middleware' => ['cors', 'auth:api']
 ], function() {
