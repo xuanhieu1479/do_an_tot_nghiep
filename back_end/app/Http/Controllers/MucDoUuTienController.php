@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\LoaiKeHoach;
 use DB;
 
 class MucDoUuTienController extends Controller

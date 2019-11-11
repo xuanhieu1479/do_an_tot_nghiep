@@ -21,9 +21,15 @@ Route::group([
     'middleware' => 'cors'
 ], function() {
     Route::post('dangky', 'TaiKhoanController@dangKy');
-    Route::post('dangnhap', 'TaiKhoanController@dangNhap');
-    Route::post('themkehoach', 'KeHoachController@themKeHoach');
+    Route::post('dangnhap', 'TaiKhoanController@dangNhap');    
     Route::get('mucdouutien', 'MucDoUuTienController@getMucDoUuTien');
+});
+
+Route::group([
+    'middleware' => ['cors', 'auth:api']
+], function() {
+    Route::post('themkehoach', 'KeHoachController@themKeHoach');
+    Route::get('loaikehoach', 'LoaiKeHoachController@getLoaiKeHoach');
 });
 
 Route::group([

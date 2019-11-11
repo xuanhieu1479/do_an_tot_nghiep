@@ -13,6 +13,9 @@ interface TaskModalState {
     maloai: number;
     cothongbao: boolean;
     dahoanthanh: boolean;
+    userEmail: any;
+    loaikehoach: string[];
+    doneLoadTaskType: boolean;
 }
 
 interface TaskModalProps {
@@ -32,6 +35,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             maloai: 0,
             cothongbao: false,
             dahoanthanh: false,
+            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            loaikehoach: ['Công việc'],
+            doneLoadTaskType: false,
         }
 
         this.showTaskModal = this.showTaskModal.bind(this);
@@ -55,7 +61,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     hideTaskModal() {
-        this.setState({show: false});
+        this.setState({show: false, doneLoadTaskType: false});
     }
 
     onChangeTenKeHoach(event: any) {
@@ -87,20 +93,27 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     loadTaskPriority() {
-        apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(            
             response => {
                 localStorage.setItem('mucdouutien', JSON.stringify(response.data));
             }
         );
     }
 
-    async saveTask() {
-        let token: string = localStorage.getItem('access_token') as string;
-        let decodedToken: object = jwt_decode(token);
-        let userEmail = Object.values(decodedToken)[5];
+    loadTaskType() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/loaikehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
+            response => {
+                const { statusCode, data } = response;
+                if(statusCode === 200) {
+                    this.setState({loaikehoach: data.loaikehoach, doneLoadTaskType: true});
+                }
+            }
+        );
+    }    
 
+    async saveTask() {
         let task = {
-            email: userEmail,
+            email: this.state.userEmail,
             tenkehoach: this.state.tenkehoach,
             thoigian: this.state.thoigian.toString(),
             ghichu: this.state.ghichu,
@@ -110,18 +123,20 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             dahoanthanh: this.state.dahoanthanh,
         }
 
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task).then(
+        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task, localStorage.getItem('access_token')).then(
             response => {                
                 this.hideTaskModal();
             }
         );
     }
 
-    render(): React.ReactNode {
+    render(): React.ReactNode {        
         if(localStorage.getItem('mucdouutien') === null) {
             this.loadTaskPriority();
         }
         let mucdouutien = JSON.parse(localStorage.getItem('mucdouutien')!);
+        if(!this.state.doneLoadTaskType && this.state.show) this.loadTaskType();
+        
         return(
             <Modal 
                 show={this.state.show} 
@@ -153,7 +168,11 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <Form.Label>Loại Task</Form.Label>
                             <InputGroup className="mb-3">
                                 <Form.Control as="select" onChange={this.onChangeMaLoai}>
-                                    <option>Công việc</option>
+                                    {this.state.loaikehoach.map((lkh: string) => {
+                                        return (
+                                            <option>{lkh}</option>
+                                        );
+                                    })}
                                 </Form.Control>
                                 <InputGroup.Append>
                                     <Button variant="outline-secondary">+</Button>
