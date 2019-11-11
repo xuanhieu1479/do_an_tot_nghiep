@@ -16,6 +16,7 @@ class TaiKhoanSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'matkhau' => Hash::make('123'),
             'maloaitk' => 0,
+            'timezone' => '+07:00',
         ]);
     }
 }

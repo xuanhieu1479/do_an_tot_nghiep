@@ -53,17 +53,4 @@ class KeHoachController extends Controller
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
-
-    public function test(Request $request) {
-        $time = $request->input('time');
-        $clientTime = DateTime::createFromFormat('D M d Y H:i:s e+', $time);
-        $serverTime = new DateTime();
-        $convert = new DateTime();
-        $convert->setTimezone(new DateTimeZone('+07:00'));
-        return response()->json([
-            'client' => $clientTime,
-            'server' => $serverTime,
-            'convert_to_client_timezone' => $convert,
-        ]);
-    }
 }

@@ -18,6 +18,7 @@ class CreateTaiKhoanTable extends Migration
             $table->string('matkhau');
             $table->integer('maloaitk')->default(0);
             $table->string('sdt')->nullable();
+            $table->string('timezone');
             $table->primary('email');
             $table->foreign('maloaitk')->references('maloaitk')->on('loaitaikhoan')->onDelete('cascade');
             $table->timestamps();

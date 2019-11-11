@@ -131,7 +131,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     render(): React.ReactNode {
-        console.log(new Date());
         if(localStorage.getItem('mucdouutien') === null) {
             this.loadTaskPriority();
         }

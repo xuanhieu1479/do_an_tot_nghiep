@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Hash;
+use DateTime;
 use App\Mail\ResetMatKhau;
 use App\TaiKhoan;
 
@@ -34,6 +35,7 @@ class TaiKhoanController extends Controller
 
         $email = $request->input('email');
         $matkhau = $request->input('matkhau');
+        $timezone =  DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('timezone'))->getTimezone()->getName();
 
         if (!$email || !$matkhau) return response()->json([
             'message' => 'Yêu cầu đầy đủ email và mật khẩu',
@@ -42,6 +44,7 @@ class TaiKhoanController extends Controller
         $taikhoan = new TaiKhoan([
             'email' => $email,
             'matkhau' => Hash::make($matkhau),
+            'timezone' => $timezone,
         ]);
 
         if ($taikhoan->daTonTai($email)) {

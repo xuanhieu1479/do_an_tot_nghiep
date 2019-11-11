@@ -39,6 +39,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         let registerInfo = {
             email: this.state.email,
             matkhau: this.state.password,
+            timezone: new Date().toString(),
         }
         callApi(process.env.REACT_APP_DOMAIN + 'api/dangky', "POST", registerInfo).then(
             response => {
