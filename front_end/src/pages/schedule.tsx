@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 import SideBar from "../components/sidebar/sidebar";
 import NavBar from "../components/navbar/navbar";
 import TaskDeck from "../components/task_section/task_deck";

@@ -2,7 +2,7 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Alert } from "react-bootstrap";
 import callApi from "../utils/apiCaller";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 
 interface LoginScreenState {
     email: string;
