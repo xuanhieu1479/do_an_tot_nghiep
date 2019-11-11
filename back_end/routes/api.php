@@ -23,9 +23,8 @@ Route::group([
     Route::post('dangky', 'TaiKhoanController@dangKy');
     Route::post('dangnhap', 'TaiKhoanController@dangNhap');    
     Route::get('mucdouutien', 'MucDoUuTienController@getMucDoUuTien');
+    Route::post('test', 'KeHoachController@test');
 });
-
-Route::post('test', 'KeHoachController@test');
 
 Route::group([
     'middleware' => ['cors', 'auth:api']
