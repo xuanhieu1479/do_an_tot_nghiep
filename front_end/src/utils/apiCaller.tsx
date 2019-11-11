@@ -2,10 +2,12 @@ export default function callApi(
     url: string,
     method: string,
     body?: any,
-) {
+    token?: any,
+) {    
     return fetch(url, {
         method,
         headers: {
+            'Authorization': 'Bearer ' + token,
             "Content-type": "application/json",
         },
         body: body ? JSON.stringify(body) : undefined
