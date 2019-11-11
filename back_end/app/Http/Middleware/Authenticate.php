@@ -15,7 +15,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            $this->redirectTo = 'https://google.com'; //Tại lười, nhát override auth:api để thay vì redirect mà trả về json.
+            $this->redirectTo = 'https://do-an-19.herokuapp.com/';
             return $this->redirectTo;
         }
     }

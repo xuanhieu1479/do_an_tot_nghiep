@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
+use DB;
 use App\KeHoach;
 use App\LoaiKeHoach;
 
@@ -23,7 +24,7 @@ class KeHoachController extends Controller
     public function themKeHoach(Request $request) {
         $email = $request->input('email');
         $tenkehoach = $request->input('tenkehoach');
-        $thoigian = \DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian'));
+        $thoigian = DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian'));
         $ghichu = $request->input('ghichu');
         $mauutien = $request->input('mauutien');
         $maloai = $request->input('maloai');
@@ -52,5 +53,45 @@ class KeHoachController extends Controller
                 'message' => $e->getMessage(),
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }
+    }
+
+    public function getKeHoach(Request $request) {
+        $email = $request->input('email');
+        $clientTimeZone = DB::table('taikhoan')->where('email', '=', $email)->pluck('timezone')[0];
+        $clientDateTime = new DateTime();
+        $clientDateTime->setTimezone(new DateTimeZone($clientTimeZone));
+        $clientTommorowDate = clone $clientDateTime;
+        $clientTommorowDate->modify('+1 day');
+
+        $clientDate = $clientDateTime->format('Y-m-d');
+        
+        $clientTommorowDate = $clientTommorowDate->format('Y-m-d');
+
+        $clientDateTime = $clientDateTime->format('Y-m-d H:i:s');
+
+        $taskList = DB::table('kehoach')->where('email', '=', $email)->get();
+        $overdueTask = [];
+        $todayTask = [];
+        $tommorowTask = [];
+        $otherTask = [];
+
+        foreach($taskList as $task) {
+            if(strtotime($task->thoigian) < strtotime($clientDateTime)) {
+                array_push($overdueTask, $task);
+            } else if(strtotime(\explode(" ", $task->thoigian)[0]) == strtotime($clientDate)) {
+                array_push($todayTask, $task);
+            } else if(strtotime(\explode(" ", $task->thoigian)[0]) == strtotime($clientTommorowDate)) {
+                array_push($tommorowTask, $task);
+            } else {
+                array_push($otherTask, $task);
+            }
+        }
+
+        return response()->json([
+           'overdueTask' => $overdueTask, 
+           'todayTask' => $todayTask,
+           'tommorowTask' => $tommorowTask,
+           'otherTask' => $otherTask,
+        ]);
     }
 }

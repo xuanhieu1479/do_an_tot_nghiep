@@ -30,6 +30,7 @@ Route::group([
 ], function() {
     Route::post('themkehoach', 'KeHoachController@themKeHoach');
     Route::get('loaikehoach', 'LoaiKeHoachController@getLoaiKeHoach');
+    Route::get('kehoach', 'KeHoachController@getKeHoach');
 });
 
 Route::group([
