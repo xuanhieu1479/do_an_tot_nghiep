@@ -56,7 +56,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
     componentDidUpdate(prevProps: any) {
         if (this.props.show !== prevProps.show) {
-            this.setState({show: this.props.show});
+            this.setState({show: this.props.show, thoigian: new Date()});
         }
     }
 
@@ -127,7 +127,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         await apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task, localStorage.getItem('access_token')).then(
             response => {        
                 this.props.setLoadTaskUndone();        
-                this.setState({show: false, doneLoadTaskType: false});
+                this.setState({show: false, doneLoadTaskType: false, thoigian: new Date()});
                 this.props.hideModal();
             }
         );
