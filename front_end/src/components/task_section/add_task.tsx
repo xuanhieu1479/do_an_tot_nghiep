@@ -6,26 +6,39 @@ interface ButtonAddTaskState {
     showModal: boolean;
 }
 
-export default class ButtonAddTask extends React.Component<any, ButtonAddTaskState> {
-    constructor(props: any) {
+interface ButtonAddTaskProps {
+    setLoadTaskUndone: () => void;
+}
+
+export default class ButtonAddTask extends React.Component<ButtonAddTaskProps, ButtonAddTaskState> {
+    constructor(props: ButtonAddTaskProps) {
         super(props);
         this.state = {
             showModal: false,
         }
 
         this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
     }
 
-    async showModal() {
-        await this.setState({showModal: true});
-        this.setState(this.state);
+    showModal() {
+        this.setState({showModal: true});
+    }
+
+    hideModal() {
+        this.setState({showModal: false});
     }
 
     render(): React.ReactNode {
         return(
             <div>
                 <Button variant="outline-success" size="sm" onClick={this.showModal}>Thêm Task</Button>
-                <TaskModal modalType="add" show={this.state.showModal} />
+                <TaskModal 
+                    modalType="add" 
+                    show={this.state.showModal}
+                    setLoadTaskUndone={this.props.setLoadTaskUndone}
+                    hideModal={this.hideModal}
+                />
             </div>
         );
     }

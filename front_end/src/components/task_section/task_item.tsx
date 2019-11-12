@@ -34,7 +34,7 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
                             {this.props.task.tenkehoach}
                         </div>
                         <div style={{display: 'inline', float: 'right'}}>
-                            {this.props.task.thoigian}
+                            {(this.props.task.thoigian).split(" ")[1]}
                         </div>
                     </div>
                     <div style={{clear: 'both', float: 'right'}}>

@@ -18,7 +18,7 @@ class CreateKeHoachTable extends Migration
             $table->string('email');
             $table->string('tenkehoach');
             $table->dateTime('thoigian');
-            $table->string('ghichu');
+            $table->string('ghichu')->nullable();
             $table->bigInteger('mauutien');
             $table->bigInteger('maloai');
             $table->boolean('cothongbao');

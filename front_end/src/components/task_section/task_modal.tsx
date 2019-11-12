@@ -21,13 +21,15 @@ interface TaskModalState {
 interface TaskModalProps {
     modalType: string;
     show: boolean;
+    setLoadTaskUndone: () => void;
+    hideModal: () => void;
 }
 
 export default class TaskModal extends React.Component<TaskModalProps, TaskModalState> {
     constructor(props: TaskModalProps) {
         super(props);
         this.state = {
-            show: false,
+            show: this.props.show,
             tenkehoach: '',
             thoigian: new Date(),
             ghichu: '',
@@ -40,8 +42,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             doneLoadTaskType: false,
         }
 
-        this.showTaskModal = this.showTaskModal.bind(this);
-        this.hideTaskModal = this.hideTaskModal.bind(this);
+        this.hideThisModal = this.hideThisModal.bind(this);
         this.onChangeTenKeHoach = this.onChangeTenKeHoach.bind(this);
         this.onChangeThoiGian = this.onChangeThoiGian.bind(this);
         this.onChangeGhiChu = this.onChangeGhiChu.bind(this);
@@ -49,19 +50,19 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.onChangeMaLoai = this.onChangeMaLoai.bind(this);
         this.onChangeCoThongBao = this.onChangeCoThongBao.bind(this);
         this.onChangeDaHoanThanh = this.onChangeDaHoanThanh.bind(this);
+        this.componentDidUpdate = this.componentDidUpdate.bind(this);
         this.saveTask = this.saveTask.bind(this);
     }
 
-    async UNSAFE_componentWillReceiveProps() {
-        await this.setState({show: this.props.show});
+    componentDidUpdate(prevProps: any) {
+        if (this.props.show !== prevProps.show) {
+            this.setState({show: this.props.show});
+        }
     }
 
-    showTaskModal() {
-        this.setState({show: true});
-    }
-
-    hideTaskModal() {
+    hideThisModal() {
         this.setState({show: false, doneLoadTaskType: false});
+        this.props.hideModal();
     }
 
     onChangeTenKeHoach(event: any) {
@@ -124,8 +125,10 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         }
 
         await apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task, localStorage.getItem('access_token')).then(
-            response => {                
-                this.hideTaskModal();
+            response => {        
+                this.props.setLoadTaskUndone();        
+                this.setState({show: false, doneLoadTaskType: false});
+                this.props.hideModal();
             }
         );
     }
@@ -141,7 +144,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             <Modal 
                 show={this.state.show} 
                 centered
-                onHide={this.hideTaskModal}
+                onHide={this.hideThisModal}
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Tạo task mới</Modal.Title>

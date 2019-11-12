@@ -2,7 +2,6 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import SideBar from "../components/sidebar/sidebar";
 import NavBar from "../components/navbar/navbar";
-import TaskDeck from "../components/task_section/task_deck";
 
 export default class PageSchedule extends React.Component<any, any> {
 
@@ -14,7 +13,7 @@ export default class PageSchedule extends React.Component<any, any> {
                 <SideBar 
                     mainContent=
                     {
-                        <TaskDeck />
+                        <div>Đây là cái thời gian biểu</div>
                     }
                     activeTab="#schedule"
                     transitions={false}
