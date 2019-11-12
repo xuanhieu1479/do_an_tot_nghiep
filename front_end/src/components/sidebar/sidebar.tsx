@@ -45,11 +45,11 @@ export default class SideBar extends React.Component<SideBarProps, any> {
     render(): React.ReactNode {
         const sideBarCustomStyle = {
             root: {
-                'margin-top': '56px',
+                'marginTop': '56px',
             },
             content: {
-                'margin-top': '20px',
-                'margin-left': '40px',
+                'marginTop': '20px',
+                'marginLeft': '40px',
             }
         }
 

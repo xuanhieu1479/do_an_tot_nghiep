@@ -67,7 +67,8 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                         <ListGroup>
                             {this.state.overdueTask.map(task => {
                                 return (
-                                    <TaskItem 
+                                    <TaskItem
+                                        key={task.makehoach}
                                         task={task} 
                                         showModal={this.props.showModal}
                                     />
@@ -81,7 +82,8 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Hôm nay</Card.Title>
                         {this.state.todayTask.map(task => {
                             return (
-                                <TaskItem 
+                                <TaskItem
+                                    key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
                                 />
@@ -94,7 +96,8 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Ngày mai</Card.Title>
                         {this.state.tommorowTask.map(task => {
                             return (
-                                <TaskItem 
+                                <TaskItem
+                                    key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
                                 />
@@ -107,7 +110,8 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Các task khác</Card.Title>
                         {this.state.otherTask.map(task => {
                             return (
-                                <TaskItem 
+                                <TaskItem
+                                    key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
                                 />
