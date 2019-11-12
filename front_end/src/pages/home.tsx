@@ -5,6 +5,7 @@ import NavBar from "../components/navbar/navbar";
 import TaskDeck from "../components/task_section/task_deck";
 import ButtonAddTask from "../components/task_section/add_task";
 import TaskModal from "../components/task_section/task_modal";
+import apiCaller from "../utils/apiCaller";
 
 interface PageHomeState {
     doneLoadTask: boolean;
@@ -50,8 +51,19 @@ export default class PageHome extends React.Component<any, PageHomeState> {
         this.setState({doneLoadTask: false});
     }
 
+    loadTaskPriority() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(            
+            response => {
+                localStorage.setItem('mucdouutien', JSON.stringify(response.data));
+            }
+        );
+    }
+
     render(): React.ReactNode {
         if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);
+        if(localStorage.getItem('mucdouutien') === null) {
+            this.loadTaskPriority();
+        }
         return (
             <div>
                 <NavBar />

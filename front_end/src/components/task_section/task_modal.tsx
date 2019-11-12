@@ -125,14 +125,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.setState({dahoanthanh: event.target.checked, dataChanged: true});
     }
 
-    loadTaskPriority() {
-        apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(            
-            response => {
-                localStorage.setItem('mucdouutien', JSON.stringify(response.data));
-            }
-        );
-    }
-
     loadTaskType() {
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/loaikehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
             response => {
@@ -204,11 +196,8 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         );
     }
 
-    render(): React.ReactNode {
-        if(localStorage.getItem('mucdouutien') === null) {
-            this.loadTaskPriority();
-        }
-        let mucdouutien = JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien;
+    render(): React.ReactNode {        
+        let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
         if(!this.state.doneLoadTaskType && this.state.show) this.loadTaskType();
         if(!this.props.isAddingTask && !this.state.doneLoadTask && this.state.show) this.loadTaskData();
         
