@@ -31,6 +31,7 @@ Route::group([
     Route::post('themkehoach', 'KeHoachController@themKeHoach');
     Route::get('loaikehoach', 'LoaiKeHoachController@getLoaiKeHoach');
     Route::get('kehoach', 'KeHoachController@getKeHoach');
+    Route::get('kehoachbyid', 'KeHoachController@getKeHoachByID');
     Route::put('updatekehoach', 'KeHoachController@updateKeHoach');
 });
 

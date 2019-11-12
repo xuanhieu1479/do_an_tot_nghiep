@@ -4,9 +4,13 @@ import SideBar from "../components/sidebar/sidebar";
 import NavBar from "../components/navbar/navbar";
 import TaskDeck from "../components/task_section/task_deck";
 import ButtonAddTask from "../components/task_section/add_task";
+import TaskModal from "../components/task_section/task_modal";
 
 interface PageHomeState {
     doneLoadTask: boolean;
+    showModal: boolean;
+    isAddingTask: boolean;
+    makehoach: string;
 }
 
 export default class PageHome extends React.Component<any, PageHomeState> {
@@ -14,10 +18,28 @@ export default class PageHome extends React.Component<any, PageHomeState> {
         super(props);
         this.state = {
             doneLoadTask: false,
+            showModal: false,
+            isAddingTask: true,
+            makehoach: '',
         }
 
+        this.showAddModal = this.showAddModal.bind(this);
+        this.showUpdateModal = this.showUpdateModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
         this.setLoadTaskDone = this.setLoadTaskDone.bind(this);
         this.setLoadTaskUndone = this.setLoadTaskUndone.bind(this);
+    }
+
+    showAddModal() {
+        this.setState({showModal: true, isAddingTask: true});
+    }
+
+    showUpdateModal(makehoach: string) {
+        this.setState({showModal: true, makehoach: makehoach, isAddingTask: false});
+    }
+
+    hideModal() {
+        this.setState({showModal: false});
     }
 
     setLoadTaskDone() {
@@ -37,10 +59,18 @@ export default class PageHome extends React.Component<any, PageHomeState> {
                     mainContent=
                     {
                         <div style={{height: '100%'}}>
-                            <div style={{marginBottom: 20}}><ButtonAddTask setLoadTaskUndone={this.setLoadTaskUndone} /></div>
+                            <div style={{marginBottom: 20}}><ButtonAddTask showModal={this.showAddModal} /></div>
                             <TaskDeck 
                                 doneLoadTask={this.state.doneLoadTask}
                                 setLoadTaskDone={this.setLoadTaskDone}
+                                showModal={this.showUpdateModal}
+                            />
+                            <TaskModal 
+                                isAddingTask={this.state.isAddingTask}
+                                show={this.state.showModal}
+                                setLoadTaskUndone={this.setLoadTaskUndone}
+                                hideModal={this.hideModal}
+                                makehoach={this.state.makehoach}
                             />
                         </div>
                     }

@@ -72,7 +72,7 @@ class KeHoachController extends Controller
             } else {
                 array_push($otherTask, $task);
             }
-        }
+        }        
 
         return response()->json([
            'overdueTask' => $overdueTask, 
@@ -82,10 +82,17 @@ class KeHoachController extends Controller
         ]);
     }
 
+    public function getKeHoachByID(Request $request) {
+        $kehoach = KeHoach::find($request->input('makehoach'));
+
+        return response()->json([
+            'kehoach' => $kehoach,
+        ], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
     public function updateKehoach(Request $request) {
-        $makehoach = $request->input('makehoach');
         $thoigian = DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian'));
-        $kehoach = KeHoach::find($makehoach);        
+        $kehoach = KeHoach::find($request->input('makehoach'));        
         $request->merge([
             'thoigian' => $thoigian,
         ]);

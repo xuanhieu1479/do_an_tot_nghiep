@@ -4,6 +4,7 @@ import Task from "../../models/task";
 
 interface TaskItemProps {
     task: Task;
+    showModal: (makehoach: string) => void;
 }
 interface TaskItemState {
     task: Task;
@@ -17,6 +18,7 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         }
 
         this.switchStatus = this.switchStatus.bind(this);
+        this.showUpdateModal = this.showUpdateModal.bind(this);
     } 
 
     switchStatus() {
@@ -25,10 +27,18 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         this.setState({task: task});
     }
 
+    showUpdateModal() {
+        this.props.showModal(this.state.task.makehoach);
+    }
+
     render(): React.ReactNode {
         return (
             <div>
-                <ListGroup.Item action variant={(this.state.task.dahoanthanh) ? "secondary" : undefined}>
+                <ListGroup.Item 
+                    action 
+                    variant={(this.state.task.dahoanthanh) ? "secondary" : undefined}
+                    onClick={this.showUpdateModal}
+                >
                     <div>
                         <div style={{display: 'inline', float: 'left'}}>
                             {this.props.task.tenkehoach}

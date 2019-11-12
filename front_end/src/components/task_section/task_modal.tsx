@@ -16,13 +16,15 @@ interface TaskModalState {
     userEmail: any;
     loaikehoach: string[];
     doneLoadTaskType: boolean;
+    doneLoadTask: boolean;
 }
 
 interface TaskModalProps {
-    modalType: string;
+    isAddingTask: boolean;
     show: boolean;
     setLoadTaskUndone: () => void;
     hideModal: () => void;
+    makehoach: string,
 }
 
 export default class TaskModal extends React.Component<TaskModalProps, TaskModalState> {
@@ -40,6 +42,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
             loaikehoach: ['Công việc'],
             doneLoadTaskType: false,
+            doneLoadTask: false,
         }
 
         this.hideThisModal = this.hideThisModal.bind(this);
@@ -61,7 +64,25 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     hideThisModal() {
-        this.setState({show: false, doneLoadTaskType: false});
+        if(this.props.isAddingTask) {
+            this.setState({
+                show: false, 
+                doneLoadTaskType: false,
+            });
+        } else {
+            this.setState({
+                show: false, 
+                doneLoadTaskType: false, 
+                doneLoadTask: false,
+                tenkehoach: '',
+                thoigian: new Date(),
+                ghichu: '',
+                mauutien: 0,
+                maloai: 0,
+                cothongbao: false,
+                dahoanthanh: false,
+            });
+        }        
         this.props.hideModal();
     }
 
@@ -110,7 +131,25 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                 }
             }
         );
-    }    
+    }
+    
+    loadTaskData() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/kehoachbyid?makehoach=' + this.props.makehoach, 'GET', null, localStorage.getItem('access_token')).then(
+            response => {
+                const { data } = response;
+                this.setState({
+                    tenkehoach: data.kehoach.tenkehoach,
+                    thoigian: new Date(data.kehoach.thoigian),
+                    ghichu: data.kehoach.ghichu,
+                    mauutien: data.kehoach.mauutien - 1,  //Vì auto increment dưới database bắt đầu = 1
+                    maloai: data.kehoach.maloai - 1,
+                    cothongbao: data.kehoach.cothongbao,
+                    dahoanthanh: data.kehoach.dahoanthanh,
+                    doneLoadTask: true,
+                });
+            }
+        )
+    }
 
     async saveTask() {
         let task = {
@@ -139,6 +178,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         }
         let mucdouutien = JSON.parse(localStorage.getItem('mucdouutien')!);
         if(!this.state.doneLoadTaskType && this.state.show) this.loadTaskType();
+        if(!this.props.isAddingTask && !this.state.doneLoadTask && this.state.show) this.loadTaskData();
         
         return(
             <Modal 
@@ -147,7 +187,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                 onHide={this.hideThisModal}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Tạo task mới</Modal.Title>
+                    <Modal.Title>
+                        {(this.props.isAddingTask) ? <div>Tạo task mới</div> : <div>Cập nhật task</div>}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
@@ -156,9 +198,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <Form.Label>Mức độ ưu tiên</Form.Label>
                             <Form.Control as="select" onChange={this.onChangeMaUuTien}>
                                 {(mucdouutien) ? 
-                                    mucdouutien.mucdouutien.map((mdut :string) => {     //Sau khi parse thì nó vẫn là object, map chỉ dùng đc với array
-                                        return (                                        //Array cần tìm nằm trong mucdouutien
-                                            <option>{mdut}</option>
+                                    mucdouutien.mucdouutien.map((mdut :string, index: number) => {     //Sau khi parse thì nó vẫn là object, map chỉ dùng đc với array
+                                        return (                                                       //Array cần tìm nằm trong mucdouutien
+                                            (index === this.state.mauutien) ? <option selected>{mdut}</option> : <option>{mdut}</option>
                                         );
                                     })
                                     :
@@ -171,9 +213,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <Form.Label>Loại Task</Form.Label>
                             <InputGroup className="mb-3">
                                 <Form.Control as="select" onChange={this.onChangeMaLoai}>
-                                    {this.state.loaikehoach.map((lkh: string) => {
+                                    {this.state.loaikehoach.map((lkh: string, index: number) => {
                                         return (
-                                            <option>{lkh}</option>
+                                            (index === this.state.maloai) ? <option selected>{lkh}</option> : <option>{lkh}</option>
                                         );
                                     })}
                                 </Form.Control>
@@ -208,12 +250,12 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                         
                         <Form.Group controlId="formGridTaskName">
                             <Form.Label>Tên Task</Form.Label>
-                            <Form.Control type="text" onChange={this.onChangeTenKeHoach} />
+                            <Form.Control type="text" value={this.state.tenkehoach} onChange={this.onChangeTenKeHoach} />
                         </Form.Group>
 
                         <Form.Group controlId="formGridTaskDetail">
                             <Form.Label>Ghi chú</Form.Label>
-                            <Form.Control as="textarea" rows="5" onChange={this.onChangeGhiChu} />
+                            <Form.Control as="textarea" rows="5" value={this.state.ghichu} onChange={this.onChangeGhiChu} />
                         </Form.Group>
                     </Form>
                 </Modal.Body>

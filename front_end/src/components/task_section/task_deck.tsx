@@ -17,6 +17,7 @@ interface TaskDeckState {
 interface TaskDeckProps {
     doneLoadTask: boolean;
     setLoadTaskDone: () => void;
+    showModal: (makehoach: string) => void;
 }
 
 export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckState> {
@@ -66,7 +67,10 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                         <ListGroup>
                             {this.state.overdueTask.map(task => {
                                 return (
-                                    <TaskItem task={task} />
+                                    <TaskItem 
+                                        task={task} 
+                                        showModal={this.props.showModal}
+                                    />
                                 );
                             })}
                         </ListGroup>
@@ -77,7 +81,10 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Hôm nay</Card.Title>
                         {this.state.todayTask.map(task => {
                             return (
-                                <TaskItem task={task} />
+                                <TaskItem 
+                                    task={task} 
+                                    showModal={this.props.showModal}
+                                />
                             );
                         })}
                     </Card.Body>
@@ -87,7 +94,10 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Ngày mai</Card.Title>
                         {this.state.tommorowTask.map(task => {
                             return (
-                                <TaskItem task={task} />
+                                <TaskItem 
+                                    task={task} 
+                                    showModal={this.props.showModal}
+                                />
                             );
                         })}
                     </Card.Body>
@@ -97,7 +107,10 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Các task khác</Card.Title>
                         {this.state.otherTask.map(task => {
                             return (
-                                <TaskItem task={task} />
+                                <TaskItem 
+                                    task={task} 
+                                    showModal={this.props.showModal}
+                                />
                             );
                         })}
                     </Card.Body>
