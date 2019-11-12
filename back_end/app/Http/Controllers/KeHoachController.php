@@ -22,25 +22,12 @@ class KeHoachController extends Controller
     }
 
     public function themKeHoach(Request $request) {
-        $email = $request->input('email');
-        $tenkehoach = $request->input('tenkehoach');
-        $thoigian = DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian'));
-        $ghichu = $request->input('ghichu');
-        $mauutien = $request->input('mauutien');
-        $maloai = $request->input('maloai');
-        $cothongbao = $request->input('cothongbao');
-        $dahoanthanh = false;
 
-        $kehoach = new KeHoach([
-            'email' => $email,
-            'tenkehoach' => $tenkehoach,
-            'thoigian' => $thoigian,
-            'ghichu' => $ghichu,
-            'mauutien' => $mauutien,
-            'maloai' => $maloai,
-            'cothongbao' => $cothongbao,
-            'dahoanthanh' => $dahoanthanh,
-        ]);
+        $email = $request->input('email');
+
+        $kehoach = new KeHoach($request->all());
+        $kehoach->thoigian = DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian'));
+        $kehoach->dahoanthanh = false;
 
         try {
             $this->themLoaiKeHoachMacDinh($email);
@@ -93,5 +80,25 @@ class KeHoachController extends Controller
            'tommorowTask' => $tommorowTask,
            'otherTask' => $otherTask,
         ]);
+    }
+
+    public function updateKehoach(Request $request) {
+        $makehoach = $request->input('makehoach');
+        $thoigian = DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian'));
+        $kehoach = KeHoach::find($makehoach);        
+        $request->merge([
+            'thoigian' => $thoigian,
+        ]);
+
+        try {
+            $kehoach->update($request->all());
+            return response()->json([
+                'message' => 'Update kế hoạch thành công',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 }
