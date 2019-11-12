@@ -1,6 +1,7 @@
 import React from "react";
 import { ListGroup, Form } from "react-bootstrap";
 import Task from "../../models/task";
+import apiCaller from "../../utils/apiCaller";
 
 interface TaskItemProps {
     key: string;
@@ -26,11 +27,16 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         this.props.showModal(this.state.task.makehoach);
     }
 
-    switchStatus(event: any) {
+    async switchStatus(event: any) {
+        event.stopPropagation();
         let task = {...this.state.task};
         task.dahoanthanh = !this.state.task.dahoanthanh;
-        this.setState({task: task});
-        event.stopPropagation();
+        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatekehoach?makehoach=' + this.props.task.makehoach, 'PUT', 
+            {dahoanthanh: task.dahoanthanh}, localStorage.getItem('access_token')).then(
+                response => {        
+                    this.setState({task: task});
+                }
+            );        
     }
 
     render(): React.ReactNode {

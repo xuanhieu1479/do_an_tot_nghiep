@@ -91,11 +91,13 @@ class KeHoachController extends Controller
     }
 
     public function updateKehoach(Request $request) {
-        $thoigian = DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian'));
-        $kehoach = KeHoach::find($request->input('makehoach'));        
-        $request->merge([
-            'thoigian' => $thoigian,
-        ]);
+        $kehoach = KeHoach::find($request->input('makehoach'));
+        $thoigian = $request->input('thoigian');
+        if ($thoigian) {
+            $request->merge([
+                'thoigian' => DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('thoigian')),
+            ]);
+        }        
 
         try {
             $kehoach->update($request->all());
