@@ -283,7 +283,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
                         <Form.Group controlId="formGridTaskDetail">
                             <Form.Label>Ghi chú</Form.Label>
-                            <Form.Control as="textarea" rows="5" value={this.state.ghichu} onChange={this.onChangeGhiChu} />
+                            <Form.Control as="textarea" rows="5" value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu} />
                         </Form.Group>
                     </Form>
                 </Modal.Body>

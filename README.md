@@ -32,3 +32,10 @@ Cách mở csdl trong máy ảo ra xem
  + \d+ <tên bảng> để xem thông tin bảng
  + TABLE <tên bảng> để xem dữ liệu bảng
 Nếu không thấy bảng nào thì reset csdl rồi \dt trong máy ảo
+
+Cách tạo cron
+ + Đăng nhập vào vm bằng ssh
+ + crontab -e
+ + Chọn 1 (nano)
+ + Thêm dòng này vào * * * * * cd /home/vagrant/code && php artisan schedule:run >> /dev/null 2>&1
+ + Ctrl + O -> Enter -> Ctrl + X
