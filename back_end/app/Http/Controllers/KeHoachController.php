@@ -92,6 +92,23 @@ class KeHoachController extends Controller
 
     public function updateKehoach(Request $request) {
         $kehoach = KeHoach::find($request->input('makehoach'));
+
+        $daXoa = ($request->input('dahoanthanh')) ? $this->deleteIfDoneAndOverDue($kehoach, true) : false;
+
+        if ($daXoa) {
+            try {
+                $kehoach->delete();
+                return response()->json([
+                    'message' => 'Đã xóa kế hoạch',
+                    'daxoa' => $daXoa,
+                ], 200, [], JSON_UNESCAPED_UNICODE);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
         $thoigian = $request->input('thoigian');
         if ($thoigian) {
             $request->merge([
@@ -103,11 +120,22 @@ class KeHoachController extends Controller
             $kehoach->update($request->all());
             return response()->json([
                 'message' => 'Update kế hoạch thành công',
+                'daxoa' => $daXoa,
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }
+    }
+
+    public function deleteIfDoneAndOverDue($kehoach, $dahoanthanh) {
+        $timezone = DB::table('taikhoan')->where('email', '=', $kehoach->email)->pluck('timezone')[0];
+        $clientTime = new DateTime();
+        $clientTime->setTimezone(new DateTimeZone($timezone));
+        $clientTime = $clientTime->format('Y-m-d H:i:s');
+        if ($dahoanthanh && strtotime($kehoach->thoigian) < strtotime($clientTime)) {
+            return true;
+        } else return false;
     }
 }

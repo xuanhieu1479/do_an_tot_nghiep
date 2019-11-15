@@ -7,6 +7,7 @@ interface TaskItemProps {
     key: string;
     task: Task;
     showModal: (makehoach: string) => void;
+    deleteThisItem: (makehoach: string) => void;
 }
 interface TaskItemState {
     task: Task;
@@ -33,8 +34,13 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         task.dahoanthanh = !this.state.task.dahoanthanh;
         await apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatekehoach?makehoach=' + this.props.task.makehoach, 'PUT', 
             {dahoanthanh: task.dahoanthanh}, localStorage.getItem('access_token')).then(
-                response => {        
-                    this.setState({task: task});
+                response => {
+                    const { data } = response;
+                    if (data.daxoa) {
+                        this.props.deleteThisItem(this.state.task.makehoach);
+                    } else {
+                        this.setState({task: task});
+                    }                    
                 }
             );        
     }

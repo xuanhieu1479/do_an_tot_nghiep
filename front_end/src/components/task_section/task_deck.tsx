@@ -12,6 +12,7 @@ interface TaskDeckState {
     tommorowTask: Task[];
     otherTask: Task[];
     doneLoadTask: boolean;
+    deleteThisItem: string[];
 }
 
 interface TaskDeckProps {
@@ -30,9 +31,11 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
             tommorowTask: [],
             otherTask: [],
             doneLoadTask: this.props.doneLoadTask,
+            deleteThisItem: [],
         }
 
         this.loadTask = this.loadTask.bind(this);
+        this.deleteThisItem = this.deleteThisItem.bind(this);
     }
 
     componentDidUpdate(prevProps: any) {
@@ -57,6 +60,12 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
         );
     }
 
+    deleteThisItem(makehoach: string) {
+        let dummyArray = this.state.deleteThisItem;
+        dummyArray.push(makehoach);
+        this.setState({deleteThisItem: dummyArray});
+    }
+
     render(): React.ReactNode {
         if(!this.state.doneLoadTask) this.loadTask();
         return (
@@ -67,11 +76,15 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                         <ListGroup>
                             {this.state.overdueTask.map(task => {
                                 return (
+                                    (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
                                     <TaskItem
                                         key={task.makehoach}
                                         task={task} 
                                         showModal={this.props.showModal}
+                                        deleteThisItem={this.deleteThisItem}
                                     />
+                                    :
+                                    null
                                 );
                             })}
                         </ListGroup>
@@ -82,11 +95,15 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Hôm nay</Card.Title>
                         {this.state.todayTask.map(task => {
                             return (
+                                (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
                                 <TaskItem
                                     key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
+                                    deleteThisItem={this.deleteThisItem}
                                 />
+                                :
+                                null
                             );
                         })}
                     </Card.Body>
@@ -96,11 +113,15 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Ngày mai</Card.Title>
                         {this.state.tommorowTask.map(task => {
                             return (
+                                (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
                                 <TaskItem
                                     key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
+                                    deleteThisItem={this.deleteThisItem}
                                 />
+                                :
+                                null
                             );
                         })}
                     </Card.Body>
@@ -110,11 +131,15 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Title>Các task khác</Card.Title>
                         {this.state.otherTask.map(task => {
                             return (
+                                (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
                                 <TaskItem
                                     key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
+                                    deleteThisItem={this.deleteThisItem}
                                 />
+                                :
+                                null
                             );
                         })}
                     </Card.Body>
