@@ -33,6 +33,7 @@ Route::group([
     Route::get('kehoach', 'KeHoachController@getKeHoach');
     Route::get('kehoachbyid', 'KeHoachController@getKeHoachByID');
     Route::put('updatekehoach', 'KeHoachController@updateKeHoach');
+    Route::delete('deletekehoach', 'KeHoachController@deleteKeHoachByID');
 });
 
 Route::group([

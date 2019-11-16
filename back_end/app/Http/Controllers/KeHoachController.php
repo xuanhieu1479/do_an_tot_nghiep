@@ -94,11 +94,31 @@ class KeHoachController extends Controller
     }
 
     public function getKeHoachByID(Request $request) {
-        $kehoach = KeHoach::find($request->input('makehoach'));
+        try {
+            $kehoach = KeHoach::find($request->input('makehoach'));
 
-        return response()->json([
-            'kehoach' => $kehoach,
-        ], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json([
+                'kehoach' => $kehoach,
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    public function deleteKeHoachByID(Request $request) {
+        try {
+            KeHoach::destroy($request->input('makehoach'));
+
+            return response()->json([
+                'message' => 'Xóa kế hoạch thành công',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 
     public function updateKehoach(Request $request) {
