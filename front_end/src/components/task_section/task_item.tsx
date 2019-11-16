@@ -45,6 +45,20 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
             );        
     }
 
+    formatDateTimeToTime(dateTime: string) {
+        let time = dateTime.split(" ")[1];
+        let hour = time.split(":")[0];
+        let minute = time.split(":")[1];
+        let subfix = 'A.M';
+        if (Number(hour) > 12) {
+            hour = (Number(hour) - 12).toString();
+            subfix = 'P.M';
+        } else {
+            hour = hour.substr(1);
+        }
+        return hour + ":" + minute + " " + subfix;
+    }
+
     render(): React.ReactNode {
         return (
             <div>
@@ -58,7 +72,7 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
                             {this.props.task.tenkehoach}
                         </div>
                         <div style={{display: 'inline', float: 'right'}}>
-                            {(this.props.task.thoigian).split(" ")[1]}
+                            {this.formatDateTimeToTime(this.props.task.thoigian)}
                         </div>
                     </div>
                     <div 
