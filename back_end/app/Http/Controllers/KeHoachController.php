@@ -12,6 +12,8 @@ use App\LoaiKeHoach;
 
 class KeHoachController extends Controller
 {
+    private $overDueDateToDelete = 2;
+
     public function themLoaiKeHoachMacDinh($email) {
         $loaikehoach = new LoaiKeHoach([
             'maloai' => 0,
@@ -47,8 +49,8 @@ class KeHoachController extends Controller
         $clientTimeZone = DB::table('taikhoan')->where('email', '=', $email)->pluck('timezone')[0];
         $clientDateTime = new DateTime();
         $clientDateTime->setTimezone(new DateTimeZone($clientTimeZone));
-        $clientTommorowDate = clone $clientDateTime;
-        $clientTommorowDate->modify('+1 day');
+        $clientTommorowDate = (clone $clientDateTime)->modify('+1 day');
+        $clientOverDueDateToDelete = (clone $clientDateTime)->modify('-' . $this->overDueDateToDelete . ' day');
 
         $clientDate = $clientDateTime->format('Y-m-d');
         
@@ -56,14 +58,19 @@ class KeHoachController extends Controller
 
         $clientDateTime = $clientDateTime->format('Y-m-d H:i:s');
 
+        $clientOverDueDateToDelete = $clientOverDueDateToDelete->format('Y-m-d');
+
         $taskList = DB::table('kehoach')->where('email', '=', $email)->get();
         $overdueTask = [];
         $todayTask = [];
         $tommorowTask = [];
         $otherTask = [];
+        $deleteTask = [];
 
         foreach($taskList as $task) {
-            if(strtotime($task->thoigian) < strtotime($clientDateTime)) {
+            if (strtotime($task->thoigian) < strtotime($clientOverDueDateToDelete)) {
+                array_push($deleteTask, $task->makehoach);
+            } else if(strtotime($task->thoigian) < strtotime($clientDateTime)) {
                 array_push($overdueTask, $task);
             } else if(strtotime(\explode(" ", $task->thoigian)[0]) == strtotime($clientDate)) {
                 array_push($todayTask, $task);
@@ -72,7 +79,11 @@ class KeHoachController extends Controller
             } else {
                 array_push($otherTask, $task);
             }
-        }        
+        }
+
+        if (count($deleteTask) != 0) {
+            DB::table('kehoach')->whereIn('makehoach', $deleteTask)->delete();
+        }
 
         return response()->json([
            'overdueTask' => $overdueTask, 
