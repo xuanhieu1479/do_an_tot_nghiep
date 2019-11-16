@@ -59,6 +59,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.componentDidUpdate = this.componentDidUpdate.bind(this);
         this.saveTask = this.saveTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
     }
 
     componentDidUpdate(prevProps: any) {
@@ -196,6 +197,18 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         );
     }
 
+    deleteTask() {
+        if (window.confirm("Chắc không?")) {
+            apiCaller(process.env.REACT_APP_DOMAIN + 'api/deletekehoach?makehoach=' + this.props.makehoach, 'DELETE', null, localStorage.getItem('access_token')).then(
+                response => {        
+                    this.props.setLoadTaskUndone();
+                    this.resetThisModal();
+                    this.props.hideModal();
+                }
+            );
+        }        
+    }
+
     render(): React.ReactNode {        
         let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
         if(!this.state.doneLoadTaskType && this.state.show) this.loadTaskType();
@@ -288,10 +301,15 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask : this.updateTask}>
-                        Lưu
-                    </Button>
-                    <Button variant="danger" onClick={this.hideThisModal}>Hủy</Button>
+                    <div style={{width: '100%'}}>
+                        <div style={{display: 'inline', float: 'right'}}>
+                            <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask : this.updateTask}>Lưu</Button>
+                            <Button variant="danger" onClick={this.hideThisModal}>Hủy</Button>
+                        </div>
+                        <div style={{display: 'inline', float: 'left'}}>
+                            <Button variant="dark" onClick={this.deleteTask}>Xóa</Button>
+                        </div>
+                    </div>
                 </Modal.Footer>
             </Modal>
         );
