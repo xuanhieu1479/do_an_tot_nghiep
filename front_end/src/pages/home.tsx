@@ -96,7 +96,7 @@ export default class PageHome extends React.Component<any, PageHomeState> {
                     mainContent=
                     {
                         <div style={{height: '100%'}}>
-                            <div style={{marginBottom: 20}}><ButtonAddTask showModal={this.showAddModal} /></div>
+                            <div style={{marginBottom: 20}}><ButtonAddTask showModal={this.showAddModal} setLoadTaskTypeUndone={this.setLoadTaskTypeUndone} /></div>
                             <TaskDeck 
                                 doneLoadTask={this.state.doneLoadTask}
                                 setLoadTaskDone={this.setLoadTaskDone}

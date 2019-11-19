@@ -133,7 +133,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             response => {
                 const { statusCode, data } = response;
                 if(statusCode === 200) {
-                    this.setState({loaikehoach: data.loaikehoach});
+                    this.setState({loaikehoach: data.loaikehoach, maloai: data.loaikehoach[0].maloai});
                     this.props.setLoadTaskTypeDone();
                 }
             }
