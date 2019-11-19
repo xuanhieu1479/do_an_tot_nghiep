@@ -8,20 +8,10 @@ use DateTime;
 use DateTimeZone;
 use DB;
 use App\KeHoach;
-use App\LoaiKeHoach;
 
 class KeHoachController extends Controller
 {
     private $overDueDateToDelete = 2;
-
-    public function themLoaiKeHoachMacDinh($email) {
-        $loaikehoach = new LoaiKeHoach([
-            'maloai' => 0,
-            'email' => $email,
-            'tenloai' => 'Công việc',
-        ]);
-        if(!$loaikehoach->daTonTai($email)) $loaikehoach->save();
-    }
 
     public function themKeHoach(Request $request) {
 
@@ -32,7 +22,6 @@ class KeHoachController extends Controller
         $kehoach->dahoanthanh = false;
 
         try {
-            $this->themLoaiKeHoachMacDinh($email);
             $kehoach->save();
             return response()->json([
                 'message' => "Thêm kế hoạch thành công."

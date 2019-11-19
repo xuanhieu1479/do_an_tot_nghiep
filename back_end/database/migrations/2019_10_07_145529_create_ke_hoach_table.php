@@ -24,8 +24,8 @@ class CreateKeHoachTable extends Migration
             $table->boolean('cothongbao');
             $table->boolean('dahoanthanh');
             $table->foreign('email')->references('email')->on('taikhoan')->onDelete('cascade');
-            $table->foreign('maloai')->references('maloai')->on('loaikehoach')->onDelete('cascade');
-            $table->foreign('mauutien')->references('mauutien')->on('mucdouutien')->onDelete('cascade');
+            $table->foreign('maloai')->references('maloai')->on('loaikehoach');
+            $table->foreign('mauutien')->references('mauutien')->on('mucdouutien');
             $table->timestamps();
         });
     }

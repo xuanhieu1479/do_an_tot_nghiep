@@ -12,8 +12,4 @@ class LoaiKeHoach extends Authenticatable
     protected $table = 'loaikehoach';
     protected $primaryKey = 'maloai';
     protected $fillable = ['email', 'tenloai'];
-
-    public function daTonTai($email) {
-        return (LoaiKeHoach::where('email', '=', $email)->exists());
-    }
 }

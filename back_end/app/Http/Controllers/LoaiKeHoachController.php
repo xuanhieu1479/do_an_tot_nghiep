@@ -44,7 +44,8 @@ class LoaiKeHoachController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage(),
+                'message' => 'Loại kế hoạch này vẫn đang được sử dụng',
+                'error message' => $e->getMessage(),
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }

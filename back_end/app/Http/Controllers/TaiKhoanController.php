@@ -10,6 +10,7 @@ use Hash;
 use DateTime;
 use App\Mail\ResetMatKhau;
 use App\TaiKhoan;
+use App\LoaiKeHoach;
 
 class TaiKhoanController extends Controller
 {
@@ -54,6 +55,11 @@ class TaiKhoanController extends Controller
         }
 
         $taikhoan->save();
+        $lkh = new LoaiKeHoach([
+            'email' => $email,
+            'tenloai' => 'Công việc',
+        ]);
+        $lkh->save();
         Auth::attempt(['email' => $email, 'matkhau' => $matkhau]);
         return $this->taoToken($request, 'Tạo tài khoản thành công');
 
