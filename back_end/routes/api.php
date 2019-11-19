@@ -29,12 +29,14 @@ Route::group([
     'middleware' => ['cors', 'auth:api']
 ], function() {
     Route::post('themkehoach', 'KeHoachController@themKeHoach');
+    Route::post('themloaikehoach', 'LoaiKeHoachController@addLoaiKeHoach');
     Route::get('loaikehoach', 'LoaiKeHoachController@getLoaiKeHoach');
     Route::get('kehoach', 'KeHoachController@getKeHoach');
     Route::get('allkehoach', 'KeHoachController@getAllKeHoach');
     Route::get('kehoachbyid', 'KeHoachController@getKeHoachByID');
     Route::put('updatekehoach', 'KeHoachController@updateKeHoach');
     Route::delete('deletekehoach', 'KeHoachController@deleteKeHoachByID');
+    Route::delete('deleteloaikehoach', 'LoaiKeHoachController@deleteLoaiKeHoach');
 });
 
 Route::group([
