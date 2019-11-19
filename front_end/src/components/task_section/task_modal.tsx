@@ -50,6 +50,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         }
 
         this.hideThisModal = this.hideThisModal.bind(this);
+        this.cancelButton = this.cancelButton.bind(this);
         this.resetThisModal = this.resetThisModal.bind(this);
         this.onChangeTenKeHoach = this.onChangeTenKeHoach.bind(this);
         this.onChangeThoiGian = this.onChangeThoiGian.bind(this);
@@ -82,6 +83,17 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             });
         } else {
             this.updateTask();
+            this.resetThisModal();
+        }        
+        this.props.hideModal();
+    }
+
+    cancelButton() {
+        if(this.props.isAddingTask) {
+            this.setState({
+                show: false,
+            });
+        } else {
             this.resetThisModal();
         }        
         this.props.hideModal();
@@ -316,7 +328,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                     <div style={{width: '100%'}}>
                         <div style={{display: 'inline', float: 'right'}}>
                             <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask : this.updateTask}>Lưu</Button>
-                            <Button variant="danger" onClick={this.hideThisModal}>Hủy</Button>
+                            <Button variant="danger" onClick={this.cancelButton}>Hủy</Button>
                         </div>
                         <div style={{display: 'inline', float: 'left'}}>
                             <Button variant="dark" onClick={this.deleteTask}>Xóa</Button>
