@@ -5,13 +5,16 @@ import NavBar from "../components/navbar/navbar";
 import TaskDeck from "../components/task_section/task_deck";
 import ButtonAddTask from "../components/task_section/add_task";
 import TaskModal from "../components/task_section/task_modal";
+import TaskTypeModal from "../components/task_section/task_type_modal";
 import apiCaller from "../utils/apiCaller";
 
 interface PageHomeState {
     doneLoadTask: boolean;
     showModal: boolean;
+    showTypeModal: boolean;
     isAddingTask: boolean;
     makehoach: string;
+    doneLoadTaskType: boolean;
 }
 
 export default class PageHome extends React.Component<any, PageHomeState> {
@@ -20,15 +23,21 @@ export default class PageHome extends React.Component<any, PageHomeState> {
         this.state = {
             doneLoadTask: false,
             showModal: false,
+            showTypeModal: false,
             isAddingTask: true,
             makehoach: '',
+            doneLoadTaskType: false,
         }
 
         this.showAddModal = this.showAddModal.bind(this);
         this.showUpdateModal = this.showUpdateModal.bind(this);
+        this.showTypeModal = this.showTypeModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
+        this.hideTypeModal = this.hideTypeModal.bind(this);
         this.setLoadTaskDone = this.setLoadTaskDone.bind(this);
         this.setLoadTaskUndone = this.setLoadTaskUndone.bind(this);
+        this.setLoadTaskTypeDone = this.setLoadTaskTypeDone.bind(this);
+        this.setLoadTaskTypeUndone = this.setLoadTaskTypeUndone.bind(this);
     }
 
     showAddModal() {
@@ -39,8 +48,16 @@ export default class PageHome extends React.Component<any, PageHomeState> {
         this.setState({showModal: true, makehoach: makehoach, isAddingTask: false});
     }
 
+    showTypeModal() {
+        this.setState({showTypeModal: true});
+    }
+
     hideModal() {
         this.setState({showModal: false});
+    }
+
+    hideTypeModal() {
+        this.setState({showTypeModal: false})
     }
 
     setLoadTaskDone() {
@@ -49,6 +66,14 @@ export default class PageHome extends React.Component<any, PageHomeState> {
 
     setLoadTaskUndone() {
         this.setState({doneLoadTask: false});
+    }
+
+    setLoadTaskTypeDone() {
+        this.setState({doneLoadTaskType: true});
+    }
+
+    setLoadTaskTypeUndone() {
+        this.setState({doneLoadTaskType: false});
     }
 
     loadTaskPriority() {
@@ -83,6 +108,14 @@ export default class PageHome extends React.Component<any, PageHomeState> {
                                 setLoadTaskUndone={this.setLoadTaskUndone}
                                 hideModal={this.hideModal}
                                 makehoach={this.state.makehoach}
+                                showTypeModal={this.showTypeModal}
+                                doneLoadTaskType={this.state.doneLoadTaskType}
+                                setLoadTaskTypeDone={this.setLoadTaskTypeDone}
+                            />
+                            <TaskTypeModal 
+                                show={this.state.showTypeModal}
+                                hideModal={this.hideTypeModal}
+                                setLoadTaskTypeUndone={this.setLoadTaskTypeUndone}
                             />
                         </div>
                     }

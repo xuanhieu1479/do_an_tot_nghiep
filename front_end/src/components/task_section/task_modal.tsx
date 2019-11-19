@@ -16,7 +16,6 @@ interface TaskModalState {
     dahoanthanh: boolean;
     userEmail: any;
     loaikehoach: TaskType[];
-    doneLoadTaskType: boolean;
     doneLoadTask: boolean;
     dataChanged: boolean;
 }
@@ -28,6 +27,8 @@ interface TaskModalProps {
     hideModal: () => void;
     makehoach: string,
     showTypeModal: () => void;
+    doneLoadTaskType: boolean;
+    setLoadTaskTypeDone: () => void;
 }
 
 export default class TaskModal extends React.Component<TaskModalProps, TaskModalState> {
@@ -44,7 +45,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             dahoanthanh: false,
             userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
             loaikehoach: [],
-            doneLoadTaskType: false,
             doneLoadTask: false,
             dataChanged: false,
         }
@@ -70,7 +70,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             this.setState({
                 show: this.props.show,                 
                 dataChanged: false,
-                doneLoadTaskType: false,
                 doneLoadTask: false,
             });
         }
@@ -134,7 +133,8 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             response => {
                 const { statusCode, data } = response;
                 if(statusCode === 200) {
-                    this.setState({loaikehoach: data.loaikehoach, doneLoadTaskType: true});
+                    this.setState({loaikehoach: data.loaikehoach});
+                    this.props.setLoadTaskTypeDone();
                 }
             }
         );
@@ -223,7 +223,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
     render(): React.ReactNode {    
         let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
-        if(!this.state.doneLoadTaskType && this.state.show) this.loadTaskType();
+        if(!this.props.doneLoadTaskType && this.state.show) this.loadTaskType();
         if(!this.props.isAddingTask && !this.state.doneLoadTask && this.state.show) this.loadTaskData();
         
         return(
