@@ -10,7 +10,7 @@ class LoaiKeHoachController extends Controller
 {
     public function getLoaiKeHoach(Request $request) {
         $email = $request->input('email');
-        $loaikehoach = DB::table('loaikehoach')->where('email', '=', $email)->get()->pluck('tenloai');
+        $loaikehoach = DB::table('loaikehoach')->select('maloai', 'tenloai')->where('email', '=', $email)->get();
         if(count($loaikehoach) != 0) {
             return response()->json([
                 'loaikehoach' => $loaikehoach,

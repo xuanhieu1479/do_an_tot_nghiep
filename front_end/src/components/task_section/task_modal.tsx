@@ -3,6 +3,7 @@ import { Button, Modal, Form, Col, InputGroup } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
 import jwt_decode from 'jwt-decode';
 import apiCaller from "../../utils/apiCaller";
+import TaskType from "../../models/task_type";
 
 interface TaskModalState {
     show: boolean;
@@ -14,7 +15,7 @@ interface TaskModalState {
     cothongbao: boolean;
     dahoanthanh: boolean;
     userEmail: any;
-    loaikehoach: string[];
+    loaikehoach: TaskType[];
     doneLoadTaskType: boolean;
     doneLoadTask: boolean;
     dataChanged: boolean;
@@ -26,6 +27,7 @@ interface TaskModalProps {
     setLoadTaskUndone: () => void;
     hideModal: () => void;
     makehoach: string,
+    showTypeModal: () => void;
 }
 
 export default class TaskModal extends React.Component<TaskModalProps, TaskModalState> {
@@ -41,7 +43,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             cothongbao: false,
             dahoanthanh: false,
             userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
-            loaikehoach: ['Công việc'],
+            loaikehoach: [],
             doneLoadTaskType: false,
             doneLoadTask: false,
             dataChanged: false,
@@ -57,6 +59,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.onChangeCoThongBao = this.onChangeCoThongBao.bind(this);
         this.onChangeDaHoanThanh = this.onChangeDaHoanThanh.bind(this);
         this.componentDidUpdate = this.componentDidUpdate.bind(this);
+        this.getCurrentTaskType = this.getCurrentTaskType.bind(this);
         this.saveTask = this.saveTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
@@ -115,7 +118,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     onChangeMaLoai(event: any) {
-        this.setState({maloai: event.target.selectedIndex, dataChanged: true});
+        this.setState({maloai: event.target.options[event.target.selectedIndex].getAttribute('data-key'), dataChanged: true});
     }
 
     onChangeCoThongBao(event: any) {
@@ -136,6 +139,15 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             }
         );
     }
+
+    getCurrentTaskType() {
+        let lkh = this.state.loaikehoach;
+        for (let index = 0; index < lkh.length; ++index) {
+            if (this.state.maloai === lkh[index].maloai) {
+                return lkh[index].tenloai;
+            }
+        }
+    }
     
     loadTaskData() {
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/kehoachbyid?makehoach=' + this.props.makehoach, 'GET', null, localStorage.getItem('access_token')).then(
@@ -146,7 +158,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                     thoigian: new Date(data.kehoach.thoigian),
                     ghichu: data.kehoach.ghichu,
                     mauutien: data.kehoach.mauutien - 1,  //Vì auto increment dưới database bắt đầu = 1
-                    maloai: data.kehoach.maloai - 1,
+                    maloai: data.kehoach.maloai,
                     cothongbao: data.kehoach.cothongbao,
                     dahoanthanh: data.kehoach.dahoanthanh,
                     doneLoadTask: true,
@@ -162,7 +174,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             thoigian: this.state.thoigian.toString(),
             ghichu: this.state.ghichu,
             mauutien: this.state.mauutien + 1, //Vì auto increment dưới database bắt đầu = 1
-            maloai: this.state.maloai + 1,
+            maloai: this.state.maloai,
             cothongbao: this.state.cothongbao,
             dahoanthanh: this.state.dahoanthanh,
         }
@@ -183,7 +195,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             thoigian: this.state.thoigian.toString(),
             ghichu: this.state.ghichu,
             mauutien: this.state.mauutien + 1, //Vì auto increment dưới database bắt đầu = 1
-            maloai: this.state.maloai + 1,
+            maloai: this.state.maloai,
             cothongbao: this.state.cothongbao,
             dahoanthanh: this.state.dahoanthanh,
         }
@@ -209,7 +221,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         }        
     }
 
-    render(): React.ReactNode {        
+    render(): React.ReactNode {    
         let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
         if(!this.state.doneLoadTaskType && this.state.show) this.loadTaskType();
         if(!this.props.isAddingTask && !this.state.doneLoadTask && this.state.show) this.loadTaskData();
@@ -251,16 +263,16 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <InputGroup className="mb-3">
                                 <Form.Control as="select" 
                                     onChange={this.onChangeMaLoai}
-                                    value={this.state.loaikehoach[this.state.maloai]}
+                                    value={this.getCurrentTaskType()}
                                 >
-                                    {this.state.loaikehoach.map((lkh: string, index: number) => {
+                                    {this.state.loaikehoach.map((lkh: TaskType) => {
                                         return (
-                                            <option key={index}>{lkh}</option>
+                                            <option key={lkh.maloai} data-key={lkh.maloai}>{lkh.tenloai}</option>
                                         );
                                     })}
                                 </Form.Control>
                                 <InputGroup.Append>
-                                    <Button variant="outline-secondary">+</Button>
+                                    <Button variant="outline-secondary" onClick={this.props.showTypeModal}>+</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                             </Form.Group>
