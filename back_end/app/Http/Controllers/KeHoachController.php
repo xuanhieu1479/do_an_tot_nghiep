@@ -90,7 +90,16 @@ class KeHoachController extends Controller
            'todayTask' => $todayTask,
            'tommorowTask' => $tommorowTask,
            'otherTask' => $otherTask,
-        ]);
+        ], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function getAllKeHoach(Request $request) {
+        $email = $request->input('email');
+        $taskList = DB::table('kehoach')->where('email', '=', $email)->get();
+
+        return response()->json([
+            'kehoach' => $taskList,
+         ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function getKeHoachByID(Request $request) {

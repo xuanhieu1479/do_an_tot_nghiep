@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import SideBar from "../components/sidebar/sidebar";
 import NavBar from "../components/navbar/navbar";
+import Calendar from "../components/calendar_section/calendar";
 
 export default class PageCalendar extends React.Component<any, any> {
 
@@ -13,7 +14,7 @@ export default class PageCalendar extends React.Component<any, any> {
                 <SideBar 
                     mainContent=
                     {
-                        <div>Đây là cái lịch</div>
+                        <Calendar />
                     }
                     activeTab="#calendar"
                     transitions={false}
