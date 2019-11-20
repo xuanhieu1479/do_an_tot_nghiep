@@ -1,5 +1,4 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Alert, Modal } from "react-bootstrap";
 import callApi from "../utils/apiCaller";
 import { Redirect } from "react-router-dom";
@@ -24,12 +23,6 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
             emailValidated: true,
             passwordValidated: true,
         };
-
-        this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
-        this.checkValidation = this.checkValidation.bind(this);
-        this.doRegister = this.doRegister.bind(this);
-        this.redirectToHome = this.redirectToHome.bind(this);
     }
 
     onChangeEmail(event: any) {
@@ -91,8 +84,10 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
     }
 
     render(): React.ReactNode {
-        if(localStorage.getItem('access_token') && this.state.show === false) return (<Redirect to="/home" />);
+
+        if(localStorage.getItem('access_token') && !this.state.show) return (<Redirect to="/home" />);
         let isHidden = this.state.errorMessage ? false : true;
+        
         return (
             <div style={{
                 height: '100vh',
@@ -104,7 +99,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                     <h1 style={{marginBottom: 50, textAlign: 'center'}}>Đăng ký</h1>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="Nhập email" value={this.state.email} onChange={this.onChangeEmail} />
+                        <Form.Control type="email" placeholder="asdasd@gmail.com" value={this.state.email} onChange={this.onChangeEmail.bind(this)} />
                         <Form.Text className="text-muted">
                         <Alert variant='danger' hidden={isHidden}>{this.state.errorMessage}</Alert>
                         <Alert variant='danger' hidden={this.state.emailValidated}>Yêu cầu nhập đúng định dạng email.</Alert>
@@ -113,12 +108,10 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Mật khẩu</Form.Label>
-                        <Form.Control type="password" placeholder="Mật khẩu" value={this.state.password} onChange={this.onChangePassword} />
+                        <Form.Control type="password" placeholder="asd123" value={this.state.password} onChange={this.onChangePassword.bind(this)} />
                         <Alert variant='danger' hidden={this.state.passwordValidated}>Tối thiểu 6 ký tự, trong đó tồn tại ít nhất 1 chữ và 1 số.</Alert>
                     </Form.Group>
-                    <Button variant="primary" onClick={this.doRegister}>
-                        Đăng ký
-                    </Button>
+                    <Button variant="primary" onClick={this.doRegister.bind(this)}>Đăng ký</Button>
                 </Form>
 
                 <Modal show={this.state.show}>
@@ -127,9 +120,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                     </Modal.Header>
                     <Modal.Body>Bắt đầu quản lý thời gian một cách hiệu quả hơn.</Modal.Body>
                     <Modal.Footer>
-                    <Button variant="primary" onClick={this.redirectToHome}>
-                        Ngon!
-                    </Button>
+                    <Button variant="primary" onClick={this.redirectToHome.bind(this)}>Ngon!</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

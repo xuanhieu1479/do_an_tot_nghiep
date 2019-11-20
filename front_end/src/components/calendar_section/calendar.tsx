@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, momentLocalizer, View } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from 'moment';
 import jwt_decode from 'jwt-decode';
@@ -28,17 +28,14 @@ export default class CalendarComponent extends React.Component<any, CalendarComp
             taskList: [],
             doneLoadTask: false,
         }
-
-        this.loadTask = this.loadTask.bind(this);
     }
 
     async loadTask() {
         await apiCaller(process.env.REACT_APP_DOMAIN + 'api/allkehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
             response => {
                 const { data } = response;
-                let taskReceived = data.kehoach;
                 let taskList: CalendarTask[] = [];
-                taskReceived.map((task: any) => {
+                data.kehoach.map((task: any) => {
                     return taskList.push({
                         title: task.tenkehoach,
                         start: new Date(task.thoigian),
@@ -54,18 +51,12 @@ export default class CalendarComponent extends React.Component<any, CalendarComp
     render(): React.ReactNode {
         if (!this.state.doneLoadTask) this.loadTask();
 
-        let allView: View[] = [
-            'month',
-            'week',
-            'day',
-        ];
-
         return (
             <div style={{height: "92%", width: "99%"}}>
                 <Calendar
                     localizer={localizer}
                     events={this.state.taskList}
-                    views={allView}
+                    views={['month', 'week', 'day']}
                 />
             </div>
         );

@@ -5,7 +5,6 @@ import apiCaller from "../../utils/apiCaller";
 import TaskType from "../../models/task_type";
 
 interface TaskTypeModalState {
-    show: boolean;
     userEmail: any;
     newTaskTypeName: string;
     maloai: number;
@@ -24,7 +23,6 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
     constructor(props: TaskTypeModalProps) {
         super(props);
         this.state = {
-            show: this.props.show,
             userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
             newTaskTypeName: '',
             maloai: 0,
@@ -32,24 +30,12 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
             doneLoadTaskType: false,
             taskTypeNameValidated: true,
         }
-
-        this.hideThisModal = this.hideThisModal.bind(this);
-        this.onChangeAddType = this.onChangeAddType.bind(this);
-        this.onChangeDeleteType = this.onChangeDeleteType.bind(this);
-        this.loadTaskType = this.loadTaskType.bind(this);
-        this.checkValidation = this.checkValidation.bind(this);
-        this.addTaskType = this.addTaskType.bind(this);
-        this.deleteTaskType = this.deleteTaskType.bind(this);
     }
 
     componentDidUpdate(prevProps: any) {
         if (this.props.show !== prevProps.show) {
-            this.setState({show: this.props.show, taskTypeNameValidated: true})
+            this.setState({taskTypeNameValidated: true})
         }
-    }
-
-    hideThisModal() {
-        this.setState({show: false});
     }
 
     onChangeAddType(event: any) {
@@ -65,7 +51,11 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
             response => {
                 const { statusCode, data } = response;
                 if(statusCode === 200) {
-                    this.setState({taskTypeList: data.loaikehoach, maloai: data.loaikehoach[0].maloai, doneLoadTaskType: true});
+                    this.setState({
+                        taskTypeList: data.loaikehoach,
+                        maloai: data.loaikehoach[0].maloai,
+                        doneLoadTaskType: true,
+                    });
                 }
             }
         );
@@ -96,35 +86,37 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
         };
 
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/themloaikehoach', 'POST', newTaskType, localStorage.getItem('access_token')).then(
-            response => {
-                alert(response.data.message);
+            response => {                
                 this.setState({newTaskTypeName: '', doneLoadTaskType: false});
-                this.props.setLoadTaskTypeUndone();                
+                this.props.setLoadTaskTypeUndone();
+                alert(response.data.message);
             }
         );
     }
 
     deleteTaskType() {
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/deleteloaikehoach?maloai=' + this.state.maloai, 'DELETE', null, localStorage.getItem('access_token')).then(
-            response => {
-                alert(response.data.message);
+            response => {                
                 this.setState({doneLoadTaskType: false});
-                this.props.setLoadTaskTypeUndone();                
+                this.props.setLoadTaskTypeUndone();
+                alert(response.data.message);
             }
         );
     }
 
     render(): React.ReactNode {
-        if(!this.state.doneLoadTaskType && this.state.show) this.loadTaskType();
+
+        if(!this.state.doneLoadTaskType && this.props.show) this.loadTaskType();
+        
         return (
-            <Modal show={this.state.show} onHide={this.props.hideModal} centered>
+            <Modal show={this.props.show} onHide={this.props.hideModal} centered>
                 <Modal.Body>
                     <Form.Group as={Col} controlId="formGridAddTaskType">
                         <Form.Label>Thêm loại kế hoạch</Form.Label>
                         <InputGroup className="mb-3">
-                            <Form.Control onChange={this.onChangeAddType} value={this.state.newTaskTypeName}></Form.Control>
+                            <Form.Control onChange={this.onChangeAddType.bind(this)} placeholder="Giải trí" value={this.state.newTaskTypeName}></Form.Control>
                             <InputGroup.Append>
-                                <Button variant="outline-secondary" onClick={this.addTaskType}>+</Button>
+                                <Button variant="outline-secondary" onClick={this.addTaskType.bind(this)}>+</Button>
                             </InputGroup.Append>                            
                         </InputGroup>
                         <Alert variant='danger' hidden={this.state.taskTypeNameValidated}>Tối đa 10 ký tự và không được để trống.</Alert>
@@ -132,7 +124,7 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
                     <Form.Group as={Col} controlId="formGridDeleteTaskType">
                         <Form.Label>Xóa loại kế hoạch</Form.Label>
                         <InputGroup className="mb-3">
-                            <Form.Control as="select" onChange={this.onChangeDeleteType}>
+                            <Form.Control as="select" onChange={this.onChangeDeleteType.bind(this)}>
                                 {this.state.taskTypeList.map((taskType: TaskType) => {
                                     return (
                                         <option key={taskType.maloai} data-key={taskType.maloai}>{taskType.tenloai}</option>
@@ -140,7 +132,7 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
                                 })}
                             </Form.Control>
                             <InputGroup.Append>
-                                <Button variant="outline-secondary" onClick={this.deleteTaskType}>-</Button>
+                                <Button variant="outline-secondary" onClick={this.deleteTaskType.bind(this)}>-</Button>
                             </InputGroup.Append>
                         </InputGroup>
                     </Form.Group>

@@ -1,5 +1,4 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, NavDropdown,  } from "react-bootstrap";
 import ButtonDangKy from "./dangky";
 import ButtonDangNhap from "./dangnhap";
@@ -28,7 +27,7 @@ export default class NavBar extends React.Component {
                 </Navbar.Collapse>
                 <ButtonDangNhap isHidden={this.isLoggedIn} />   
                 <ButtonDangKy isHidden={this.isLoggedIn} />
-                <ButtonDangXuat isHidden={this.isLoggedIn} />            
+                <ButtonDangXuat isHidden={!this.isLoggedIn} />            
             </Navbar>
         );
     }

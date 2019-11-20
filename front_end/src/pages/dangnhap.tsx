@@ -1,5 +1,4 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Alert } from "react-bootstrap";
 import callApi from "../utils/apiCaller";
 import { Redirect } from "react-router-dom";
@@ -18,10 +17,6 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
             password: '',
             errorMessage: '',
         };
-
-        this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
-        this.doLogin = this.doLogin.bind(this);        
     }
 
     onChangeEmail(event: any) {
@@ -51,8 +46,10 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
     }
 
     render(): React.ReactNode {
+
         if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
         let isHidden = this.state.errorMessage ? false : true;
+
         return (
             <div style={{
                 height: '100vh',
@@ -64,7 +61,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                 <h1 style={{marginBottom: 50, textAlign: 'center'}}>Đăng nhập</h1>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="Nhập email" value={this.state.email} onChange={this.onChangeEmail} />
+                        <Form.Control type="email" placeholder="asdasd@gmail.com" value={this.state.email} onChange={this.onChangeEmail.bind(this)} />
                         <Form.Text className="text-muted">
                         <Alert variant='danger' hidden={isHidden}>{this.state.errorMessage}</Alert>
                         </Form.Text>
@@ -72,11 +69,9 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Mật khẩu</Form.Label>
-                        <Form.Control type="password" placeholder="Mật khẩu" value={this.state.password} onChange={this.onChangePassword} />
+                        <Form.Control type="password" placeholder="asd123" value={this.state.password} onChange={this.onChangePassword.bind(this)} />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.doLogin}>
-                        Đăng nhập
-                    </Button>
+                    <Button variant="primary" onClick={this.doLogin.bind(this)}>Đăng nhập</Button>
                 </Form>
             </div>
         );

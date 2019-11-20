@@ -1,5 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import jwt_decode from 'jwt-decode';
+import TaskType from "../models/task_type";
 import SideBar from "../components/sidebar/sidebar";
 import NavBar from "../components/navbar/navbar";
 import TaskDeck from "../components/task_section/task_deck";
@@ -9,11 +11,13 @@ import TaskTypeModal from "../components/task_section/task_type_modal";
 import apiCaller from "../utils/apiCaller";
 
 interface PageHomeState {
+    userEmail: any,
     doneLoadTask: boolean;
     showModal: boolean;
     showTypeModal: boolean;
     isAddingTask: boolean;
     makehoach: string;
+    taskType: TaskType[];
     doneLoadTaskType: boolean;
 }
 
@@ -21,11 +25,13 @@ export default class PageHome extends React.Component<any, PageHomeState> {
     constructor(props: any) {
         super(props);
         this.state = {
+            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
             doneLoadTask: false,
             showModal: false,
             showTypeModal: false,
             isAddingTask: true,
             makehoach: '',
+            taskType: [],
             doneLoadTaskType: false,
         }
 
@@ -84,11 +90,25 @@ export default class PageHome extends React.Component<any, PageHomeState> {
         );
     }
 
+    loadTaskType() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/loaikehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
+            response => {
+                const { statusCode, data } = response;
+                if(statusCode === 200) {
+                    this.setState({taskType: data.loaikehoach, doneLoadTaskType: true});
+                }
+            }
+        );
+    }
+
     render(): React.ReactNode {
+
         if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);
         if(localStorage.getItem('mucdouutien') === null) {
             this.loadTaskPriority();
         }
+        if(!this.state.doneLoadTaskType) this.loadTaskType();
+
         return (
             <div>
                 <NavBar />
@@ -109,8 +129,7 @@ export default class PageHome extends React.Component<any, PageHomeState> {
                                 hideModal={this.hideModal}
                                 makehoach={this.state.makehoach}
                                 showTypeModal={this.showTypeModal}
-                                doneLoadTaskType={this.state.doneLoadTaskType}
-                                setLoadTaskTypeDone={this.setLoadTaskTypeDone}
+                                taskType={this.state.taskType}
                             />
                             <TaskTypeModal 
                                 show={this.state.showTypeModal}

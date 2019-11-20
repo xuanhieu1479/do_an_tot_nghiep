@@ -33,9 +33,6 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
             doneLoadTask: this.props.doneLoadTask,
             deleteThisItem: [],
         }
-
-        this.loadTask = this.loadTask.bind(this);
-        this.deleteThisItem = this.deleteThisItem.bind(this);
     }
 
     componentDidUpdate(prevProps: any) {
@@ -61,13 +58,15 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
     }
 
     deleteThisItem(makehoach: string) {
-        let dummyArray = this.state.deleteThisItem;
+        let dummyArray = this.state.deleteThisItem; 
         dummyArray.push(makehoach);
         this.setState({deleteThisItem: dummyArray});
     }
 
     render(): React.ReactNode {
+
         if(!this.state.doneLoadTask) this.loadTask();
+        
         return (
             <CardDeck style={{height: "90%", width: "100%"}}>
                 <Card style={{height: "100%"}}>
@@ -81,7 +80,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                                         key={task.makehoach}
                                         task={task} 
                                         showModal={this.props.showModal}
-                                        deleteThisItem={this.deleteThisItem}
+                                        deleteThisItem={this.deleteThisItem.bind(this)}
                                     />
                                     :
                                     null
@@ -100,7 +99,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                                     key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
-                                    deleteThisItem={this.deleteThisItem}
+                                    deleteThisItem={this.deleteThisItem.bind(this)}
                                 />
                                 :
                                 null
@@ -118,7 +117,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                                     key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
-                                    deleteThisItem={this.deleteThisItem}
+                                    deleteThisItem={this.deleteThisItem.bind(this)}
                                 />
                                 :
                                 null
@@ -136,7 +135,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                                     key={task.makehoach}
                                     task={task} 
                                     showModal={this.props.showModal}
-                                    deleteThisItem={this.deleteThisItem}
+                                    deleteThisItem={this.deleteThisItem.bind(this)}
                                 />
                                 :
                                 null

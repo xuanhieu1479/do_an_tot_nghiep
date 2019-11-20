@@ -7,16 +7,13 @@ import apiCaller from "../../utils/apiCaller";
 import TaskType from "../../models/task_type";
 
 interface TaskModalState {
-    show: boolean;
     tenkehoach: string;
     thoigian: Date;
     ghichu: string;
     mauutien: number;
     maloai: number;
     cothongbao: boolean;
-    dahoanthanh: boolean;
     userEmail: any;
-    loaikehoach: TaskType[];
     doneLoadTask: boolean;
     dataChanged: boolean;
     dateTimeValidated: boolean;
@@ -31,27 +28,27 @@ interface TaskModalProps {
     hideModal: () => void;
     makehoach: string,
     showTypeModal: () => void;
-    doneLoadTaskType: boolean;
-    setLoadTaskTypeDone: () => void;
+    taskType: TaskType[];
 }
 
 export default class TaskModal extends React.Component<TaskModalProps, TaskModalState> {
+
     private dateTimePickerRef: any;
     private taskNameRef: any;
     private taskNoteRef: any;
+    private taskNameRegex = new RegExp(/^.{1,20}$/);
+    private taskNoteRegex = new RegExp(/^.{0,1000}$/);
+
     constructor(props: TaskModalProps) {
         super(props);
         this.state = {
-            show: this.props.show,
             tenkehoach: '',
             thoigian: moment().add(1, 'hours').toDate(),
             ghichu: '',
             mauutien: 0,
             maloai: 0,
             cothongbao: false,
-            dahoanthanh: false,
             userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
-            loaikehoach: [],
             doneLoadTask: false,
             dataChanged: false,
             dateTimeValidated: true,
@@ -62,29 +59,11 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.dateTimePickerRef = React.createRef();
         this.taskNameRef = React.createRef();
         this.taskNoteRef = React.createRef();
-
-        this.hideThisModal = this.hideThisModal.bind(this);
-        this.cancelButton = this.cancelButton.bind(this);
-        this.resetThisModal = this.resetThisModal.bind(this);
-        this.onChangeTenKeHoach = this.onChangeTenKeHoach.bind(this);
-        this.onChangeThoiGian = this.onChangeThoiGian.bind(this);
-        this.onChangeGhiChu = this.onChangeGhiChu.bind(this);
-        this.onChangeMaUuTien = this.onChangeMaUuTien.bind(this);
-        this.onChangeMaLoai = this.onChangeMaLoai.bind(this);
-        this.onChangeCoThongBao = this.onChangeCoThongBao.bind(this);
-        this.onChangeDaHoanThanh = this.onChangeDaHoanThanh.bind(this);
-        this.componentDidUpdate = this.componentDidUpdate.bind(this);
-        this.getCurrentTaskType = this.getCurrentTaskType.bind(this);
-        this.checkValidation = this.checkValidation.bind(this);
-        this.saveTask = this.saveTask.bind(this);
-        this.updateTask = this.updateTask.bind(this);
-        this.deleteTask = this.deleteTask.bind(this);
     }
 
     componentDidUpdate(prevProps: any) {
         if (this.props.show !== prevProps.show) {
             this.setState({
-                show: this.props.show,                 
                 dataChanged: false,
                 doneLoadTask: false,
                 dateTimeValidated: true,
@@ -96,9 +75,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
     hideThisModal() {
         if(this.props.isAddingTask) {
-            this.setState({
-                show: false,
-            });
             this.props.hideModal();
         } else {
             if (this.state.dataChanged) {
@@ -113,33 +89,26 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     cancelButton() {
-        if(this.props.isAddingTask) {
-            this.setState({
-                show: false,
-            });
-        } else {
+        if(!this.props.isAddingTask) {
             this.resetThisModal();
-        }        
+        }      
         this.props.hideModal();
     }
 
     resetThisModal() {
         this.setState({
-            show: false, 
             tenkehoach: '',
             thoigian: moment().add(1, 'hours').toDate(),
             ghichu: '',
             mauutien: 0,
             maloai: 0,
             cothongbao: false,
-            dahoanthanh: false,
         });
     }
 
     async onChangeTenKeHoach(event: any) {
         await this.setState({tenkehoach: event.target.value, dataChanged: true});
-        let taskNameRegex = new RegExp(/^.{1,20}$/);        
-        if (taskNameRegex.test(this.state.tenkehoach) && this.state.taskNameValidate === false) {
+        if (this.taskNameRegex.test(this.state.tenkehoach) && !this.state.taskNameValidate) {
             this.setState({taskNameValidate: true});
         }
     }
@@ -153,8 +122,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
     async onChangeGhiChu(event: any) {
         await this.setState({ghichu: event.target.value, dataChanged: true});
-        let taskNoteRegex = new RegExp(/^.{0,1000}$/);
-        if (taskNoteRegex.test(this.state.ghichu) && this.state.taskNoteValidated === false) {
+        if (this.taskNoteRegex.test(this.state.ghichu) && !this.state.taskNoteValidated) {
             this.setState({taskNoteValidated: true});
         }
     }
@@ -171,24 +139,8 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.setState({cothongbao: event.target.checked, dataChanged: true});
     }
 
-    onChangeDaHoanThanh(event: any) {
-        this.setState({dahoanthanh: event.target.checked, dataChanged: true});
-    }
-
-    loadTaskType() {
-        apiCaller(process.env.REACT_APP_DOMAIN + 'api/loaikehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
-            response => {
-                const { statusCode, data } = response;
-                if(statusCode === 200) {
-                    this.setState({loaikehoach: data.loaikehoach, maloai: data.loaikehoach[0].maloai});
-                    this.props.setLoadTaskTypeDone();
-                }
-            }
-        );
-    }
-
     getCurrentTaskType() {
-        let lkh = this.state.loaikehoach;
+        let lkh = this.props.taskType;
         for (let index = 0; index < lkh.length; ++index) {
             if (this.state.maloai === lkh[index].maloai) {
                 return lkh[index].tenloai;
@@ -207,7 +159,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                     mauutien: data.kehoach.mauutien - 1,  //Vì auto increment dưới database bắt đầu = 1
                     maloai: data.kehoach.maloai,
                     cothongbao: data.kehoach.cothongbao,
-                    dahoanthanh: data.kehoach.dahoanthanh,
                     doneLoadTask: true,
                 });
             }
@@ -215,8 +166,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     checkValidation() {
-        let taskNameRegex = new RegExp(/^.{1,20}$/);
-        let taskNoteRegex = new RegExp(/^.{0,1000}$/);
         let isValidated;
 
         if (this.state.thoigian >= moment().add(3300, 'seconds').toDate()) {
@@ -227,7 +176,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             isValidated = false;
         }
 
-        if (taskNameRegex.test(this.state.tenkehoach)) {
+        if (this.taskNameRegex.test(this.state.tenkehoach)) {
             this.setState({taskNameValidate: true});
             isValidated = (isValidated && true);
         } else {
@@ -235,7 +184,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             isValidated = false;
         }
 
-        if (taskNoteRegex.test(this.state.ghichu)) {
+        if (this.taskNoteRegex.test(this.state.ghichu)) {
             this.setState({taskNoteValidated: true});
             isValidated = (isValidated && true);
         } else {
@@ -258,7 +207,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             mauutien: this.state.mauutien + 1, //Vì auto increment dưới database bắt đầu = 1
             maloai: this.state.maloai,
             cothongbao: this.state.cothongbao,
-            dahoanthanh: this.state.dahoanthanh,
+            dahoanthanh: false,
         }
 
         await apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task, localStorage.getItem('access_token')).then(
@@ -282,7 +231,6 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             mauutien: this.state.mauutien + 1, //Vì auto increment dưới database bắt đầu = 1
             maloai: this.state.maloai,
             cothongbao: this.state.cothongbao,
-            dahoanthanh: this.state.dahoanthanh,
         }
 
         await apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatekehoach?makehoach=' + this.props.makehoach, 'PUT', task, localStorage.getItem('access_token')).then(
@@ -307,16 +255,12 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     render(): React.ReactNode {        
+
         let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
-        if(!this.props.doneLoadTaskType && this.state.show) this.loadTaskType();
-        if(!this.props.isAddingTask && !this.state.doneLoadTask && this.state.show) this.loadTaskData();
+        if(!this.props.isAddingTask && !this.state.doneLoadTask && this.props.show) this.loadTaskData();
         
         return(
-            <Modal 
-                show={this.state.show} 
-                centered
-                onHide={this.hideThisModal}
-            >
+            <Modal centered show={this.props.show} onHide={this.hideThisModal.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         {(this.props.isAddingTask) ? <div>Tạo task mới</div> : <div>Cập nhật task</div>}
@@ -326,40 +270,41 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                     <Form>
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridPrioritiy">
-                            <Form.Label>Mức độ ưu tiên</Form.Label>
-                            <Form.Control as="select" 
-                                onChange={this.onChangeMaUuTien} 
-                                value={mucdouutien[this.state.mauutien]}
-                            >
-                                {(mucdouutien) ? 
-                                    mucdouutien.map((mdut :string, index: number) => {
-                                        return (
-                                            <option key={index}>{mdut}</option>
-                                        );
-                                    })
-                                    :
-                                    <div></div>
-                                }
-                            </Form.Control>
+                                <Form.Label>Mức độ ưu tiên</Form.Label>
+                                <Form.Control as="select" 
+                                    onChange={this.onChangeMaUuTien.bind(this)} 
+                                    value={mucdouutien[this.state.mauutien]}
+                                >
+                                    {(mucdouutien) ? 
+                                        mucdouutien.map((mdut :string, index: number) => {
+                                            return (
+                                                <option key={index}>{mdut}</option>
+                                            );
+                                        })
+                                        :
+                                        <div></div>
+                                    }
+                                </Form.Control>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridTaskType">
-                            <Form.Label>Loại Task</Form.Label>
-                            <InputGroup className="mb-3">
-                                <Form.Control as="select" 
-                                    onChange={this.onChangeMaLoai}
-                                    value={this.getCurrentTaskType()}
-                                >
-                                    {this.state.loaikehoach.map((lkh: TaskType) => {
-                                        return (
-                                            <option key={lkh.maloai} data-key={lkh.maloai}>{lkh.tenloai}</option>
-                                        );
-                                    })}
-                                </Form.Control>
-                                <InputGroup.Append>
-                                    <Button variant="outline-secondary" onClick={this.props.showTypeModal}>+</Button>
-                                </InputGroup.Append>
-                            </InputGroup>
+                                <Form.Label>Loại Task</Form.Label>
+                                <InputGroup className="mb-3">
+                                    <Form.Control
+                                        as="select" 
+                                        onChange={this.onChangeMaLoai.bind(this)}
+                                        value={this.getCurrentTaskType()}
+                                    >
+                                        {this.props.taskType.map((lkh: TaskType) => {
+                                            return (
+                                                <option key={lkh.maloai} data-key={lkh.maloai}>{lkh.tenloai}</option>
+                                            );
+                                        })}
+                                    </Form.Control>
+                                    <InputGroup.Append>
+                                        <Button variant="outline-secondary" onClick={this.props.showTypeModal}>+</Button>
+                                    </InputGroup.Append>
+                                </InputGroup>
                             </Form.Group>
                         </Form.Row>
 
@@ -368,7 +313,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                                 <Form.Label>Ngày bắt đầu</Form.Label>
                                 <DateTimePicker
                                     ref={this.dateTimePickerRef}
-                                    onChange={this.onChangeThoiGian}
+                                    onChange={this.onChangeThoiGian.bind(this)}
                                     value={this.state.thoigian}
                                     format="dd-MM-y h:mm:ss a"
                                 />
@@ -387,7 +332,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                                     id="id"
                                     label=""
                                     checked={this.state.cothongbao}
-                                    onChange={this.onChangeCoThongBao}
+                                    onChange={this.onChangeCoThongBao.bind(this)}
                                 />
                             </Form.Group>
                         </Form.Row>
@@ -397,8 +342,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <Form.Control
                                 ref={this.taskNameRef}
                                 type="text"
+                                placeholder="Ngồi thiền"
                                 value={this.state.tenkehoach}
-                                onChange={this.onChangeTenKeHoach} 
+                                onChange={this.onChangeTenKeHoach.bind(this)} 
                             />
                             <Overlay target={this.taskNameRef.current} show={!this.state.taskNameValidate} placement="top">
                                 {(props: any) => (
@@ -414,8 +360,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             <Form.Control
                                 ref={this.taskNoteRef}
                                 as="textarea"
+                                placeholder="Trời đất dung hòa, vạn vật sinh sôi..."
                                 rows="5"
-                                value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu} 
+                                value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu.bind(this)} 
                             />
                             <Overlay target={this.taskNoteRef.current} show={!this.state.taskNoteValidated} placement="top">
                                 {(props: any) => (
@@ -430,11 +377,11 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                 <Modal.Footer>
                     <div style={{width: '100%'}}>
                         <div style={{display: 'inline', float: 'right'}}>
-                            <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask : this.updateTask}>Lưu</Button>
-                            <Button variant="danger" onClick={this.cancelButton}>Hủy</Button>
+                            <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask.bind(this) : this.updateTask.bind(this)}>Lưu</Button>
+                            <Button variant="danger" onClick={this.cancelButton.bind(this)}>Hủy</Button>
                         </div>
                         <div style={{display: 'inline', float: 'left'}}>
-                            <Button variant="dark" onClick={this.deleteTask}>Xóa</Button>
+                            <Button variant="dark" onClick={this.deleteTask.bind(this)}>Xóa</Button>
                         </div>
                     </div>
                 </Modal.Footer>

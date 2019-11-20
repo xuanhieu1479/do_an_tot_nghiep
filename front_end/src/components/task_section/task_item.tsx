@@ -19,9 +19,6 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         this.state = {
             task: this.props.task,
         }
-
-        this.showUpdateModal = this.showUpdateModal.bind(this);
-        this.switchStatus = this.switchStatus.bind(this);
     }
 
     showUpdateModal() {
@@ -61,35 +58,33 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
 
     render(): React.ReactNode {
         return (
-            <div>
-                <ListGroup.Item                    
-                    action 
-                    variant={(this.state.task.dahoanthanh) ? "secondary" : undefined}
-                    onClick={this.showUpdateModal}
-                >
-                    <div>
-                        <div style={{display: 'inline', float: 'left'}}>
-                            {this.props.task.tenkehoach}
-                        </div>
-                        <div style={{display: 'inline', float: 'right'}}>
-                            {this.formatDateTimeToTime(this.props.task.thoigian)}
-                        </div>
+            <ListGroup.Item                    
+                action 
+                variant={(this.state.task.dahoanthanh) ? "secondary" : undefined}
+                onClick={this.showUpdateModal.bind(this)}
+            >
+                <div>
+                    <div style={{display: 'inline', float: 'left'}}>
+                        {this.props.task.tenkehoach}
                     </div>
-                    <div 
-                        id={'Switch - ' + this.props.task.makehoach}
-                        style={{clear: 'both', float: 'right'}} 
-                        onClick={this.switchStatus}
-                    >
+                    <div style={{display: 'inline', float: 'right'}}>
+                        {this.formatDateTimeToTime(this.props.task.thoigian)}
+                    </div>
+                </div>
+                <div 
+                    id={'Switch - ' + this.props.task.makehoach}
+                    style={{clear: 'both', float: 'right'}} 
+                    onClick={this.switchStatus.bind(this)}
+                >
                     <Form.Check 
                         type="switch"
                         id={'Switch - ' + this.props.task.makehoach}
                         label=""
                         checked={!this.state.task.dahoanthanh}  
-                        onChange={this.switchStatus}                      
+                        onChange={this.switchStatus.bind(this)}                      
                     />
-                    </div>
-                </ListGroup.Item>
-            </div>
+                </div>
+            </ListGroup.Item>
         );
     }
 }

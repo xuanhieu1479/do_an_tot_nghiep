@@ -1,5 +1,4 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -17,7 +16,7 @@ export default class ButtonDangXuat extends React.Component<ButtonDangXuatProps,
     render(): React.ReactNode {
         return (
             <Link to='/'>
-                <Button variant="secondary" hidden={!this.props.isHidden} onClick={this.clearLocalStorage}>Đăng xuất</Button>
+                <Button variant="secondary" hidden={this.props.isHidden} onClick={this.clearLocalStorage}>Đăng xuất</Button>
             </Link>
         );
     }
