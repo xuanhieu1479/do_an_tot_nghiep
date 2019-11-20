@@ -43,7 +43,7 @@ export default class CalendarComponent extends React.Component<any, CalendarComp
                         title: task.tenkehoach,
                         start: new Date(task.thoigian),
                         end: new Date(task.thoigian),
-                        allDay: true,
+                        allDay: false,
                     });
                 })
                 this.setState({taskList: taskList, doneLoadTask: true});
@@ -56,7 +56,8 @@ export default class CalendarComponent extends React.Component<any, CalendarComp
 
         let allView: View[] = [
             'month',
-            // 'day',
+            'week',
+            'day',
         ];
 
         return (

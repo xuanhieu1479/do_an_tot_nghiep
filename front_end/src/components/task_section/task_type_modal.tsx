@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Form, InputGroup, Col, Button } from "react-bootstrap";
+import { Modal, Form, InputGroup, Col, Button, Alert } from "react-bootstrap";
 import jwt_decode from 'jwt-decode';
 import apiCaller from "../../utils/apiCaller";
 import TaskType from "../../models/task_type";
@@ -11,6 +11,7 @@ interface TaskTypeModalState {
     maloai: number;
     taskTypeList: TaskType[];
     doneLoadTaskType: boolean;
+    taskTypeNameValidated: boolean;
 }
 
 interface TaskTypeModalProps {
@@ -29,19 +30,21 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
             maloai: 0,
             taskTypeList: [],
             doneLoadTaskType: false,
+            taskTypeNameValidated: true,
         }
 
         this.hideThisModal = this.hideThisModal.bind(this);
         this.onChangeAddType = this.onChangeAddType.bind(this);
         this.onChangeDeleteType = this.onChangeDeleteType.bind(this);
         this.loadTaskType = this.loadTaskType.bind(this);
+        this.checkValidation = this.checkValidation.bind(this);
         this.addTaskType = this.addTaskType.bind(this);
         this.deleteTaskType = this.deleteTaskType.bind(this);
     }
 
     componentDidUpdate(prevProps: any) {
         if (this.props.show !== prevProps.show) {
-            this.setState({show: this.props.show})
+            this.setState({show: this.props.show, taskTypeNameValidated: true})
         }
     }
 
@@ -68,7 +71,25 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
         );
     }
 
+    checkValidation() {
+        let taskTypeNameRegex = new RegExp(/^.{1,10}$/);
+        let isValidated;
+
+        if (taskTypeNameRegex.test(this.state.newTaskTypeName)) {
+            this.setState({taskTypeNameValidated: true});
+            isValidated = true;
+        } else {
+            this.setState({taskTypeNameValidated: false});
+            isValidated = false;
+        }
+
+        return isValidated;
+    }
+
     addTaskType() {
+        let isValidated = this.checkValidation();
+        if (!isValidated) return;
+
         let newTaskType = {
             email: this.state.userEmail,
             tenloai: this.state.newTaskTypeName,
@@ -104,8 +125,9 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
                             <Form.Control onChange={this.onChangeAddType} value={this.state.newTaskTypeName}></Form.Control>
                             <InputGroup.Append>
                                 <Button variant="outline-secondary" onClick={this.addTaskType}>+</Button>
-                            </InputGroup.Append>
+                            </InputGroup.Append>                            
                         </InputGroup>
+                        <Alert variant='danger' hidden={this.state.taskTypeNameValidated}>Tối đa 10 ký tự và không được để trống.</Alert>
                     </Form.Group>
                     <Form.Group as={Col} controlId="formGridDeleteTaskType">
                         <Form.Label>Xóa loại kế hoạch</Form.Label>

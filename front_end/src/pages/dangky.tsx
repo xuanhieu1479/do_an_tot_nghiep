@@ -9,6 +9,8 @@ interface LoginScreenState {
     password: string;
     errorMessage: string;
     show: boolean;
+    emailValidated: boolean;
+    passwordValidated: boolean;
 }
 
 export default class PageDangKy extends React.Component<any, LoginScreenState> {
@@ -19,10 +21,13 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
             password: '',
             errorMessage: '',
             show: false,
+            emailValidated: true,
+            passwordValidated: true,
         };
 
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
+        this.checkValidation = this.checkValidation.bind(this);
         this.doRegister = this.doRegister.bind(this);
         this.redirectToHome = this.redirectToHome.bind(this);
     }
@@ -35,7 +40,34 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         this.setState({password: event.target.value});
     }
 
+    checkValidation() {
+        let emailRegex = new RegExp(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
+        let passwordRegex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/);
+        let isValidated;
+
+        if (emailRegex.test(this.state.email)) {
+            this.setState({emailValidated: true});
+            isValidated = true;
+        } else {
+            this.setState({emailValidated: false});
+            isValidated = false;
+        }
+
+        if (passwordRegex.test(this.state.password)) {
+            this.setState({passwordValidated: true});
+            isValidated = (isValidated && true);
+        } else {
+            this.setState({passwordValidated: false});
+            isValidated = false;
+        }
+
+        return isValidated;
+    }
+
     doRegister() {
+        let isValidated = this.checkValidation();
+        if (!isValidated) return;
+
         let registerInfo = {
             email: this.state.email,
             matkhau: this.state.password,
@@ -74,15 +106,15 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" placeholder="Nhập email" value={this.state.email} onChange={this.onChangeEmail} />
                         <Form.Text className="text-muted">
-                        <Alert variant='danger' hidden={isHidden}>
-                            {this.state.errorMessage}
-                        </Alert>
+                        <Alert variant='danger' hidden={isHidden}>{this.state.errorMessage}</Alert>
+                        <Alert variant='danger' hidden={this.state.emailValidated}>Yêu cầu nhập đúng định dạng email.</Alert>
                         </Form.Text>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Mật khẩu</Form.Label>
                         <Form.Control type="password" placeholder="Mật khẩu" value={this.state.password} onChange={this.onChangePassword} />
+                        <Alert variant='danger' hidden={this.state.passwordValidated}>Tối thiểu 6 ký tự, trong đó tồn tại ít nhất 1 chữ và 1 số.</Alert>
                     </Form.Group>
                     <Button variant="primary" onClick={this.doRegister}>
                         Đăng ký

@@ -61,13 +61,12 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                 justifyContent: 'center',
             }}>
                 <Form style={{width: 540}}>
+                <h1 style={{marginBottom: 50, textAlign: 'center'}}>Đăng nhập</h1>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" placeholder="Nhập email" value={this.state.email} onChange={this.onChangeEmail} />
                         <Form.Text className="text-muted">
-                        <Alert variant='danger' hidden={isHidden}>
-                            {this.state.errorMessage}
-                        </Alert>
+                        <Alert variant='danger' hidden={isHidden}>{this.state.errorMessage}</Alert>
                         </Form.Text>
                     </Form.Group>
 

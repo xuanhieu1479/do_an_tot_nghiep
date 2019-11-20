@@ -1,6 +1,6 @@
 Chương trình cần cài
  + Git
- + NodeJS - version 10.16.0
+ + NodeJS
  + PHP - version 7 trở lên
  + Composer 
  + VirtualBox

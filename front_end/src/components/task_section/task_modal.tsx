@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Modal, Form, Col, InputGroup } from "react-bootstrap";
+import { Button, Modal, Form, Col, InputGroup, Overlay, Tooltip } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
 import jwt_decode from 'jwt-decode';
+import moment from "moment";
 import apiCaller from "../../utils/apiCaller";
 import TaskType from "../../models/task_type";
 
@@ -18,6 +19,9 @@ interface TaskModalState {
     loaikehoach: TaskType[];
     doneLoadTask: boolean;
     dataChanged: boolean;
+    dateTimeValidated: boolean;
+    taskNameValidate: boolean;
+    taskNoteValidated: boolean;
 }
 
 interface TaskModalProps {
@@ -32,12 +36,15 @@ interface TaskModalProps {
 }
 
 export default class TaskModal extends React.Component<TaskModalProps, TaskModalState> {
+    private dateTimePickerRef: any;
+    private taskNameRef: any;
+    private taskNoteRef: any;
     constructor(props: TaskModalProps) {
         super(props);
         this.state = {
             show: this.props.show,
             tenkehoach: '',
-            thoigian: new Date(),
+            thoigian: moment().add(1, 'hours').toDate(),
             ghichu: '',
             mauutien: 0,
             maloai: 0,
@@ -47,7 +54,14 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             loaikehoach: [],
             doneLoadTask: false,
             dataChanged: false,
+            dateTimeValidated: true,
+            taskNameValidate: true,
+            taskNoteValidated: true,
         }
+
+        this.dateTimePickerRef = React.createRef();
+        this.taskNameRef = React.createRef();
+        this.taskNoteRef = React.createRef();
 
         this.hideThisModal = this.hideThisModal.bind(this);
         this.cancelButton = this.cancelButton.bind(this);
@@ -61,6 +75,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.onChangeDaHoanThanh = this.onChangeDaHoanThanh.bind(this);
         this.componentDidUpdate = this.componentDidUpdate.bind(this);
         this.getCurrentTaskType = this.getCurrentTaskType.bind(this);
+        this.checkValidation = this.checkValidation.bind(this);
         this.saveTask = this.saveTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
@@ -72,6 +87,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                 show: this.props.show,                 
                 dataChanged: false,
                 doneLoadTask: false,
+                dateTimeValidated: true,
+                taskNameValidate: true,
+                taskNoteValidated: true,
             });
         }
     }
@@ -81,11 +99,17 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             this.setState({
                 show: false,
             });
+            this.props.hideModal();
         } else {
+            if (this.state.dataChanged) {
+                let isValidated = this.checkValidation();
+                if (!isValidated) return;
+            }            
+
             this.updateTask();
             this.resetThisModal();
-        }        
-        this.props.hideModal();
+            this.props.hideModal();
+        }
     }
 
     cancelButton() {
@@ -103,7 +127,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         this.setState({
             show: false, 
             tenkehoach: '',
-            thoigian: new Date(),
+            thoigian: moment().add(1, 'hours').toDate(),
             ghichu: '',
             mauutien: 0,
             maloai: 0,
@@ -112,16 +136,27 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         });
     }
 
-    onChangeTenKeHoach(event: any) {
-        this.setState({tenkehoach: event.target.value, dataChanged: true});        
+    async onChangeTenKeHoach(event: any) {
+        await this.setState({tenkehoach: event.target.value, dataChanged: true});
+        let taskNameRegex = new RegExp(/^.{1,20}$/);        
+        if (taskNameRegex.test(this.state.tenkehoach) && this.state.taskNameValidate === false) {
+            this.setState({taskNameValidate: true});
+        }
     }
 
-    onChangeThoiGian(date: Date) {
-        this.setState({thoigian: date, dataChanged: true});
+    async onChangeThoiGian(date: Date) {
+        await this.setState({thoigian: date, dataChanged: true});
+        if (this.state.thoigian >= moment().add(3300, 'seconds').toDate() && this.state.dateTimeValidated === false) {
+            this.setState({dateTimeValidated: true});
+        }
     }
 
-    onChangeGhiChu(event: any) {
-        this.setState({ghichu: event.target.value, dataChanged: true});
+    async onChangeGhiChu(event: any) {
+        await this.setState({ghichu: event.target.value, dataChanged: true});
+        let taskNoteRegex = new RegExp(/^.{0,1000}$/);
+        if (taskNoteRegex.test(this.state.ghichu) && this.state.taskNoteValidated === false) {
+            this.setState({taskNoteValidated: true});
+        }
     }
 
     onChangeMaUuTien(event: any) {
@@ -179,7 +214,42 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         );
     }
 
+    checkValidation() {
+        let taskNameRegex = new RegExp(/^.{1,20}$/);
+        let taskNoteRegex = new RegExp(/^.{0,1000}$/);
+        let isValidated;
+
+        if (this.state.thoigian >= moment().add(3300, 'seconds').toDate()) {
+            this.setState({dateTimeValidated: true});
+            isValidated = true;
+        } else {
+            this.setState({dateTimeValidated: false});
+            isValidated = false;
+        }
+
+        if (taskNameRegex.test(this.state.tenkehoach)) {
+            this.setState({taskNameValidate: true});
+            isValidated = (isValidated && true);
+        } else {
+            this.setState({taskNameValidate: false});
+            isValidated = false;
+        }
+
+        if (taskNoteRegex.test(this.state.ghichu)) {
+            this.setState({taskNoteValidated: true});
+            isValidated = (isValidated && true);
+        } else {
+            this.setState({taskNoteValidated: false});
+            isValidated = false;
+        }
+
+        return isValidated;
+    }
+
     async saveTask() {
+        let isValidated = this.checkValidation();
+        if (!isValidated) return;
+
         let task = {
             email: this.state.userEmail,
             tenkehoach: this.state.tenkehoach,
@@ -201,6 +271,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     async updateTask() {
+        let isValidated = this.checkValidation();
+        if (!isValidated) return;
+
         if (!this.state.dataChanged) return;
         let task = {
             tenkehoach: this.state.tenkehoach,
@@ -233,7 +306,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         }        
     }
 
-    render(): React.ReactNode {    
+    render(): React.ReactNode {        
         let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
         if(!this.props.doneLoadTaskType && this.state.show) this.loadTaskType();
         if(!this.props.isAddingTask && !this.state.doneLoadTask && this.state.show) this.loadTaskData();
@@ -293,17 +366,23 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridTime">
                                 <Form.Label>Ngày bắt đầu</Form.Label>
-                                <div>
-                                    <DateTimePicker 
-                                        onChange={this.onChangeThoiGian}
-                                        value={this.state.thoigian}
-                                        format="dd-MM-y h:mm:ss a"
-                                    />
-                                </div>
+                                <DateTimePicker
+                                    ref={this.dateTimePickerRef}
+                                    onChange={this.onChangeThoiGian}
+                                    value={this.state.thoigian}
+                                    format="dd-MM-y h:mm:ss a"
+                                />
+                                <Overlay target={this.dateTimePickerRef.current} show={!this.state.dateTimeValidated} placement="right">
+                                    {(props: any) => (
+                                    <Tooltip id="dateTimePicker-tooltip" {...props} show={(props.show).toString()}>
+                                        Ít nhất sau 1 giờ hiện tại
+                                    </Tooltip>
+                                    )}
+                                </Overlay>
                             </Form.Group>
                             <Form.Group as={Col} style={{textAlign: 'right'}} controlId="formGridHasNotification">
                                 <Form.Label>Có thông báo</Form.Label>
-                                <Form.Check 
+                                <Form.Check
                                     type="switch"
                                     id="id"
                                     label=""
@@ -315,12 +394,36 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                         
                         <Form.Group controlId="formGridTaskName">
                             <Form.Label>Tên Task</Form.Label>
-                            <Form.Control type="text" value={this.state.tenkehoach} onChange={this.onChangeTenKeHoach} />
+                            <Form.Control
+                                ref={this.taskNameRef}
+                                type="text"
+                                value={this.state.tenkehoach}
+                                onChange={this.onChangeTenKeHoach} 
+                            />
+                            <Overlay target={this.taskNameRef.current} show={!this.state.taskNameValidate} placement="top">
+                                {(props: any) => (
+                                <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
+                                    Tối đa 20 ký tự và không được để trống
+                                </Tooltip>
+                                )}
+                            </Overlay>
                         </Form.Group>
 
                         <Form.Group controlId="formGridTaskDetail">
                             <Form.Label>Ghi chú</Form.Label>
-                            <Form.Control as="textarea" rows="5" value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu} />
+                            <Form.Control
+                                ref={this.taskNoteRef}
+                                as="textarea"
+                                rows="5"
+                                value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu} 
+                            />
+                            <Overlay target={this.taskNoteRef.current} show={!this.state.taskNoteValidated} placement="top">
+                                {(props: any) => (
+                                <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
+                                    Tối đa 1000 ký tự
+                                </Tooltip>
+                                )}
+                            </Overlay>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
