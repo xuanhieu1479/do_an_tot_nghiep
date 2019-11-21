@@ -13,6 +13,7 @@ interface TaskDeckState {
     otherTask: Task[];
     doneLoadTask: boolean;
     deleteThisItem: string[];
+    isFetching: boolean;
 }
 
 interface TaskDeckProps {
@@ -32,6 +33,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
             otherTask: [],
             doneLoadTask: this.props.doneLoadTask,
             deleteThisItem: [],
+            isFetching: false,
         }
     }
 
@@ -39,10 +41,15 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
         if (this.props.doneLoadTask !== prevProps.doneLoadTask) {
             this.setState({doneLoadTask: this.props.doneLoadTask});
         }
+
+        if(!this.state.doneLoadTask && !this.state.isFetching) {
+            this.setState({isFetching: true});
+            this.loadTask();
+        }
     }
 
-    async loadTask() {
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/kehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
+    loadTask() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/kehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
             response => {
                 const { data } = response;
                 this.setState({
@@ -51,6 +58,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     tommorowTask: data.tommorowTask,
                     otherTask: data.otherTask,
                     doneLoadTask: true,
+                    isFetching: false,
                 });
                 this.props.setLoadTaskDone();
             }
@@ -64,9 +72,6 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
     }
 
     render(): React.ReactNode {
-
-        if(!this.state.doneLoadTask) this.loadTask();
-        
         return (
             <CardDeck style={{height: "90%", width: "100%"}}>
                 <Card style={{height: "100%"}}>

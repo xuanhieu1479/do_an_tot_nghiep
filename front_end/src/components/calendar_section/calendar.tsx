@@ -30,8 +30,8 @@ export default class CalendarComponent extends React.Component<any, CalendarComp
         }
     }
 
-    async loadTask() {
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/allkehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
+    loadTask() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/allkehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
             response => {
                 const { data } = response;
                 let taskList: CalendarTask[] = [];

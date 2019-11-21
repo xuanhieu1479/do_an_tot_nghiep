@@ -36,24 +36,27 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
     checkValidation() {
         let emailRegex = new RegExp(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
         let passwordRegex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/);
+        let emailValidated;
+        let passwordValidated;
         let isValidated;
 
         if (emailRegex.test(this.state.email)) {
-            this.setState({emailValidated: true});
+            emailValidated = true;
             isValidated = true;
         } else {
-            this.setState({emailValidated: false});
+            emailValidated = false;
             isValidated = false;
         }
 
         if (passwordRegex.test(this.state.password)) {
-            this.setState({passwordValidated: true});
+            passwordValidated = true;
             isValidated = (isValidated && true);
         } else {
-            this.setState({passwordValidated: false});
+            passwordValidated = false;
             isValidated = false;
         }
 
+        this.setState({emailValidated: emailValidated, passwordValidated: passwordValidated})
         return isValidated;
     }
 

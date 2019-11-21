@@ -17,8 +17,9 @@ interface TaskModalState {
     doneLoadTask: boolean;
     dataChanged: boolean;
     dateTimeValidated: boolean;
-    taskNameValidate: boolean;
+    taskNameValidated: boolean;
     taskNoteValidated: boolean;
+    isFetching: boolean;
 }
 
 interface TaskModalProps {
@@ -52,8 +53,9 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             doneLoadTask: false,
             dataChanged: false,
             dateTimeValidated: true,
-            taskNameValidate: true,
+            taskNameValidated: true,
             taskNoteValidated: true,
+            isFetching: false,
         }
 
         this.dateTimePickerRef = React.createRef();
@@ -64,12 +66,18 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     componentDidUpdate(prevProps: any) {
         if (this.props.show !== prevProps.show) {
             this.setState({
+                maloai: this.props.taskType[0].maloai,
                 dataChanged: false,
                 doneLoadTask: false,
                 dateTimeValidated: true,
-                taskNameValidate: true,
+                taskNameValidated: true,
                 taskNoteValidated: true,
             });
+        }
+        
+        if(!this.props.isAddingTask && !this.state.doneLoadTask && this.props.show && !this.state.isFetching) {
+            this.setState({isFetching: true});
+            this.loadTaskData();
         }
     }
 
@@ -106,24 +114,27 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         });
     }
 
-    async onChangeTenKeHoach(event: any) {
-        await this.setState({tenkehoach: event.target.value, dataChanged: true});
-        if (this.taskNameRegex.test(this.state.tenkehoach) && !this.state.taskNameValidate) {
-            this.setState({taskNameValidate: true});
+    onChangeTenKeHoach(event: any) {        
+        if (this.taskNameRegex.test(event.target.value) && !this.state.taskNameValidated) {
+            this.setState({tenkehoach: event.target.value, dataChanged: true, taskNameValidated: true});
+        } else {
+            this.setState({tenkehoach: event.target.value, dataChanged: true});
         }
     }
 
-    async onChangeThoiGian(date: Date) {
-        await this.setState({thoigian: date, dataChanged: true});
-        if (this.state.thoigian >= moment().add(3300, 'seconds').toDate() && this.state.dateTimeValidated === false) {
-            this.setState({dateTimeValidated: true});
+    onChangeThoiGian(date: Date) {        
+        if (date >= moment().add(3300, 'seconds').toDate() && !this.state.dateTimeValidated) {
+            this.setState({thoigian: date, dataChanged: true, dateTimeValidated: true});
+        } else {
+            this.setState({thoigian: date, dataChanged: true});
         }
     }
 
-    async onChangeGhiChu(event: any) {
-        await this.setState({ghichu: event.target.value, dataChanged: true});
-        if (this.taskNoteRegex.test(this.state.ghichu) && !this.state.taskNoteValidated) {
-            this.setState({taskNoteValidated: true});
+    onChangeGhiChu(event: any) {        
+        if (this.taskNoteRegex.test(event.target.value) && !this.state.taskNoteValidated) {
+            this.setState({ghichu: event.target.value, dataChanged: true, taskNoteValidated: true});
+        } else {
+            this.setState({ghichu: event.target.value, dataChanged: true});
         }
     }
 
@@ -160,42 +171,48 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                     maloai: data.kehoach.maloai,
                     cothongbao: data.kehoach.cothongbao,
                     doneLoadTask: true,
+                    isFetching: false,
                 });
             }
         );
     }
 
     checkValidation() {
+        let dateTimeValidated;
+        let taskNameValidated;
+        let taskNoteValidated;
+
         let isValidated;
 
         if (this.state.thoigian >= moment().add(3300, 'seconds').toDate()) {
-            this.setState({dateTimeValidated: true});
+            dateTimeValidated = true;
             isValidated = true;
         } else {
-            this.setState({dateTimeValidated: false});
+            dateTimeValidated = false;
             isValidated = false;
         }
 
         if (this.taskNameRegex.test(this.state.tenkehoach)) {
-            this.setState({taskNameValidate: true});
+            taskNameValidated = true;
             isValidated = (isValidated && true);
         } else {
-            this.setState({taskNameValidate: false});
+            taskNameValidated = false;
             isValidated = false;
         }
 
         if (this.taskNoteRegex.test(this.state.ghichu)) {
-            this.setState({taskNoteValidated: true});
+            taskNoteValidated = true;
             isValidated = (isValidated && true);
         } else {
-            this.setState({taskNoteValidated: false});
+            taskNoteValidated = false;
             isValidated = false;
         }
 
+        this.setState({dateTimeValidated: dateTimeValidated, taskNameValidated: taskNameValidated, taskNoteValidated: taskNoteValidated});
         return isValidated;
     }
 
-    async saveTask() {
+    saveTask() {
         let isValidated = this.checkValidation();
         if (!isValidated) return;
 
@@ -210,7 +227,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             dahoanthanh: false,
         }
 
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task, localStorage.getItem('access_token')).then(
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/themkehoach', 'POST', task, localStorage.getItem('access_token')).then(
             response => {        
                 this.props.setLoadTaskUndone();        
                 this.resetThisModal();
@@ -219,7 +236,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
         );
     }
 
-    async updateTask() {
+    updateTask() {
         let isValidated = this.checkValidation();
         if (!isValidated) return;
 
@@ -233,7 +250,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             cothongbao: this.state.cothongbao,
         }
 
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatekehoach?makehoach=' + this.props.makehoach, 'PUT', task, localStorage.getItem('access_token')).then(
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatekehoach?makehoach=' + this.props.makehoach, 'PUT', task, localStorage.getItem('access_token')).then(
             response => {        
                 this.props.setLoadTaskUndone();
                 this.resetThisModal();
@@ -256,8 +273,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
     render(): React.ReactNode {        
 
-        let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
-        if(!this.props.isAddingTask && !this.state.doneLoadTask && this.props.show) this.loadTaskData();
+        let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];           
         
         return(
             <Modal centered show={this.props.show} onHide={this.hideThisModal.bind(this)}>
@@ -346,7 +362,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                                 value={this.state.tenkehoach}
                                 onChange={this.onChangeTenKeHoach.bind(this)} 
                             />
-                            <Overlay target={this.taskNameRef.current} show={!this.state.taskNameValidate} placement="top">
+                            <Overlay target={this.taskNameRef.current} show={!this.state.taskNameValidated} placement="top">
                                 {(props: any) => (
                                 <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
                                     Tối đa 20 ký tự và không được để trống

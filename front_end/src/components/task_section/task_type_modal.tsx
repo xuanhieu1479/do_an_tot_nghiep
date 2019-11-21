@@ -8,14 +8,13 @@ interface TaskTypeModalState {
     userEmail: any;
     newTaskTypeName: string;
     maloai: number;
-    taskTypeList: TaskType[];
-    doneLoadTaskType: boolean;
     taskTypeNameValidated: boolean;
 }
 
 interface TaskTypeModalProps {
     show: boolean;
     hideModal: () => void;
+    taskTypeList: TaskType[];
     setLoadTaskTypeUndone: () => void;
 }
 
@@ -26,15 +25,13 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
             userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
             newTaskTypeName: '',
             maloai: 0,
-            taskTypeList: [],
-            doneLoadTaskType: false,
             taskTypeNameValidated: true,
         }
     }
 
     componentDidUpdate(prevProps: any) {
         if (this.props.show !== prevProps.show) {
-            this.setState({taskTypeNameValidated: true})
+            this.setState({taskTypeNameValidated: true, maloai: this.props.taskTypeList[0].maloai})
         }
     }
 
@@ -44,21 +41,6 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
 
     onChangeDeleteType(event: any) {
         this.setState({maloai: event.target.options[event.target.selectedIndex].getAttribute('data-key')})
-    }
-
-    loadTaskType() {
-        apiCaller(process.env.REACT_APP_DOMAIN + 'api/loaikehoach?email=' + this.state.userEmail, 'GET', null, localStorage.getItem('access_token')).then(
-            response => {
-                const { statusCode, data } = response;
-                if(statusCode === 200) {
-                    this.setState({
-                        taskTypeList: data.loaikehoach,
-                        maloai: data.loaikehoach[0].maloai,
-                        doneLoadTaskType: true,
-                    });
-                }
-            }
-        );
     }
 
     checkValidation() {
@@ -87,7 +69,7 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
 
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/themloaikehoach', 'POST', newTaskType, localStorage.getItem('access_token')).then(
             response => {                
-                this.setState({newTaskTypeName: '', doneLoadTaskType: false});
+                this.setState({newTaskTypeName: ''});
                 this.props.setLoadTaskTypeUndone();
                 alert(response.data.message);
             }
@@ -96,8 +78,7 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
 
     deleteTaskType() {
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/deleteloaikehoach?maloai=' + this.state.maloai, 'DELETE', null, localStorage.getItem('access_token')).then(
-            response => {                
-                this.setState({doneLoadTaskType: false});
+            response => {
                 this.props.setLoadTaskTypeUndone();
                 alert(response.data.message);
             }
@@ -105,9 +86,6 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
     }
 
     render(): React.ReactNode {
-
-        if(!this.state.doneLoadTaskType && this.props.show) this.loadTaskType();
-        
         return (
             <Modal show={this.props.show} onHide={this.props.hideModal} centered>
                 <Modal.Body>
@@ -125,7 +103,7 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
                         <Form.Label>Xóa loại kế hoạch</Form.Label>
                         <InputGroup className="mb-3">
                             <Form.Control as="select" onChange={this.onChangeDeleteType.bind(this)}>
-                                {this.state.taskTypeList.map((taskType: TaskType) => {
+                                {this.props.taskTypeList.map((taskType: TaskType) => {
                                     return (
                                         <option key={taskType.maloai} data-key={taskType.maloai}>{taskType.tenloai}</option>
                                     );

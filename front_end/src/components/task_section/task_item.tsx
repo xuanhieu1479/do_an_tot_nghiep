@@ -25,11 +25,11 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         this.props.showModal(this.state.task.makehoach);
     }
 
-    async switchStatus(event: any) {
+    switchStatus(event: any) {
         event.stopPropagation();
         let task = {...this.state.task};
         task.dahoanthanh = !this.state.task.dahoanthanh;
-        await apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatekehoach?makehoach=' + this.props.task.makehoach, 'PUT', 
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatekehoach?makehoach=' + this.props.task.makehoach, 'PUT', 
             {dahoanthanh: task.dahoanthanh}, localStorage.getItem('access_token')).then(
                 response => {
                     const { data } = response;

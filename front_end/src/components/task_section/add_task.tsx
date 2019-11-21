@@ -3,13 +3,11 @@ import { Button } from "react-bootstrap";
 
 interface ButtonAddTaskProps {
     showModal: () => void;
-    setLoadTaskTypeUndone: () => void;
 }
 
 export default class ButtonAddTask extends React.Component<ButtonAddTaskProps, any> {
 
     onClickAddButton() {
-        this.props.setLoadTaskTypeUndone();
         this.props.showModal();
     }
 

@@ -34,16 +34,6 @@ export default class PageHome extends React.Component<any, PageHomeState> {
             taskType: [],
             doneLoadTaskType: false,
         }
-
-        this.showAddModal = this.showAddModal.bind(this);
-        this.showUpdateModal = this.showUpdateModal.bind(this);
-        this.showTypeModal = this.showTypeModal.bind(this);
-        this.hideModal = this.hideModal.bind(this);
-        this.hideTypeModal = this.hideTypeModal.bind(this);
-        this.setLoadTaskDone = this.setLoadTaskDone.bind(this);
-        this.setLoadTaskUndone = this.setLoadTaskUndone.bind(this);
-        this.setLoadTaskTypeDone = this.setLoadTaskTypeDone.bind(this);
-        this.setLoadTaskTypeUndone = this.setLoadTaskTypeUndone.bind(this);
     }
 
     showAddModal() {
@@ -72,10 +62,6 @@ export default class PageHome extends React.Component<any, PageHomeState> {
 
     setLoadTaskUndone() {
         this.setState({doneLoadTask: false});
-    }
-
-    setLoadTaskTypeDone() {
-        this.setState({doneLoadTaskType: true});
     }
 
     setLoadTaskTypeUndone() {
@@ -116,25 +102,28 @@ export default class PageHome extends React.Component<any, PageHomeState> {
                     mainContent=
                     {
                         <div style={{height: '100%'}}>
-                            <div style={{marginBottom: 20}}><ButtonAddTask showModal={this.showAddModal} setLoadTaskTypeUndone={this.setLoadTaskTypeUndone} /></div>
+                            <div style={{marginBottom: 20}}>
+                                <ButtonAddTask showModal={this.showAddModal.bind(this)} />
+                            </div>
                             <TaskDeck 
                                 doneLoadTask={this.state.doneLoadTask}
-                                setLoadTaskDone={this.setLoadTaskDone}
-                                showModal={this.showUpdateModal}
+                                setLoadTaskDone={this.setLoadTaskDone.bind(this)}
+                                showModal={this.showUpdateModal.bind(this)}
                             />
                             <TaskModal 
                                 isAddingTask={this.state.isAddingTask}
                                 show={this.state.showModal}
-                                setLoadTaskUndone={this.setLoadTaskUndone}
-                                hideModal={this.hideModal}
+                                setLoadTaskUndone={this.setLoadTaskUndone.bind(this)}
+                                hideModal={this.hideModal.bind(this)}
                                 makehoach={this.state.makehoach}
-                                showTypeModal={this.showTypeModal}
+                                showTypeModal={this.showTypeModal.bind(this)}
                                 taskType={this.state.taskType}
                             />
                             <TaskTypeModal 
                                 show={this.state.showTypeModal}
-                                hideModal={this.hideTypeModal}
-                                setLoadTaskTypeUndone={this.setLoadTaskTypeUndone}
+                                hideModal={this.hideTypeModal.bind(this)}
+                                taskTypeList={this.state.taskType}
+                                setLoadTaskTypeUndone={this.setLoadTaskTypeUndone.bind(this)}
                             />
                         </div>
                     }
