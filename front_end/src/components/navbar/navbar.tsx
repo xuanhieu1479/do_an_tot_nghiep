@@ -3,6 +3,7 @@ import { Navbar, Nav, NavDropdown,  } from "react-bootstrap";
 import ButtonDangKy from "./dangky";
 import ButtonDangNhap from "./dangnhap";
 import ButtonDangXuat from "./dangxuat";
+import UserAvatar from "../profile/avatar";
 
 export default class NavBar extends React.Component {
     isLoggedIn = (localStorage.getItem('access_token')) ? true : false;
@@ -10,7 +11,8 @@ export default class NavBar extends React.Component {
     render(): React.ReactNode {
         return (
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                <UserAvatar isHidden={!this.isLoggedIn} />
+                <Navbar.Brand hidden={this.isLoggedIn} href="#home">React-Bootstrap</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
