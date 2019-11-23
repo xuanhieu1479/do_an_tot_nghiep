@@ -15,7 +15,7 @@ class TaiKhoan extends Authenticatable
     protected $primaryKey = 'email';
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['email', 'matkhau', 'timezone'];
+    protected $fillable = ['email', 'matkhau', 'sdt', 'timezone'];
 
     public function getAuthPassword()
     {

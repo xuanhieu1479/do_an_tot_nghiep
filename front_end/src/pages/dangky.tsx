@@ -6,10 +6,12 @@ import { Redirect } from "react-router-dom";
 interface LoginScreenState {
     email: string;
     password: string;
+    telephone: string;
     errorMessage: string;
     show: boolean;
     emailValidated: boolean;
     passwordValidated: boolean;
+    telephoneValidated: boolean;
 }
 
 export default class PageDangKy extends React.Component<any, LoginScreenState> {
@@ -18,10 +20,12 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         this.state = {
             email: '',
             password: '',
+            telephone: '',
             errorMessage: '',
             show: false,
             emailValidated: true,
             passwordValidated: true,
+            telephoneValidated: true,
         };
     }
 
@@ -33,11 +37,17 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         this.setState({password: event.target.value});
     }
 
+    onChangeTelephone(event: any) {
+        this.setState({telephone: event.target.value});
+    }
+
     checkValidation() {
         let emailRegex = new RegExp(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
         let passwordRegex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/);
+        let telephoneRegex = new RegExp(/^(\d{0}|\d{10}|\d{11})$/);
         let emailValidated;
         let passwordValidated;
+        let telephoneValidated;
         let isValidated;
 
         if (emailRegex.test(this.state.email)) {
@@ -56,7 +66,15 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
             isValidated = false;
         }
 
-        this.setState({emailValidated: emailValidated, passwordValidated: passwordValidated})
+        if (telephoneRegex.test(this.state.telephone)) {
+            telephoneValidated = true;
+            isValidated = (isValidated && true);
+        } else {
+            telephoneValidated = false;
+            isValidated = false;
+        }
+
+        this.setState({emailValidated: emailValidated, passwordValidated: passwordValidated, telephoneValidated: telephoneValidated})
         return isValidated;
     }
 
@@ -67,6 +85,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         let registerInfo = {
             email: this.state.email,
             matkhau: this.state.password,
+            sdt: this.state.telephone,
             timezone: new Date().toString(),
         }
         callApi(process.env.REACT_APP_DOMAIN + 'api/dangky', "POST", registerInfo).then(
@@ -107,6 +126,12 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                         <Alert variant='danger' hidden={isHidden}>{this.state.errorMessage}</Alert>
                         <Alert variant='danger' hidden={this.state.emailValidated}>Yêu cầu nhập đúng định dạng email.</Alert>
                         </Form.Text>
+                    </Form.Group>
+
+                    <Form.Group controlId="formBasicTel">
+                        <Form.Label>Số điện thoại</Form.Label>
+                        <Form.Control type="text" placeholder="0905123456" value={this.state.telephone} onChange={this.onChangeTelephone.bind(this)} />
+                        <Alert variant='danger' hidden={this.state.telephoneValidated}>Đúng định dạng số điện thoại hoặc có thể cập nhật sau.</Alert>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">

@@ -36,6 +36,7 @@ class TaiKhoanController extends Controller
 
         $email = $request->input('email');
         $matkhau = $request->input('matkhau');
+        $sdt = $request->input('sdt');
         $timezone =  DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('timezone'))->getTimezone()->getName();
 
         if (!$email || !$matkhau) return response()->json([
@@ -45,6 +46,7 @@ class TaiKhoanController extends Controller
         $taikhoan = new TaiKhoan([
             'email' => $email,
             'matkhau' => Hash::make($matkhau),
+            'sdt' => $sdt,
             'timezone' => $timezone,
         ]);
 
