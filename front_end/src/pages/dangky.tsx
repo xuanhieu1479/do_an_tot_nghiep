@@ -45,31 +45,22 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         let emailRegex = new RegExp(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
         let passwordRegex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/);
         let telephoneRegex = new RegExp(/^(\d{0}|\d{10}|\d{11})$/);
-        let emailValidated;
-        let passwordValidated;
-        let telephoneValidated;
-        let isValidated;
+        let emailValidated = true;
+        let passwordValidated = true;
+        let telephoneValidated = true;
+        let isValidated = true;
 
-        if (emailRegex.test(this.state.email)) {
-            emailValidated = true;
-            isValidated = true;
-        } else {
+        if (!emailRegex.test(this.state.email)) {
             emailValidated = false;
             isValidated = false;
         }
 
-        if (passwordRegex.test(this.state.password)) {
-            passwordValidated = true;
-            isValidated = (isValidated && true);
-        } else {
+        if (!passwordRegex.test(this.state.password)) {
             passwordValidated = false;
             isValidated = false;
         }
 
-        if (telephoneRegex.test(this.state.telephone)) {
-            telephoneValidated = true;
-            isValidated = (isValidated && true);
-        } else {
+        if (!telephoneRegex.test(this.state.telephone)) {
             telephoneValidated = false;
             isValidated = false;
         }
@@ -122,10 +113,8 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" placeholder="asdasd@gmail.com" value={this.state.email} onChange={this.onChangeEmail.bind(this)} />
-                        <Form.Text className="text-muted">
                         <Alert variant='danger' hidden={isHidden}>{this.state.errorMessage}</Alert>
                         <Alert variant='danger' hidden={this.state.emailValidated}>Yêu cầu nhập đúng định dạng email.</Alert>
-                        </Form.Text>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicTel">

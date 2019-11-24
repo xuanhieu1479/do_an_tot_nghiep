@@ -178,32 +178,22 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     checkValidation() {
-        let dateTimeValidated;
-        let taskNameValidated;
-        let taskNoteValidated;
+        let dateTimeValidated = true;
+        let taskNameValidated = true;
+        let taskNoteValidated = true;
+        let isValidated = true;
 
-        let isValidated;
-
-        if (this.state.thoigian >= moment().add(3300, 'seconds').toDate()) {
-            dateTimeValidated = true;
-            isValidated = true;
-        } else {
+        if (this.state.thoigian <= moment().add(3300, 'seconds').toDate()) {
             dateTimeValidated = false;
             isValidated = false;
         }
 
-        if (this.taskNameRegex.test(this.state.tenkehoach)) {
-            taskNameValidated = true;
-            isValidated = (isValidated && true);
-        } else {
+        if (!this.taskNameRegex.test(this.state.tenkehoach)) {
             taskNameValidated = false;
             isValidated = false;
         }
 
-        if (this.taskNoteRegex.test(this.state.ghichu)) {
-            taskNoteValidated = true;
-            isValidated = (isValidated && true);
-        } else {
+        if (!this.taskNoteRegex.test(this.state.ghichu)) {
             taskNoteValidated = false;
             isValidated = false;
         }

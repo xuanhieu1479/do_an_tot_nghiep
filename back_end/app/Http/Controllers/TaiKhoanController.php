@@ -172,9 +172,10 @@ class TaiKhoanController extends Controller
 
         $email = $request->input('email');
         $newPassword = $request->input('password');
+        $newPassword = Hash::make($newPassword);
 
         try {
-            DB::table('taikhoan')->where('email', '=', $email)->update(['matkhau' => Hash::make($newPassword)]);
+            DB::table('taikhoan')->where('email', '=', $email)->update(['matkhau' => $newPassword]);
             return response()->json([
                 'message' => 'Cập nhật mật khẩu thành công',
             ], 200, [], JSON_UNESCAPED_UNICODE);
