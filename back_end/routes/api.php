@@ -30,11 +30,15 @@ Route::group([
 ], function() {
     Route::post('themkehoach', 'KeHoachController@themKeHoach');
     Route::post('themloaikehoach', 'LoaiKeHoachController@addLoaiKeHoach');
+    Route::post('checkoldpassword', 'TaiKhoanController@checkCurrentPassword');
     Route::get('loaikehoach', 'LoaiKeHoachController@getLoaiKeHoach');
     Route::get('kehoach', 'KeHoachController@getKeHoach');
     Route::get('allkehoach', 'KeHoachController@getAllKeHoach');
     Route::get('kehoachbyid', 'KeHoachController@getKeHoachByID');
+    Route::get('sdt', 'TaiKhoanController@getTelephone');
     Route::put('updatekehoach', 'KeHoachController@updateKeHoach');
+    Route::put('updatesdt', 'TaiKhoanController@updateTelephone');
+    Route::put('updatepassword', 'TaiKhoanController@updatePassword');
     Route::delete('deletekehoach', 'KeHoachController@deleteKeHoachByID');
     Route::delete('deleteloaikehoach', 'LoaiKeHoachController@deleteLoaiKeHoach');
 });

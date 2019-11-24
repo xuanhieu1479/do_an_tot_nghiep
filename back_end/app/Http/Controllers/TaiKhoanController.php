@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DB;
 use Hash;
 use DateTime;
 use App\Mail\ResetMatKhau;
@@ -120,6 +121,67 @@ class TaiKhoanController extends Controller
             return response()->json([
                 'message' => 'Gửi mail thành công',
             ], 200, [], JSON_UNESCAPED_UNICODE);
+        }
+
+    }
+
+    public function getTelephone(Request $request) {
+
+        $email = $request->input('email');
+        $telephone = DB::table('taikhoan')->where('email', '=', $email)->pluck('sdt')[0];
+        if ($telephone === null) $telephone = '';
+        return response()->json([
+           'sdt' => $telephone, 
+        ], 200);
+
+    }
+
+    public function updateTelephone(Request $request) {
+
+        $email = $request->input('email');
+        $newTelephone = $request->input('telephone');
+
+        try {
+            DB::table('taikhoan')->where('email', '=', $email)->update(['sdt' => $newTelephone]);
+            return response()->json([
+                'message' => 'Update số điện thoại thành công'
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400, [], JSON_UNESCAPED_UNICODE);
+        }
+
+    }
+
+    public function checkCurrentPassword(Request $request) {
+
+        $email = $request->input('email');
+        $oldPassword = $request->input('oldPassword');
+        $currentPassword = DB::table('taikhoan')->where('email', '=', $email)->pluck('matkhau')[0];
+        $result = \password_verify($oldPassword, $currentPassword);
+        if ($result) {
+            return response()->json([], 200);
+        } else {
+            return response()->json([], 400);
+        }
+
+    }
+
+    public function updatePassword(Request $request) {
+
+        $email = $request->input('email');
+        $newPassword = $request->input('password');
+
+        try {
+            DB::table('taikhoan')->where('email', '=', $email)->update(['matkhau' => Hash::make($newPassword)]);
+            return response()->json([
+                'message' => 'Cập nhật mật khẩu thành công',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400, [], JSON_UNESCAPED_UNICODE);
         }
 
     }
