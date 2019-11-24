@@ -55,6 +55,7 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
     }
 
     componentDidMount() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatethongke', 'GET', null);
         this.loadTelephone();
     }
 

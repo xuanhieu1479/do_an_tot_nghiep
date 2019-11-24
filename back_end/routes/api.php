@@ -23,6 +23,7 @@ Route::group([
     Route::post('dangky', 'TaiKhoanController@dangKy');
     Route::post('dangnhap', 'TaiKhoanController@dangNhap');    
     Route::get('mucdouutien', 'MucDoUuTienController@getMucDoUuTien');
+    Route::get('updatethongke', 'ThongKeController@updateThongKe');
 });
 
 Route::group([
@@ -36,6 +37,7 @@ Route::group([
     Route::get('allkehoach', 'KeHoachController@getAllKeHoach');
     Route::get('kehoachbyid', 'KeHoachController@getKeHoachByID');
     Route::get('sdt', 'TaiKhoanController@getTelephone');
+    Route::get('pageviews', 'ThongKeController@getPageViews');
     Route::put('updatekehoach', 'KeHoachController@updateKeHoach');
     Route::put('updatesdt', 'TaiKhoanController@updateTelephone');
     Route::put('updatepassword', 'TaiKhoanController@updatePassword');

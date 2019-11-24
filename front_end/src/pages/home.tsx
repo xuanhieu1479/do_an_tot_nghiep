@@ -36,6 +36,10 @@ export default class PageHome extends React.Component<any, PageHomeState> {
         }
     }
 
+    componentDidMount() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatethongke', 'GET', null);
+    }
+
     showAddModal() {
         this.setState({showModal: true, isAddingTask: true});
     }

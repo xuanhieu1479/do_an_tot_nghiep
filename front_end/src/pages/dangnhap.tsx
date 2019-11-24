@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import callApi from "../utils/apiCaller";
+import apiCaller from "../utils/apiCaller";
 import { Redirect } from "react-router-dom";
 
 interface LoginScreenState {
@@ -19,6 +19,10 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
         };
     }
 
+    componentDidMount() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatethongke', 'GET', null);
+    }
+
     onChangeEmail(event: any) {
         this.setState({email: event.target.value});
     }
@@ -32,7 +36,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
             email: this.state.email,
             matkhau: this.state.password,
         }
-        callApi(process.env.REACT_APP_DOMAIN + 'api/dangnhap', "POST", loginInfo).then(
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/dangnhap', "POST", loginInfo).then(
             response => {
                 const { statusCode, data } = response;
                 if (statusCode === 200) {

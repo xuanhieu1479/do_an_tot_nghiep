@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Button, Alert, Modal } from "react-bootstrap";
-import callApi from "../utils/apiCaller";
+import apiCaller from "../utils/apiCaller";
 import { Redirect } from "react-router-dom";
 
 interface LoginScreenState {
@@ -27,6 +27,10 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
             passwordValidated: true,
             telephoneValidated: true,
         };
+    }
+
+    componentDidMount() {
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatethongke', 'GET', null);
     }
 
     onChangeEmail(event: any) {
@@ -79,7 +83,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
             sdt: this.state.telephone,
             timezone: new Date().toString(),
         }
-        callApi(process.env.REACT_APP_DOMAIN + 'api/dangky', "POST", registerInfo).then(
+        apiCaller(process.env.REACT_APP_DOMAIN + 'api/dangky', "POST", registerInfo).then(
             response => {
                 const { statusCode, data } = response;
                 if (statusCode === 200) {
