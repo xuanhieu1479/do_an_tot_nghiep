@@ -18,7 +18,11 @@ class TaiKhoanController extends Controller
     public function taoToken(Request $request, $msg) {
 
         $user = $request->user();
-        $tokenResult = $user->createToken('Token đăng nhập');
+        if ($request->input('email') == 'admin') {
+            $tokenResult = $user->createToken('Token đăng nhập', ['admin']);
+        } else {
+            $tokenResult = $user->createToken('Token đăng nhập');
+        }        
         $token = $tokenResult->token;
         $token->save();
         

@@ -13,7 +13,7 @@ class TaiKhoanSeeder extends Seeder
     public function run()
     {
         DB::table('taikhoan')->insert([
-            'email' => 'admin@gmail.com',
+            'email' => 'admin',
             'matkhau' => Hash::make('123'),
             'maloaitk' => 0,
             'timezone' => '+07:00',

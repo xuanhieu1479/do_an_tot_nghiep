@@ -37,7 +37,7 @@ Route::group([
     Route::get('allkehoach', 'KeHoachController@getAllKeHoach');
     Route::get('kehoachbyid', 'KeHoachController@getKeHoachByID');
     Route::get('sdt', 'TaiKhoanController@getTelephone');
-    Route::get('pageviews', 'ThongKeController@getPageViews');
+    Route::get('pageviews', 'ThongKeController@getPageViews')->middleware('scopes:admin');
     Route::put('updatekehoach', 'KeHoachController@updateKeHoach');
     Route::put('updatesdt', 'TaiKhoanController@updateTelephone');
     Route::put('updatepassword', 'TaiKhoanController@updatePassword');

@@ -41,7 +41,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                 const { statusCode, data } = response;
                 if (statusCode === 200) {
                     localStorage.setItem('access_token', data.access_token);
-                    this.props.history.push("./home");
+                    (this.state.email === 'admin') ? this.props.history.push("./admin") : this.props.history.push("./home");         
                 } else {
                     this.setState({errorMessage: data.message});
                 }                

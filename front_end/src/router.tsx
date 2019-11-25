@@ -7,6 +7,7 @@ import PageDangKy from "./pages/dangky";
 import PageHome from "./pages/home";
 import PageCalendar from "./pages/calendar";
 import PageProfile from "./pages/profile";
+import PageAdmin from "./pages/admin";
 
 const AppRouter = () => {
     return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
                 <Route path="/home" component={PageHome} />
                 <Route path="/calendar" component={PageCalendar} />
                 <Route path="/profile" component={PageProfile} />
+                <Route path="/admin" component={PageAdmin} />
             </Switch>
         </HashRouter>
     );

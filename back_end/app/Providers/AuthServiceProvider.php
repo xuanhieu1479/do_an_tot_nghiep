@@ -30,6 +30,9 @@ class AuthServiceProvider extends ServiceProvider
             return new TaiKhoanProvider($app['hash'], $config['model']);
         });
 
+        Passport::tokensCan([
+            'admin' => 'Get Page Views',
+        ]);
         Passport::routes();
     }
 }
