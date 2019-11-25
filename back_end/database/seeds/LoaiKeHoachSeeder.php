@@ -14,7 +14,7 @@ class LoaiKeHoachSeeder extends Seeder
         DB::table('loaikehoach')->insert([
             'maloai' => 0,
             'email' => 'admin',
-            'tenloai' => 'Làm Admin',
+            'tenloai' => 'Doing Final Year Project',
         ]);
     }
 }

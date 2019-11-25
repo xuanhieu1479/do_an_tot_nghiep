@@ -76,7 +76,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
             <CardDeck style={{height: "90%", width: "100%"}}>
                 <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
-                    <Card.Title>Quá thời gian</Card.Title>
+                    <Card.Title>Overdue</Card.Title>
                         <ListGroup>
                             {this.state.overdueTask.map(task => {
                                 return (
@@ -96,7 +96,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                 </Card>
                 <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
-                    <Card.Title>Hôm nay</Card.Title>
+                    <Card.Title>Today</Card.Title>
                         {this.state.todayTask.map(task => {
                             return (
                                 (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
@@ -114,7 +114,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                 </Card>
                 <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
-                    <Card.Title>Ngày mai</Card.Title>
+                    <Card.Title>Tommorow</Card.Title>
                         {this.state.tommorowTask.map(task => {
                             return (
                                 (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
@@ -132,7 +132,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                 </Card>
                 <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
-                    <Card.Title>Các task khác</Card.Title>
+                    <Card.Title>Others</Card.Title>
                         {this.state.otherTask.map(task => {
                             return (
                                 (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?

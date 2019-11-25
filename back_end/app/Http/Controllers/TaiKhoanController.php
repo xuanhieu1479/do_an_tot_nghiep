@@ -45,7 +45,7 @@ class TaiKhoanController extends Controller
         $timezone =  DateTime::createFromFormat('D M d Y H:i:s e+', $request->input('timezone'))->getTimezone()->getName();
 
         if (!$email || !$matkhau) return response()->json([
-            'message' => 'Yêu cầu đầy đủ email và mật khẩu',
+            'message' => 'Both email and password are required.',
         ], 400, [], JSON_UNESCAPED_UNICODE);
 
         $taikhoan = new TaiKhoan([
@@ -57,18 +57,18 @@ class TaiKhoanController extends Controller
 
         if ($taikhoan->daTonTai($email)) {
             return response()->json([
-                'message' => 'Tài khoản này đã tồn tại',
+                'message' => 'This email is already existed.',
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }
 
         $taikhoan->save();
         $lkh = new LoaiKeHoach([
             'email' => $email,
-            'tenloai' => 'Công việc',
+            'tenloai' => 'Work',
         ]);
         $lkh->save();
         Auth::attempt(['email' => $email, 'matkhau' => $matkhau]);
-        return $this->taoToken($request, 'Tạo tài khoản thành công');
+        return $this->taoToken($request, 'Your Account Has Been Created Succesfully!');
 
     }
 
@@ -78,20 +78,20 @@ class TaiKhoanController extends Controller
         $matkhau = $request->input('matkhau');
 
         if (!$email || !$matkhau) return response()->json([
-            'message' => 'Yêu cầu đầy đủ email và mật khẩu',
+            'message' => 'Both email and password are required.',
         ], 401, [], JSON_UNESCAPED_UNICODE);
 
         $taikhoan = new TaiKhoan();
         if (!$taikhoan->daTonTai($email)) {
             return response()->json([
-                'message' => 'Email này không tồn tại',
+                'message' => 'This email does not exist.',
             ], 401, [], JSON_UNESCAPED_UNICODE);
         } else if(!Auth::attempt(['email' => $email, 'matkhau' => $matkhau])) {
             return response()->json([
-                'message' => 'Mật khẩu không chính xác',
+                'message' => 'Wrong Password.',
             ], 401, [], JSON_UNESCAPED_UNICODE);
         } else {
-            return $this->taoToken($request, 'Đăng nhập thành công');
+            return $this->taoToken($request, 'You are Signed In');
         }
 
     }
@@ -101,7 +101,7 @@ class TaiKhoanController extends Controller
         $request->user()->token()->revoke();
 
         return response()->json([
-            'message' => 'Đăng xuất thành công',
+            'message' => 'Log Out',
         ], 200, [], JSON_UNESCAPED_UNICODE);
 
     }
@@ -117,13 +117,13 @@ class TaiKhoanController extends Controller
         $taikhoan = new TaiKhoan();
         if (!$taikhoan->daTonTai($email)) {
             return response()->json([
-                'message' => 'Email này không tồn tại',
+                'message' => 'This email does not exist.',
             ], 401, [], JSON_UNESCAPED_UNICODE);
         } else {
             $matKhauMoi = $taikhoan->resetMatKhau($email);
             Mail::to($email)->send(new ResetMatKhau($matKhauMoi));
             return response()->json([
-                'message' => 'Gửi mail thành công',
+                'message' => 'Mail Sent!',
             ], 200, [], JSON_UNESCAPED_UNICODE);
         }
 

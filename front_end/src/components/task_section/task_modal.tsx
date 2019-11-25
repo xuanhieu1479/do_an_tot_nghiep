@@ -250,7 +250,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
     }
 
     deleteTask() {
-        if (window.confirm("Chắc không?")) {
+        if (window.confirm("You're sure?")) {
             apiCaller(process.env.REACT_APP_DOMAIN + 'api/deletekehoach?makehoach=' + this.props.makehoach, 'DELETE', null, localStorage.getItem('access_token')).then(
                 response => {        
                     this.props.setLoadTaskUndone();
@@ -269,14 +269,14 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             <Modal centered show={this.props.show} onHide={this.hideThisModal.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {(this.props.isAddingTask) ? <div>Tạo task mới</div> : <div>Cập nhật task</div>}
+                        {(this.props.isAddingTask) ? <div>Add Task</div> : <div>Update Task</div>}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridPrioritiy">
-                                <Form.Label>Mức độ ưu tiên</Form.Label>
+                                <Form.Label>Priority</Form.Label>
                                 <Form.Control as="select" 
                                     onChange={this.onChangeMaUuTien.bind(this)} 
                                     value={mucdouutien[this.state.mauutien]}
@@ -294,7 +294,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridTaskType">
-                                <Form.Label>Loại Task</Form.Label>
+                                <Form.Label>Type</Form.Label>
                                 <InputGroup className="mb-3">
                                     <Form.Control
                                         as="select" 
@@ -316,7 +316,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridTime">
-                                <Form.Label>Ngày bắt đầu</Form.Label>
+                                <Form.Label>Start Date</Form.Label>
                                 <DateTimePicker
                                     ref={this.dateTimePickerRef}
                                     onChange={this.onChangeThoiGian.bind(this)}
@@ -326,13 +326,13 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                                 <Overlay target={this.dateTimePickerRef.current} show={!this.state.dateTimeValidated} placement="right">
                                     {(props: any) => (
                                     <Tooltip id="dateTimePicker-tooltip" {...props} show={(props.show).toString()}>
-                                        Ít nhất sau 1 giờ hiện tại
+                                        At least 1 hour from now
                                     </Tooltip>
                                     )}
                                 </Overlay>
                             </Form.Group>
                             <Form.Group as={Col} style={{textAlign: 'right'}} controlId="formGridHasNotification">
-                                <Form.Label>Có thông báo</Form.Label>
+                                <Form.Label>Has Notification?</Form.Label>
                                 <Form.Check
                                     type="switch"
                                     id="id"
@@ -344,36 +344,36 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                         </Form.Row>
                         
                         <Form.Group controlId="formGridTaskName">
-                            <Form.Label>Tên Task</Form.Label>
+                            <Form.Label>Name</Form.Label>
                             <Form.Control
                                 ref={this.taskNameRef}
                                 type="text"
-                                placeholder="Ngồi thiền"
+                                placeholder="Yoga Practice"
                                 value={this.state.tenkehoach}
                                 onChange={this.onChangeTenKeHoach.bind(this)} 
                             />
                             <Overlay target={this.taskNameRef.current} show={!this.state.taskNameValidated} placement="top">
                                 {(props: any) => (
                                 <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
-                                    Tối đa 20 ký tự và không được để trống
+                                    Maximum 20 characters and non-empty
                                 </Tooltip>
                                 )}
                             </Overlay>
                         </Form.Group>
 
                         <Form.Group controlId="formGridTaskDetail">
-                            <Form.Label>Ghi chú</Form.Label>
+                            <Form.Label>Note</Form.Label>
                             <Form.Control
                                 ref={this.taskNoteRef}
                                 as="textarea"
-                                placeholder="Trời đất dung hòa, vạn vật sinh sôi..."
+                                placeholder="Ashen one, hearest thou my voice, still?"
                                 rows="5"
                                 value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu.bind(this)} 
                             />
                             <Overlay target={this.taskNoteRef.current} show={!this.state.taskNoteValidated} placement="top">
                                 {(props: any) => (
                                 <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
-                                    Tối đa 1000 ký tự
+                                    Maximum 1000 characters
                                 </Tooltip>
                                 )}
                             </Overlay>
@@ -383,11 +383,11 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                 <Modal.Footer>
                     <div style={{width: '100%'}}>
                         <div style={{display: 'inline', float: 'right'}}>
-                            <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask.bind(this) : this.updateTask.bind(this)}>Lưu</Button>
-                            <Button variant="danger" onClick={this.cancelButton.bind(this)}>Hủy</Button>
+                            <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask.bind(this) : this.updateTask.bind(this)}>Save</Button>
+                            <Button variant="danger" onClick={this.cancelButton.bind(this)}>Cancel</Button>
                         </div>
                         <div style={{display: 'inline', float: 'left'}}>
-                            <Button variant="dark" onClick={this.deleteTask.bind(this)}>Xóa</Button>
+                            <Button variant="dark" onClick={this.deleteTask.bind(this)}>Delete</Button>
                         </div>
                     </div>
                 </Modal.Footer>

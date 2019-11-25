@@ -90,17 +90,17 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
             <Modal show={this.props.show} onHide={this.props.hideModal} centered>
                 <Modal.Body>
                     <Form.Group as={Col} controlId="formGridAddTaskType">
-                        <Form.Label>Thêm loại kế hoạch</Form.Label>
+                        <Form.Label>Add Task Type</Form.Label>
                         <InputGroup className="mb-3">
-                            <Form.Control onChange={this.onChangeAddType.bind(this)} placeholder="Giải trí" value={this.state.newTaskTypeName}></Form.Control>
+                            <Form.Control onChange={this.onChangeAddType.bind(this)} placeholder="R&R" value={this.state.newTaskTypeName}></Form.Control>
                             <InputGroup.Append>
                                 <Button variant="outline-secondary" onClick={this.addTaskType.bind(this)}>+</Button>
                             </InputGroup.Append>                            
                         </InputGroup>
-                        <Alert variant='danger' hidden={this.state.taskTypeNameValidated}>Tối đa 10 ký tự và không được để trống.</Alert>
+                        <Alert variant='danger' hidden={this.state.taskTypeNameValidated}>Maximum 10 characters and non-empty.</Alert>
                     </Form.Group>
                     <Form.Group as={Col} controlId="formGridDeleteTaskType">
-                        <Form.Label>Xóa loại kế hoạch</Form.Label>
+                        <Form.Label>Remove Task Type</Form.Label>
                         <InputGroup className="mb-3">
                             <Form.Control as="select" onChange={this.onChangeDeleteType.bind(this)}>
                                 {this.props.taskTypeList.map((taskType: TaskType) => {

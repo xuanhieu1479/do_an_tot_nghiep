@@ -113,35 +113,35 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                 justifyContent: 'center',
             }}>
                 <Form style={{width: 540}}>
-                    <h1 style={{marginBottom: 50, textAlign: 'center'}}>Đăng ký</h1>
+                    <h1 style={{marginBottom: 50, textAlign: 'center'}}>Sign Up</h1>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" placeholder="asdasd@gmail.com" value={this.state.email} onChange={this.onChangeEmail.bind(this)} />
                         <Alert variant='danger' hidden={isHidden}>{this.state.errorMessage}</Alert>
-                        <Alert variant='danger' hidden={this.state.emailValidated}>Yêu cầu nhập đúng định dạng email.</Alert>
+                        <Alert variant='danger' hidden={this.state.emailValidated}>Your email does not have corrected format.</Alert>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicTel">
-                        <Form.Label>Số điện thoại</Form.Label>
+                        <Form.Label>Telephone Number</Form.Label>
                         <Form.Control type="text" placeholder="0905123456" value={this.state.telephone} onChange={this.onChangeTelephone.bind(this)} />
-                        <Alert variant='danger' hidden={this.state.telephoneValidated}>Đúng định dạng số điện thoại hoặc có thể cập nhật sau.</Alert>
+                        <Alert variant='danger' hidden={this.state.telephoneValidated}>Your telephone number does not seem right, you can always update it later.</Alert>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Mật khẩu</Form.Label>
+                        <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="asd123" value={this.state.password} onChange={this.onChangePassword.bind(this)} />
-                        <Alert variant='danger' hidden={this.state.passwordValidated}>Tối thiểu 6 ký tự, trong đó tồn tại ít nhất 1 chữ và 1 số.</Alert>
+                        <Alert variant='danger' hidden={this.state.passwordValidated}>At least 6 characters, with 1 word character or 1 digit.</Alert>
                     </Form.Group>
-                    <Button variant="primary" onClick={this.doRegister.bind(this)}>Đăng ký</Button>
+                    <Button variant="primary" onClick={this.doRegister.bind(this)}>Sign Up</Button>
                 </Form>
 
                 <Modal show={this.state.show}>
                     <Modal.Header>
-                    <Modal.Title>Đăng ký thành công</Modal.Title>
+                    <Modal.Title>Sign Up Successful</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Bắt đầu quản lý thời gian một cách hiệu quả hơn.</Modal.Body>
+                    <Modal.Body>Start to find better ways to spend your time.</Modal.Body>
                     <Modal.Footer>
-                    <Button variant="primary" onClick={this.redirectToHome.bind(this)}>Ngon!</Button>
+                    <Button variant="primary" onClick={this.redirectToHome.bind(this)}>Got It!</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

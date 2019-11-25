@@ -50,18 +50,18 @@ export default class PageAdmin extends React.Component<any, PageAdminState> {
     render(): React.ReactNode {
         return (
             <div>
-                Lượt truy cập = {this.state.pageView}
+                Page Views = {this.state.pageView}
                 <div>
-                    <Button variant="success" onClick={this.refresh.bind(this)}>Refresh</Button>
+                    <Button variant="success" onClick={this.refresh.bind(this)}>Update</Button>
                     <ButtonLogOut isHidden={false} />
                 </div>
 
                 <Modal show={this.state.show} onHide={this.hideModal.bind(this)}>
                     <Modal.Header>
-                    <Modal.Title>Bạn không có quyền Admin</Modal.Title>
+                        <Modal.Title>You do not have admin rights!</Modal.Title>
                     </Modal.Header>
                     <Modal.Footer>
-                    <Button variant="primary" onClick={this.hideModal.bind(this)}>Biến</Button>
+                        <Button variant="primary" onClick={this.hideModal.bind(this)}>Begone!</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

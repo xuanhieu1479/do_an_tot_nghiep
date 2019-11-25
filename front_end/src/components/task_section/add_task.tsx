@@ -13,7 +13,7 @@ export default class ButtonAddTask extends React.Component<ButtonAddTaskProps, a
 
     render(): React.ReactNode {
         return(
-            <Button variant="outline-success" size="sm" onClick={this.onClickAddButton.bind(this)}>Thêm Task</Button>
+            <Button variant="outline-success" size="sm" onClick={this.onClickAddButton.bind(this)}>Create more tasks</Button>
         );
     }
 }

@@ -11,7 +11,7 @@ export default class ButtonDangNhap extends React.Component<ButtonDangNhapProps,
     render(): React.ReactNode {
         return (
             <Link to='/dangnhap'>
-                <Button variant="primary" hidden={this.props.isHidden}>Đăng nhập</Button>
+                <Button variant="primary" hidden={this.props.isHidden}>Sign In</Button>
             </Link>
         );
     }

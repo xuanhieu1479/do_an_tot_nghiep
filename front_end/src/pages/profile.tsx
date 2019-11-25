@@ -211,38 +211,38 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
                         </Form.Group>
 
                         <Form.Group controlId="formBasicTel">
-                            <div style={{clear: 'both'}}><Form.Label>Số điện thoại</Form.Label></div>
+                            <div style={{clear: 'both'}}><Form.Label>Telephone Number</Form.Label></div>
                             <div style={{display: 'inline-block'}}>                                
                                 <div style={{float: 'left', width: leftWidth}}>
                                     <Form.Control ref={this.telephoneRef} type="text" value={this.state.telephone} onChange={this.onChangeTelephone.bind(this)} />
                                 </div>
                                 <div style={{float: 'right', marginLeft: 20}}>
-                                    <Button variant="success" onClick={this.updateTelephone.bind(this)}>Cập nhật</Button>
+                                    <Button variant="success" onClick={this.updateTelephone.bind(this)}>Update</Button>
                                 </div>
                             </div>
                             <Overlay target={this.telephoneRef.current} show={!this.state.telephoneValidated} placement="left">
                                 {(props: any) => (
                                 <Tooltip id="telephoneInput-tooltip" {...props} show={(props.show).toString()}>
-                                    Chưa đúng cú pháp
+                                    Incorrected format
                                 </Tooltip>
                                 )}
                             </Overlay>
                         </Form.Group>
 
-                        <div style={{width: leftWidth + 20}}>
+                        <div style={{width: leftWidth + 40}}>
                             <Button
                                 variant="link"
                                 onClick={this.switchCollapse.bind(this)}
                                 aria-controls="change-password-collapse"
                                 aria-expanded={this.state.openCollapse}
-                                style={{marginLeft: leftWidth - 120}}
+                                style={{marginLeft: leftWidth - 140}}
                             >
-                                Đổi mật khẩu
+                                Change Password
                             </Button>
                             <Collapse in={this.state.openCollapse}>
                                 <div id="change-password-collapse">
                                     <Form.Group controlId="formBasicOldPassword" style={{width: leftWidth}}>
-                                        <Form.Label>Mật khẩu cũ</Form.Label>
+                                        <Form.Label>Current Password</Form.Label>
                                         <Form.Control
                                             ref={this.oldPasswordRef}
                                             type="password" value={this.state.oldPassword}
@@ -251,13 +251,13 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
                                         <Overlay target={this.oldPasswordRef.current} show={!this.state.oldPasswordValidated} placement="left">
                                             {(props: any) => (
                                             <Tooltip id="oldPassowrdInput-tooltip" {...props} show={(props.show).toString()}>
-                                                Sai mật khẩu cũ
+                                                Wrong Password
                                             </Tooltip>
                                             )}
                                         </Overlay>
                                     </Form.Group>
                                     <Form.Group controlId="formBasicNewPassword" style={{width: leftWidth}}>
-                                        <Form.Label>Mật khẩu mới</Form.Label>
+                                        <Form.Label>New Password</Form.Label>
                                         <Form.Control
                                             ref={this.newPasswordRef}
                                             type="password" value={this.state.newPassword}
@@ -266,20 +266,20 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
                                         <Overlay target={this.newPasswordRef.current} show={!this.state.newPasswordValidated} placement="left">
                                             {(props: any) => (
                                             <Tooltip id="newPasswordInput-tooltip" {...props} show={(props.show).toString()}>
-                                                Tối thiểu 6 ký tự, tồn tại ít nhất 1 chữ và 1 số
+                                                At least 6 characters, with 1 word character or 1 digit
                                             </Tooltip>
                                             )}
                                         </Overlay>
                                         <Overlay target={this.newPasswordRef.current} show={!this.state.passwordChanged} placement="right">
                                             {(props: any) => (
                                             <Tooltip id="newPassword2Input-tooltip" {...props} show={(props.show).toString()}>
-                                                Mật khẩu mới y hệt mật khẩu cũ
+                                                Your new password does not have any change
                                             </Tooltip>
                                             )}
                                         </Overlay>
                                     </Form.Group>
                                     <Form.Group controlId="formBasicConfirmPassword" style={{width: leftWidth}}>
-                                        <Form.Label>Xác nhận mật khẩu mới</Form.Label>
+                                        <Form.Label>Confirm New Password</Form.Label>
                                         <Form.Control
                                             ref={this.confirmPasswordRef}
                                             type="password" value={this.state.confirmPassword}
@@ -288,13 +288,13 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
                                         <Overlay target={this.confirmPasswordRef.current} show={!this.state.confirmPasswordValidated} placement="left">
                                             {(props: any) => (
                                             <Tooltip id="confirmPasswordInput-tooltip" {...props} show={(props.show).toString()}>
-                                                Mật khẩu xác nhận không đúng
+                                                Mismatched new password
                                             </Tooltip>
                                             )}
                                         </Overlay>
                                     </Form.Group>
                                     <div style={{width: leftWidth, textAlign: 'right'}}>
-                                        <Button variant="primary" onClick={this.changePassword.bind(this)}>Đổi mật khẩu</Button>
+                                        <Button variant="primary" onClick={this.changePassword.bind(this)}>Update Password</Button>
                                     </div>
                                 </div>
                             </Collapse>
@@ -305,9 +305,9 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
                         <Modal.Header>
                             <Modal.Title>{'Cập nhật ' + this.state.successMessage + ' thành công'}</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>Click nút phía dưới để quay về trang chủ hoặc click ra ngoài để tiếp tục chỉnh sửa thông tin.</Modal.Body>
+                        <Modal.Body>Press the button below to return to home page or click outside to keep updating your information.</Modal.Body>
                         <Modal.Footer>
-                            <Button variant="primary" onClick={this.returnToHomePage.bind(this)}>Quay về trang chủ!</Button>
+                            <Button variant="primary" onClick={this.returnToHomePage.bind(this)}>Return to home page!</Button>
                         </Modal.Footer>
                     </Modal>
                 </div>

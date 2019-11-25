@@ -49,6 +49,10 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
         );
     }
 
+    toRegister() {
+        this.props.history.push("./dangky");
+    }
+
     render(): React.ReactNode {
 
         if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
@@ -62,7 +66,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                 justifyContent: 'center',
             }}>
                 <Form style={{width: 540}}>
-                <h1 style={{marginBottom: 50, textAlign: 'center'}}>Đăng nhập</h1>
+                <h1 style={{marginBottom: 50, textAlign: 'center'}}>Sign In</h1>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" placeholder="asdasd@gmail.com" value={this.state.email} onChange={this.onChangeEmail.bind(this)} />
@@ -72,10 +76,17 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Mật khẩu</Form.Label>
+                        <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="asd123" value={this.state.password} onChange={this.onChangePassword.bind(this)} />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.doLogin.bind(this)}>Đăng nhập</Button>
+                    <div style={{display: 'inline-block', width: '100%'}}>
+                        <div style={{float: 'left'}}>
+                            <Button variant="primary" onClick={this.doLogin.bind(this)}>Sign In</Button>
+                        </div>
+                        <div style={{float: 'right'}}>
+                            <Button variant="link" onClick={this.toRegister.bind(this)}>Don't have an account?</Button>
+                        </div>
+                    </div>
                 </Form>
             </div>
         );

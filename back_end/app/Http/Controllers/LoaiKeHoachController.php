@@ -17,7 +17,7 @@ class LoaiKeHoachController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
             return response()->json([
-                'message' => 'Chưa có loại kế hoạch nào',
+                'message' => 'This account does not have any task type.',
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }        
     }
@@ -27,7 +27,7 @@ class LoaiKeHoachController extends Controller
         try {
             $loaikehoach->save();
             return response()->json([
-                'message' => 'Thêm loại kế hoạch thành công.',
+                'message' => 'Add task type successfully.',
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([
@@ -40,11 +40,11 @@ class LoaiKeHoachController extends Controller
         try {
             DB::table('loaikehoach')->where('maloai', '=', $request->input('maloai'))->delete();
             return response()->json([
-                'message' => 'Loại kế hoạch này đã bị xóa.',
+                'message' => 'This task type has been removed.',
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Loại kế hoạch này vẫn đang được sử dụng',
+                'message' => 'This task type is still being used.',
                 'error message' => $e->getMessage(),
             ], 400, [], JSON_UNESCAPED_UNICODE);
         }

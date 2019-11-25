@@ -12,23 +12,23 @@ class MucDoUuTienSeeder extends Seeder
     public function run()
     {
         DB::table('mucdouutien')->insert([
-            'loaiuutien' => 'Cứ từ từ',
+            'loaiuutien' => 'Low',
         ]);
 
         DB::table('mucdouutien')->insert([
-            'loaiuutien' => 'Để mai cũng được',
+            'loaiuutien' => 'Below Average',
         ]);
 
         DB::table('mucdouutien')->insert([
-            'loaiuutien' => 'Bình thường',
+            'loaiuutien' => 'Average',
         ]);
 
         DB::table('mucdouutien')->insert([
-            'loaiuutien' => 'Làm không kẻo muộn',
+            'loaiuutien' => 'High',
         ]);
 
         DB::table('mucdouutien')->insert([
-            'loaiuutien' => 'Vắt giò lên cổ chạy',
+            'loaiuutien' => 'Critical',
         ]);
     }
 }

@@ -50,7 +50,7 @@ export default class SideBar extends React.Component<SideBarProps, any> {
                 sidebar= {
                     <ListGroup defaultActiveKey={this.props.activeTab}>
                         <ListGroup.Item action href="#home">Task</ListGroup.Item>
-                        <ListGroup.Item action href="#calendar">Lịch</ListGroup.Item>
+                        <ListGroup.Item action href="#calendar">Calendar</ListGroup.Item>
                     </ListGroup>
                 }
                 open={this.state.sidebarOpen}

@@ -24,7 +24,7 @@ class KeHoachController extends Controller
         try {
             $kehoach->save();
             return response()->json([
-                'message' => "Thêm kế hoạch thành công."
+                'message' => "Created task successfully."
             ], 201, [], JSON_UNESCAPED_UNICODE);
         } catch(\Exception $e) {
             return response()->json([
@@ -110,7 +110,7 @@ class KeHoachController extends Controller
             KeHoach::destroy($request->input('makehoach'));
 
             return response()->json([
-                'message' => 'Xóa kế hoạch thành công',
+                'message' => 'Task was removed completely.',
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([
@@ -128,7 +128,7 @@ class KeHoachController extends Controller
             try {
                 $kehoach->delete();
                 return response()->json([
-                    'message' => 'Đã xóa kế hoạch',
+                    'message' => 'Removed task.',
                     'daxoa' => $daXoa,
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             } catch (\Exception $e) {
@@ -148,7 +148,7 @@ class KeHoachController extends Controller
         try {
             $kehoach->update($request->all());
             return response()->json([
-                'message' => 'Update kế hoạch thành công',
+                'message' => 'Update task successfully.',
                 'daxoa' => $daXoa,
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
