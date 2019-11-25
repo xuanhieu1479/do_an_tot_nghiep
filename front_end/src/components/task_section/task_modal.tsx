@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal, Form, Col, InputGroup, Overlay, Tooltip } from "react-bootstrap";
+import { Button, Modal, Form, Col, InputGroup, Overlay, Tooltip, Spinner } from "react-bootstrap";
 import DateTimePicker from "react-datetime-picker";
 import jwt_decode from 'jwt-decode';
 import moment from "moment";
@@ -273,124 +273,130 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="formGridPrioritiy">
-                                <Form.Label>Priority</Form.Label>
-                                <Form.Control as="select" 
-                                    onChange={this.onChangeMaUuTien.bind(this)} 
-                                    value={mucdouutien[this.state.mauutien]}
-                                >
-                                    {(mucdouutien) ? 
-                                        mucdouutien.map((mdut :string, index: number) => {
-                                            return (
-                                                <option key={index}>{mdut}</option>
-                                            );
-                                        })
-                                        :
-                                        <div></div>
-                                    }
-                                </Form.Control>
-                            </Form.Group>
-
-                            <Form.Group as={Col} controlId="formGridTaskType">
-                                <Form.Label>Type</Form.Label>
-                                <InputGroup className="mb-3">
-                                    <Form.Control
-                                        as="select" 
-                                        onChange={this.onChangeMaLoai.bind(this)}
-                                        value={this.getCurrentTaskType()}
+                    {
+                        (this.state.isFetching) ? <div style={{textAlign: "center"}}><Spinner animation="border" /></div> :
+                        <Form>
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="formGridPrioritiy">
+                                    <Form.Label>Priority</Form.Label>
+                                    <Form.Control as="select" 
+                                        onChange={this.onChangeMaUuTien.bind(this)} 
+                                        value={mucdouutien[this.state.mauutien]}
                                     >
-                                        {this.props.taskType.map((lkh: TaskType) => {
-                                            return (
-                                                <option key={lkh.maloai} data-key={lkh.maloai}>{lkh.tenloai}</option>
-                                            );
-                                        })}
+                                        {(mucdouutien) ? 
+                                            mucdouutien.map((mdut :string, index: number) => {
+                                                return (
+                                                    <option key={index}>{mdut}</option>
+                                                );
+                                            })
+                                            :
+                                            <div></div>
+                                        }
                                     </Form.Control>
-                                    <InputGroup.Append>
-                                        <Button variant="outline-secondary" onClick={this.props.showTypeModal}>+</Button>
-                                    </InputGroup.Append>
-                                </InputGroup>
-                            </Form.Group>
-                        </Form.Row>
+                                </Form.Group>
 
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="formGridTime">
-                                <Form.Label>Start Date</Form.Label>
-                                <DateTimePicker
-                                    ref={this.dateTimePickerRef}
-                                    onChange={this.onChangeThoiGian.bind(this)}
-                                    value={this.state.thoigian}
-                                    format="dd-MM-y h:mm:ss a"
+                                <Form.Group as={Col} controlId="formGridTaskType">
+                                    <Form.Label>Type</Form.Label>
+                                    <InputGroup className="mb-3">
+                                        <Form.Control
+                                            as="select" 
+                                            onChange={this.onChangeMaLoai.bind(this)}
+                                            value={this.getCurrentTaskType()}
+                                        >
+                                            {this.props.taskType.map((lkh: TaskType) => {
+                                                return (
+                                                    <option key={lkh.maloai} data-key={lkh.maloai}>{lkh.tenloai}</option>
+                                                );
+                                            })}
+                                        </Form.Control>
+                                        <InputGroup.Append>
+                                            <Button variant="outline-secondary" onClick={this.props.showTypeModal}>+</Button>
+                                        </InputGroup.Append>
+                                    </InputGroup>
+                                </Form.Group>
+                            </Form.Row>
+
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="formGridTime">
+                                    <Form.Label>Start Date</Form.Label>
+                                    <DateTimePicker
+                                        ref={this.dateTimePickerRef}
+                                        onChange={this.onChangeThoiGian.bind(this)}
+                                        value={this.state.thoigian}
+                                        format="dd-MM-y h:mm:ss a"
+                                    />
+                                    <Overlay target={this.dateTimePickerRef.current} show={!this.state.dateTimeValidated} placement="right">
+                                        {(props: any) => (
+                                        <Tooltip id="dateTimePicker-tooltip" {...props} show={(props.show).toString()}>
+                                            At least 1 hour from now
+                                        </Tooltip>
+                                        )}
+                                    </Overlay>
+                                </Form.Group>
+                                <Form.Group as={Col} style={{textAlign: 'right'}} controlId="formGridHasNotification">
+                                    <Form.Label>Has Notification?</Form.Label>
+                                    <Form.Check
+                                        type="switch"
+                                        id="id"
+                                        label=""
+                                        checked={this.state.cothongbao}
+                                        onChange={this.onChangeCoThongBao.bind(this)}
+                                    />
+                                </Form.Group>
+                            </Form.Row>
+                            
+                            <Form.Group controlId="formGridTaskName">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    ref={this.taskNameRef}
+                                    type="text"
+                                    placeholder="Yoga Practice"
+                                    value={this.state.tenkehoach}
+                                    onChange={this.onChangeTenKeHoach.bind(this)} 
                                 />
-                                <Overlay target={this.dateTimePickerRef.current} show={!this.state.dateTimeValidated} placement="right">
+                                <Overlay target={this.taskNameRef.current} show={!this.state.taskNameValidated} placement="top">
                                     {(props: any) => (
-                                    <Tooltip id="dateTimePicker-tooltip" {...props} show={(props.show).toString()}>
-                                        At least 1 hour from now
+                                    <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
+                                        Maximum 20 characters and non-empty
                                     </Tooltip>
                                     )}
                                 </Overlay>
                             </Form.Group>
-                            <Form.Group as={Col} style={{textAlign: 'right'}} controlId="formGridHasNotification">
-                                <Form.Label>Has Notification?</Form.Label>
-                                <Form.Check
-                                    type="switch"
-                                    id="id"
-                                    label=""
-                                    checked={this.state.cothongbao}
-                                    onChange={this.onChangeCoThongBao.bind(this)}
-                                />
-                            </Form.Group>
-                        </Form.Row>
-                        
-                        <Form.Group controlId="formGridTaskName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                                ref={this.taskNameRef}
-                                type="text"
-                                placeholder="Yoga Practice"
-                                value={this.state.tenkehoach}
-                                onChange={this.onChangeTenKeHoach.bind(this)} 
-                            />
-                            <Overlay target={this.taskNameRef.current} show={!this.state.taskNameValidated} placement="top">
-                                {(props: any) => (
-                                <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
-                                    Maximum 20 characters and non-empty
-                                </Tooltip>
-                                )}
-                            </Overlay>
-                        </Form.Group>
 
-                        <Form.Group controlId="formGridTaskDetail">
-                            <Form.Label>Note</Form.Label>
-                            <Form.Control
-                                ref={this.taskNoteRef}
-                                as="textarea"
-                                placeholder="Ashen one, hearest thou my voice, still?"
-                                rows="5"
-                                value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu.bind(this)} 
-                            />
-                            <Overlay target={this.taskNoteRef.current} show={!this.state.taskNoteValidated} placement="top">
-                                {(props: any) => (
-                                <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
-                                    Maximum 1000 characters
-                                </Tooltip>
-                                )}
-                            </Overlay>
-                        </Form.Group>
-                    </Form>
+                            <Form.Group controlId="formGridTaskDetail">
+                                <Form.Label>Note</Form.Label>
+                                <Form.Control
+                                    ref={this.taskNoteRef}
+                                    as="textarea"
+                                    placeholder="Ashen one, hearest thou my voice, still?"
+                                    rows="5"
+                                    value={(this.state.ghichu) ? this.state.ghichu : ''} onChange={this.onChangeGhiChu.bind(this)} 
+                                />
+                                <Overlay target={this.taskNoteRef.current} show={!this.state.taskNoteValidated} placement="top">
+                                    {(props: any) => (
+                                    <Tooltip id="taskName-tooltip" {...props} show={(props.show).toString()}>
+                                        Maximum 1000 characters
+                                    </Tooltip>
+                                    )}
+                                </Overlay>
+                            </Form.Group>
+                        </Form>
+                    }
                 </Modal.Body>
-                <Modal.Footer>
-                    <div style={{width: '100%'}}>
-                        <div style={{display: 'inline', float: 'right'}}>
-                            <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask.bind(this) : this.updateTask.bind(this)}>Save</Button>
-                            <Button variant="danger" onClick={this.cancelButton.bind(this)}>Cancel</Button>
+                {
+                    (this.state.isFetching) ? <div></div> :
+                    <Modal.Footer>
+                        <div style={{width: '100%'}}>
+                            <div style={{display: 'inline', float: 'right'}}>
+                                <Button variant="success" onClick={(this.props.isAddingTask) ? this.saveTask.bind(this) : this.updateTask.bind(this)}>Save</Button>
+                                <Button variant="danger" onClick={this.cancelButton.bind(this)}>Cancel</Button>
+                            </div>
+                            <div style={{display: 'inline', float: 'left'}}>
+                                <Button variant="dark" onClick={this.deleteTask.bind(this)}>Delete</Button>
+                            </div>
                         </div>
-                        <div style={{display: 'inline', float: 'left'}}>
-                            <Button variant="dark" onClick={this.deleteTask.bind(this)}>Delete</Button>
-                        </div>
-                    </div>
-                </Modal.Footer>
+                    </Modal.Footer>
+                }
             </Modal>
         );
     }

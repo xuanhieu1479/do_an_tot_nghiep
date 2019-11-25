@@ -7,6 +7,7 @@ interface LoginScreenState {
     email: string;
     password: string;
     errorMessage: string;
+    isFetching: boolean;
 }
 
 export default class PageDangNhap extends React.Component<any, LoginScreenState> {
@@ -16,6 +17,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
             email: '',
             password: '',
             errorMessage: '',
+            isFetching: false,
         };
     }
 
@@ -32,6 +34,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
     }
 
     doLogin() {
+        this.setState({isFetching: true});
         let loginInfo = {
             email: this.state.email,
             matkhau: this.state.password,
@@ -43,7 +46,7 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                     localStorage.setItem('access_token', data.access_token);
                     (this.state.email === 'admin') ? this.props.history.push("./admin") : this.props.history.push("./home");         
                 } else {
-                    this.setState({errorMessage: data.message});
+                    this.setState({errorMessage: data.message, isFetching: false});
                 }                
             }
         );
@@ -81,7 +84,13 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                     </Form.Group>
                     <div style={{display: 'inline-block', width: '100%'}}>
                         <div style={{float: 'left'}}>
-                            <Button variant="primary" onClick={this.doLogin.bind(this)}>Sign In</Button>
+                            <Button
+                                variant="primary"
+                                disabled={this.state.isFetching}
+                                onClick={this.doLogin.bind(this)}
+                            >
+                                {(this.state.isFetching) ? 'Loading...' : 'Sign In'}
+                            </Button>
                         </div>
                         <div style={{float: 'right'}}>
                             <Button variant="link" onClick={this.toRegister.bind(this)}>Don't have an account?</Button>

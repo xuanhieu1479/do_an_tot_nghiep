@@ -12,6 +12,7 @@ interface LoginScreenState {
     emailValidated: boolean;
     passwordValidated: boolean;
     telephoneValidated: boolean;
+    isFetching: boolean;
 }
 
 export default class PageDangKy extends React.Component<any, LoginScreenState> {
@@ -26,6 +27,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
             emailValidated: true,
             passwordValidated: true,
             telephoneValidated: true,
+            isFetching: false,
         };
     }
 
@@ -73,9 +75,10 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         return isValidated;
     }
 
-    doRegister() {
+    doRegister() {        
         let isValidated = this.checkValidation();
         if (!isValidated) return;
+        this.setState({isFetching: true});
 
         let registerInfo = {
             email: this.state.email,
@@ -88,9 +91,9 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                 const { statusCode, data } = response;
                 if (statusCode === 200) {
                     localStorage.setItem('access_token', data.access_token);
-                    this.setState({show: true});
+                    this.setState({show: true, isFetching: false});
                 } else {
-                    this.setState({errorMessage: data.message});
+                    this.setState({errorMessage: data.message, isFetching: false});
                 }                
             }
         );
@@ -132,7 +135,13 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                         <Form.Control type="password" placeholder="asd123" value={this.state.password} onChange={this.onChangePassword.bind(this)} />
                         <Alert variant='danger' hidden={this.state.passwordValidated}>At least 6 characters, with 1 word character or 1 digit.</Alert>
                     </Form.Group>
-                    <Button variant="primary" onClick={this.doRegister.bind(this)}>Sign Up</Button>
+                    <Button
+                        variant="primary"
+                        disabled={this.state.isFetching}
+                        onClick={this.doRegister.bind(this)}
+                    >
+                        {(this.state.isFetching) ? 'Loading...' : 'Sign Up'}
+                    </Button>
                 </Form>
 
                 <Modal show={this.state.show}>

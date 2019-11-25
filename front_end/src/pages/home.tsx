@@ -38,6 +38,7 @@ export default class PageHome extends React.Component<any, PageHomeState> {
 
     componentDidMount() {
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/updatethongke', 'GET', null);
+        this.loadTaskPriority();
     }
 
     showAddModal() {
@@ -94,9 +95,6 @@ export default class PageHome extends React.Component<any, PageHomeState> {
     render(): React.ReactNode {
 
         if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);
-        if(localStorage.getItem('mucdouutien') === null) {
-            this.loadTaskPriority();
-        }
         if(!this.state.doneLoadTaskType) this.loadTaskType();
 
         return (
@@ -107,7 +105,7 @@ export default class PageHome extends React.Component<any, PageHomeState> {
                     {
                         <div style={{height: '100%'}}>
                             <div style={{marginBottom: 20}}>
-                                <ButtonAddTask showModal={this.showAddModal.bind(this)} />
+                                <ButtonAddTask showModal={this.showAddModal.bind(this)} isDisabled={!this.state.doneLoadTaskType} />
                             </div>
                             <TaskDeck 
                                 doneLoadTask={this.state.doneLoadTask}

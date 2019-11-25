@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardDeck, ListGroup } from "react-bootstrap";
+import { Card, CardDeck, ListGroup, Spinner } from "react-bootstrap";
 import jwt_decode from 'jwt-decode';
 import TaskItem from "./task_item";
 import Task from "../../models/task";
@@ -78,7 +78,9 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                     <Card.Body style={{overflow: 'auto'}}>
                     <Card.Title>Overdue</Card.Title>
                         <ListGroup>
-                            {this.state.overdueTask.map(task => {
+                        {
+                            (this.state.isFetching) ? <Spinner animation="border" /> :
+                            this.state.overdueTask.map(task => {
                                 return (
                                     (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
                                     <TaskItem
@@ -90,62 +92,72 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
                                     :
                                     null
                                 );
-                            })}
+                            })
+                        }
                         </ListGroup>
                     </Card.Body>
                 </Card>
                 <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
                     <Card.Title>Today</Card.Title>
-                        {this.state.todayTask.map(task => {
-                            return (
-                                (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
-                                <TaskItem
-                                    key={task.makehoach}
-                                    task={task} 
-                                    showModal={this.props.showModal}
-                                    deleteThisItem={this.deleteThisItem.bind(this)}
-                                />
-                                :
-                                null
-                            );
-                        })}
+                        {
+                            (this.state.isFetching) ? <Spinner animation="border" /> :
+                            this.state.todayTask.map(task => {
+                                return (
+                                    (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
+                                    <TaskItem
+                                        key={task.makehoach}
+                                        task={task} 
+                                        showModal={this.props.showModal}
+                                        deleteThisItem={this.deleteThisItem.bind(this)}
+                                    />
+                                    :
+                                    null
+                                );
+                            })
+                        }
                     </Card.Body>
                 </Card>
                 <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
                     <Card.Title>Tommorow</Card.Title>
-                        {this.state.tommorowTask.map(task => {
-                            return (
-                                (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
-                                <TaskItem
-                                    key={task.makehoach}
-                                    task={task} 
-                                    showModal={this.props.showModal}
-                                    deleteThisItem={this.deleteThisItem.bind(this)}
-                                />
-                                :
-                                null
-                            );
-                        })}
+                    {
+                            (this.state.isFetching) ? <Spinner animation="border" /> :
+                            this.state.tommorowTask.map(task => {
+                                return (
+                                    (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
+                                    <TaskItem
+                                        key={task.makehoach}
+                                        task={task} 
+                                        showModal={this.props.showModal}
+                                        deleteThisItem={this.deleteThisItem.bind(this)}
+                                    />
+                                    :
+                                    null
+                                );
+                            })
+                        }
                     </Card.Body>
                 </Card>
                 <Card style={{height: "100%"}}>
                     <Card.Body style={{overflow: 'auto'}}>
                     <Card.Title>Others</Card.Title>
-                        {this.state.otherTask.map(task => {
-                            return (
-                                (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
-                                <TaskItem
-                                    key={task.makehoach}
-                                    task={task} 
-                                    showModal={this.props.showModal}
-                                    deleteThisItem={this.deleteThisItem.bind(this)}
-                                />
-                                :
-                                null
-                            );
-                        })}
+                    {
+                            (this.state.isFetching) ? <Spinner animation="border" /> :
+                            this.state.otherTask.map(task => {
+                                return (
+                                    (this.state.deleteThisItem.indexOf(task.makehoach) === -1) ?
+                                    <TaskItem
+                                        key={task.makehoach}
+                                        task={task} 
+                                        showModal={this.props.showModal}
+                                        deleteThisItem={this.deleteThisItem.bind(this)}
+                                    />
+                                    :
+                                    null
+                                );
+                            })
+                        }
                     </Card.Body>
                 </Card>
             </CardDeck>
