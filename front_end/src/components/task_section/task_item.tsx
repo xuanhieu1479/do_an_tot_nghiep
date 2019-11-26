@@ -50,7 +50,7 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         if (Number(hour) > 12) {
             hour = (Number(hour) - 12).toString();
             subfix = 'P.M';
-        } else {
+        } else if (Number(hour) < 10) {
             hour = hour.substr(1);
         }
         return hour + ":" + minute + " " + subfix;

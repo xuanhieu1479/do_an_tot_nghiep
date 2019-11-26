@@ -11,18 +11,16 @@ class MailTaskNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $tenkehoach = 'ABC';
-    public $thoigian = '7:00';
+    public $msg = '';
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($tenkehoach, $thoigian)
+    public function __construct($msg)
     {
-        $this->tenkehoach = $tenkehoach;
-        $this->thoigian = $thoigian;
+        $this->msg = $msg;
     }
 
     /**

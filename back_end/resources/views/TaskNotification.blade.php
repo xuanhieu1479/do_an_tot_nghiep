@@ -10,7 +10,7 @@
     <body>
         <div>
             <p>                
-                You have a plan {{$tenkehoach}} at {{$thoigian}}.
+                <pre>{{$msg}}</pre>
             </p>
         </div>
     </body>
