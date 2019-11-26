@@ -5,8 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use DB;
 use Carbon\Carbon;
-
-require("SpeedSMSAPI.php");
+use App\Console\Commands\SpeedSMSAPI;
 
 class SendTaskSMS extends Command
 {

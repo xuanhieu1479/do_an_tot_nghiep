@@ -32,6 +32,7 @@ Route::group([
     Route::post('themkehoach', 'KeHoachController@themKeHoach');
     Route::post('themloaikehoach', 'LoaiKeHoachController@addLoaiKeHoach');
     Route::post('checkoldpassword', 'TaiKhoanController@checkCurrentPassword');
+    Route::post('feedback', 'FeedBackController@sendUserFeedBack');
     Route::get('loaikehoach', 'LoaiKeHoachController@getLoaiKeHoach');
     Route::get('kehoach', 'KeHoachController@getKeHoach');
     Route::get('allkehoach', 'KeHoachController@getAllKeHoach');
