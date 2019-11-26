@@ -9,9 +9,7 @@
     </head>
     <body>
         <div>
-            <p>                
-                <pre>{{$msg}}</pre>
-            </p>
+            <pre>{{$msg}}</pre>
         </div>
     </body>
 </html>

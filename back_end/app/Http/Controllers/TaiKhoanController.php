@@ -10,8 +10,10 @@ use DB;
 use Hash;
 use DateTime;
 use App\Mail\ResetMatKhau;
+use App\Mail\ForgotPassword;
 use App\TaiKhoan;
 use App\LoaiKeHoach;
+use App\QuenMKToken;
 
 class TaiKhoanController extends Controller
 {
@@ -25,6 +27,11 @@ class TaiKhoanController extends Controller
         }        
         $token = $tokenResult->token;
         $token->save();
+
+        $quenmktoken = QuenMKToken::updateOrCreate(
+            ['email' => $request->input('email')],
+            ['token' => $tokenResult->accessToken]
+        );
         
         return response()->json([
             'message' => $msg,
@@ -127,6 +134,18 @@ class TaiKhoanController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         }
 
+    }
+
+    public function submitEmail(Request $request) {
+        $email = $request->input('email');
+        if ((new TaiKhoan())->daTonTai($email)) {
+            $token = DB::table('quenmktoken')->where('email', '=', $email)->pluck('token')[0];
+            Mail::to($email)->send(new ForgotPassword($token));
+
+            return response()->json([], 200);
+        } else {
+            return response()->json(['msg' => 'This email does not exist.'], 400);
+        }
     }
 
     public function getTelephone(Request $request) {

@@ -21,9 +21,10 @@ Route::group([
     'middleware' => 'cors'
 ], function() {
     Route::post('dangky', 'TaiKhoanController@dangKy');
-    Route::post('dangnhap', 'TaiKhoanController@dangNhap');    
+    Route::post('dangnhap', 'TaiKhoanController@dangNhap');
     Route::get('mucdouutien', 'MucDoUuTienController@getMucDoUuTien');
     Route::get('updatethongke', 'ThongKeController@updateThongKe');
+    Route::get('submitemail', 'TaiKhoanController@submitEmail');
 });
 
 Route::group([
