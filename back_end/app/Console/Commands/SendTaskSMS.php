@@ -3,26 +3,26 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 use DB;
 use Carbon\Carbon;
-use App\Mail\MailTaskNotification;
 
-class SendTaskNotificationEmail extends Command
+require("SpeedSMSAPI.php");
+
+class SendTaskSMS extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:tasknotification';
+    protected $signature = 'command:tasksms';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send task notification emails to each user';
+    protected $description = 'Send task sms to each user if they have telephone number';
 
     /**
      * Create a new command instance.
@@ -41,11 +41,11 @@ class SendTaskNotificationEmail extends Command
      */
     public function handle()
     {
-        \Log::info('Schedule Mail did run');
+        \Log::info('Schedule SMS did run');
         $serverTime = new \DateTime();
         $kehoach = DB::table('kehoach')
                     ->join('taikhoan', 'kehoach.email', '=', 'taikhoan.email')
-                    ->select('kehoach.email', 'tenkehoach', 'thoigian', 'mauutien', 'cothongbao', 'dahoanthanh', 'timezone')
+                    ->select('taikhoan.sdt', 'tenkehoach', 'thoigian', 'mauutien', 'cothongbao', 'dahoanthanh', 'timezone')
                     ->get();
 
         $userList = [];
@@ -73,22 +73,24 @@ class SendTaskNotificationEmail extends Command
             }
 
             if (
+                $kh->sdt != null &&
                 $kh->dahoanthanh == false &&
                 $kh->cothongbao == true &&
                 $thoigianObject >= $serverTime &&
                 $thoigianObject <= (clone $serverTime)->modify($beforeHour)
             ) {
-                if (empty($userList[$kh->email])) $userList[$kh->email] = [$kh->tenkehoach => $kh->thoigian];
-                else $userList[$kh->email] = array_merge($userList[$kh->email], [$kh->tenkehoach => $kh->thoigian]);
+                if (empty($userList[$kh->sdt])) $userList[$kh->sdt] = [$kh->tenkehoach => $kh->thoigian];
+                else $userList[$kh->sdt] = array_merge($userList[$kh->sdt], [$kh->tenkehoach => $kh->thoigian]);
             }
         }
 
-        foreach ($userList as $email => $tasks) {
+        foreach ($userList as $sdt => $tasks) {
             $msg = 'You have plans:' . "\r\n";
             foreach ($tasks as $name => $time) {
                 $msg .= '  - ' . $name . ' on ' . \explode(" ", $time)[0] . ' at ' . \explode(" ", $time)[1] . '.' . "\r\n";
             }
-            Mail::to($email)->send(new MailTaskNotification($msg));
+            $sms = new SpeedSMSAPI("mUSFZEbeCwoyWDe8TFO46iMeYytN6ml2");
+            $sms->sendSMS([$sdt], $msg, SpeedSMSAPI::SMS_TYPE_CSKH, "");
         }
     }
 }

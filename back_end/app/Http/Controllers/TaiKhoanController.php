@@ -148,7 +148,7 @@ class TaiKhoanController extends Controller
         try {
             DB::table('taikhoan')->where('email', '=', $email)->update(['sdt' => $newTelephone]);
             return response()->json([
-                'message' => 'Update số điện thoại thành công'
+                'message' => 'Update Telephone Number Succesful'
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([
@@ -181,7 +181,7 @@ class TaiKhoanController extends Controller
         try {
             DB::table('taikhoan')->where('email', '=', $email)->update(['matkhau' => $newPassword]);
             return response()->json([
-                'message' => 'Cập nhật mật khẩu thành công',
+                'message' => 'Your Password Has Been Changed Successfully',
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([

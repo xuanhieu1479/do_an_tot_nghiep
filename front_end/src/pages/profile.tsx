@@ -120,7 +120,7 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
             response => {
                 const { statusCode } = response;
                 if (statusCode === 200) {
-                    this.setState({successMessage: 'số điện thoại', showModal: true});
+                    this.setState({successMessage: 'Telephone Number', showModal: true});
                 }
             }
         );
@@ -133,7 +133,7 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
                 const { statusCode } = response;
                 if (statusCode === 200) {
                     this.setState({
-                        successMessage: 'mật khẩu',
+                        successMessage: 'Password',
                         showModal: true,
                         oldPassword: '',
                         newPassword: '',
@@ -303,7 +303,7 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
 
                     <Modal show={this.state.showModal} onHide={this.hideModal.bind(this)}>
                         <Modal.Header>
-                            <Modal.Title>{'Cập nhật ' + this.state.successMessage + ' thành công'}</Modal.Title>
+                            <Modal.Title>{'Update ' + this.state.successMessage + ' Succesfull'}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>Press the button below to return to home page or click outside to keep updating your information.</Modal.Body>
                         <Modal.Footer>
