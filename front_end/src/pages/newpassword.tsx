@@ -70,11 +70,6 @@ export default class PageNewPassword extends React.Component<any, NewPasswordSta
     }
 
     render(): React.ReactNode {
-        console.log('Email - ' + this.state.email);
-        console.log('Token - ' + this.state.token);
-        console.log('New Password - ' + this.state.newPassword);
-        console.log('Fetch source - ' + process.env.REACT_APP_DOMAIN + 'api/updatepassword');
-
         return (
             <div>
                 <NavBar />
