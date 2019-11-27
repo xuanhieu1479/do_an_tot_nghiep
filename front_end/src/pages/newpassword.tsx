@@ -70,6 +70,10 @@ export default class PageNewPassword extends React.Component<any, NewPasswordSta
     }
 
     render(): React.ReactNode {
+        console.log('Email - ' + this.state.email);
+        console.log('Token - ' + this.state.token);
+        console.log('New Password - ' + this.state.newPassword);
+
         return (
             <div>
                 <NavBar />
