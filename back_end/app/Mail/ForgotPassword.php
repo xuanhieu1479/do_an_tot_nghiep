@@ -13,7 +13,7 @@ class ForgotPassword extends Mailable
 
     public $email = '';
     public $token = '';    
-    public $domain = "https://do-an-19.herokuapp.com/";
+    public $domain = "https://do-an-19.herokuapp.com/#/";
 
     /**
      * Create a new message instance.

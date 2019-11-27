@@ -8,6 +8,7 @@ interface PageFeedbackState {
     userEmail: any;
     feedback: string;
     show: boolean;
+    isFetching: boolean;
 }
 
 export default class PageFeedback extends React.Component<any, PageFeedbackState> {
@@ -17,6 +18,7 @@ export default class PageFeedback extends React.Component<any, PageFeedbackState
             userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
             feedback: '',
             show: false,
+            isFetching: false,
         }
     }
 
@@ -30,6 +32,7 @@ export default class PageFeedback extends React.Component<any, PageFeedbackState
     }
 
     sendFeedback() {
+        this.setState({isFetching: true});
         let request = {
             email: this.state.userEmail,
             feedback: this.state.feedback,
@@ -38,8 +41,9 @@ export default class PageFeedback extends React.Component<any, PageFeedbackState
             response => {
                 const { statusCode } = response;
                 if (statusCode === 200) {
-                    this.setState({show: true});
+                    this.setState({show: true, isFetching: false});
                 } else {
+                    this.setState({isFetching: false});
                     alert('Something went wrong, please try again!');
                 }
             }
@@ -62,10 +66,11 @@ export default class PageFeedback extends React.Component<any, PageFeedbackState
                         />
                         <Button
                             variant="primary"
+                            disabled={this.state.isFetching}
                             onClick={this.sendFeedback.bind(this)}
                             style={{marginTop: 20}}
                         >
-                            Send Feedback
+                            {(this.state.isFetching) ? "Sending..." : "Send Feedback"}
                         </Button>
                     </Form.Group>
                 </Form>
