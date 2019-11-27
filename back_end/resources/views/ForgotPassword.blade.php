@@ -15,11 +15,10 @@
                 Otherwise, press the button below to create new password.<br>
                 <br>
             </p>
-
-            <form action="{{$domain}}newpassword.php" method="POST">
-                <input type="hidden" value="{{$token}}">
-                <input type="submit" value="Restore Password">
-            </form>
+            
+            <a href="{{$domain}}newpassword?email={{$email}}&token={{$token}}">
+                <button>Restore Password</button>
+            </a>
 
             <p>
                 <br>

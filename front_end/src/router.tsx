@@ -9,6 +9,8 @@ import PageCalendar from "./pages/calendar";
 import PageProfile from "./pages/profile";
 import PageAdmin from "./pages/admin";
 import PageFeedback from "./pages/feedback";
+import PageForgotPassword from "./pages/forgotpassword";
+import PageNewPassword from "./pages/newpassword";
 
 const AppRouter = () => {
     return (
@@ -22,6 +24,8 @@ const AppRouter = () => {
                 <Route path="/profile" component={PageProfile} />
                 <Route path="/admin" component={PageAdmin} />
                 <Route path="/feedback" component={PageFeedback} />
+                <Route path="/forgotpassword" component={PageForgotPassword} />
+                <Route path="/newpassword" component={PageNewPassword} />
             </Switch>
         </HashRouter>
     );

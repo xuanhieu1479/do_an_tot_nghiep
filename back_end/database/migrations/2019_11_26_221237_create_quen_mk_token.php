@@ -15,7 +15,7 @@ class CreateQuenMkToken extends Migration
     {
         Schema::create('quenmktoken', function (Blueprint $table) {
             $table->string('email');
-            $table->string('token', 5000);
+            $table->string('token', 2000);
             $table->foreign('email')->references('email')->on('taikhoan')->onDelete('cascade');
             $table->timestamps();
         });

@@ -140,7 +140,7 @@ class TaiKhoanController extends Controller
         $email = $request->input('email');
         if ((new TaiKhoan())->daTonTai($email)) {
             $token = DB::table('quenmktoken')->where('email', '=', $email)->pluck('token')[0];
-            Mail::to($email)->send(new ForgotPassword($token));
+            Mail::to($email)->send(new ForgotPassword($email, $token));
 
             return response()->json([], 200);
         } else {

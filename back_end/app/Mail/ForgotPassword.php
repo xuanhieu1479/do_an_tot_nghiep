@@ -11,7 +11,8 @@ class ForgotPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $token = '';
+    public $email = '';
+    public $token = '';    
     public $domain = "https://do-an-19.herokuapp.com/";
 
     /**
@@ -19,8 +20,9 @@ class ForgotPassword extends Mailable
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($email, $token)
     {
+        $this->email = $email;
         $this->token = $token;
         if (env("APP_ENV", "production") == "local") $this->domain = "http://localhost:3000/#/";
     }

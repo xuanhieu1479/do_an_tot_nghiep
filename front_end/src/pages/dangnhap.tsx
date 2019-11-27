@@ -56,6 +56,10 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
         this.props.history.push("./dangky");
     }
 
+    toForgotPassword() {
+        this.props.history.push("./forgotpassword");
+    }
+
     render(): React.ReactNode {
 
         if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
@@ -95,6 +99,9 @@ export default class PageDangNhap extends React.Component<any, LoginScreenState>
                         <div style={{float: 'right'}}>
                             <Button variant="link" onClick={this.toRegister.bind(this)}>Don't have an account?</Button>
                         </div>
+                    </div>
+                    <div style={{float: 'right'}}>
+                        <Button variant="link" onClick={this.toForgotPassword.bind(this)}>Forgot your password?</Button>
                     </div>
                 </Form>
             </div>
