@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { Button, Modal, Form } from "react-bootstrap";
 import jwt_decode from "jwt-decode";
 import NavBar from "../components/navbar/navbar";
@@ -15,7 +16,7 @@ export default class PageFeedback extends React.Component<any, PageFeedbackState
     constructor(props: any) {
         super(props);
         this.state = {
-            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            userEmail: (localStorage.getItem('access_token')) ? Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5] : '',
             feedback: '',
             show: false,
             isFetching: false,
@@ -51,6 +52,8 @@ export default class PageFeedback extends React.Component<any, PageFeedbackState
     }
 
     render(): React.ReactNode {
+        if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);
+
         return (
             <div>
                 <NavBar />

@@ -11,7 +11,8 @@ export default class PageCalendar extends React.Component<any, any> {
     }
 
     render(): React.ReactNode {
-        if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);        
+        if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);
+        
         return (
             <div>
                 <NavBar />

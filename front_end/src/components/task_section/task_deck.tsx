@@ -26,7 +26,7 @@ export default class TaskDeck extends React.Component<TaskDeckProps, TaskDeckSta
     constructor(props: TaskDeckProps) {
         super(props);
         this.state = {
-            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            userEmail: (localStorage.getItem('access_token')) ? Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5] : '',
             overdueTask: [],
             todayTask: [],
             tommorowTask: [],

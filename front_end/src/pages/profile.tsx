@@ -33,7 +33,7 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
     constructor(props: any) {
         super(props);
         this.state = {
-            email: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            email: (localStorage.getItem('access_token')) ? Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5] : '',
             oldPassword: '',
             newPassword: '',
             confirmPassword: '',

@@ -22,7 +22,7 @@ export default class TaskTypeModal extends React.Component<TaskTypeModalProps, T
     constructor(props: TaskTypeModalProps) {
         super(props);
         this.state = {
-            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            userEmail: (localStorage.getItem('access_token')) ? Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5] : '',
             newTaskTypeName: '',
             maloai: 0,
             taskTypeNameValidated: true,

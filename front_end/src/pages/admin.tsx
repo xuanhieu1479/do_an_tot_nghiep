@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import ButtonLogOut from "../components/navbar/dangxuat";
 import apiCaller from "../utils/apiCaller";
@@ -48,6 +49,8 @@ export default class PageAdmin extends React.Component<any, PageAdminState> {
     }
 
     render(): React.ReactNode {
+        if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);
+
         return (
             <div>
                 Page Views = {this.state.pageView}

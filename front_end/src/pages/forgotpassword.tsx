@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import apiCaller from "../utils/apiCaller";
 import NavBar from "../components/navbar/navbar";
@@ -39,6 +40,8 @@ export default class PageForgotPassword extends React.Component<any, ForgotPassw
     }
 
     render(): React.ReactNode {
+        if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
+
         return (
             <div>
                 <NavBar />

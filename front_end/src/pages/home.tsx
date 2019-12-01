@@ -25,7 +25,7 @@ export default class PageHome extends React.Component<any, PageHomeState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            userEmail: (localStorage.getItem('access_token')) ? Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5] : '',
             doneLoadTask: false,
             showModal: false,
             showTypeModal: false,

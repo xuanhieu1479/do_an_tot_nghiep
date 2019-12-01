@@ -59,6 +59,7 @@ export default class PageFront extends React.Component<any, PageFrontState> {
 
     render(): React.ReactNode {
         if(localStorage.getItem('access_token')) return (<Redirect to="/home" />);
+        
         return (
             <div style={{height: '100vh', backgroundImage: 'url(https://cdn.wallpapersafari.com/6/86/4UsAn9.jpg)'}}>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico"></link>

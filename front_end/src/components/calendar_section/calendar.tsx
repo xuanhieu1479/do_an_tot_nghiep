@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from 'moment';
@@ -24,7 +25,7 @@ export default class CalendarComponent extends React.Component<any, CalendarComp
     constructor(props: any) {
         super(props);
         this.state = {
-            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            userEmail: (localStorage.getItem('access_token')) ? Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5] : '',
             taskList: [],
             doneLoadTask: false,
         }
@@ -49,6 +50,7 @@ export default class CalendarComponent extends React.Component<any, CalendarComp
     }
 
     render(): React.ReactNode {
+        if(localStorage.getItem('access_token') === null) return (<Redirect to="/dangnhap" />);
         if (!this.state.doneLoadTask) this.loadTask();
 
         return (

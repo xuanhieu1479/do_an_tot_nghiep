@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Button, Alert, Modal } from "react-bootstrap";
 import apiCaller from "../utils/apiCaller";
 import { Redirect } from "react-router-dom";
+import NavBar from "../components/navbar/navbar";
 
 interface LoginScreenState {
     email: string;
@@ -109,8 +110,10 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
         let isHidden = this.state.errorMessage ? false : true;
         
         return (
+            <>
+            <NavBar />
             <div style={{
-                height: '100vh',
+                height: '75vh',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -154,6 +157,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                     </Modal.Footer>
                 </Modal>
             </div>
+            </>
         );
     }
 }

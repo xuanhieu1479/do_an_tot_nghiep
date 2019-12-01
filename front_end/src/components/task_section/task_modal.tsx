@@ -49,7 +49,7 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
             mauutien: 0,
             maloai: 0,
             cothongbao: false,
-            userEmail: Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5],
+            userEmail: (localStorage.getItem('access_token')) ? Object.values(jwt_decode(localStorage.getItem('access_token') as string))[5] : '',
             doneLoadTask: false,
             dataChanged: false,
             dateTimeValidated: true,
