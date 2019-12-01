@@ -1,0 +1,85 @@
+.Carousel {
+    width: 853px;
+    height: 480px;
+}
+
+.Carousel-Text {
+    font-family: 'Solway', serif;
+    font-size: 25px;
+    margin-top: 120px;
+}
+
+@media only screen and (min-width: 1201px) {
+    .Container {
+        overflow: hidden;
+        margin-top: 4%;
+        margin-left: 4%;
+    }
+
+    .Carousel {
+        float: left;
+    }
+
+    .Carousel-Text {
+        float: right;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .Carousel-Text {
+        margin-right: 1%;
+        width: 24%;
+    }
+}
+
+@media only screen and (min-width: 1320px) {
+    .Carousel-Text {
+        margin-right: 2%;
+        width: 28%;
+    }
+}
+
+@media only screen and (min-width: 1420px) {
+    .Carousel-Text {
+        margin-right: 2%;
+        width: 30%;
+    }
+}
+
+@media only screen and (min-width: 1520px) {
+    .Carousel-Text {
+        margin-right: 3%;
+        width: 32%;
+    }
+}
+
+@media only screen and (min-width: 1620px) {
+    .Carousel-Text {
+        margin-right: 4%;
+        width: 36%;
+    }
+}
+
+@media only screen and (min-width: 1720px) {
+    .Carousel-Text {
+        margin-right: 5%;
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .Container {
+        text-align: center;        
+    }
+
+    .Carousel {
+        margin: auto;
+        margin-top: 50px;
+    }
+
+    .Carousel-Text {
+        margin: auto;
+        margin-top: 20px;
+        width: 80%;
+    }
+}

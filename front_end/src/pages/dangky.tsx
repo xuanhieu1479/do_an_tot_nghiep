@@ -146,11 +146,11 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
 
                 <Modal show={this.state.show}>
                     <Modal.Header>
-                    <Modal.Title>Sign Up Successful</Modal.Title>
+                        <Modal.Title>Sign Up Successful</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>Start to find better ways to spend your time.</Modal.Body>
                     <Modal.Footer>
-                    <Button variant="primary" onClick={this.redirectToHome.bind(this)}>Got It!</Button>
+                        <Button variant="primary" onClick={this.redirectToHome.bind(this)}>Got It!</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
