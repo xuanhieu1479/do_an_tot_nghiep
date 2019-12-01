@@ -3,7 +3,7 @@ import { Navbar, Nav, } from "react-bootstrap";
 import ButtonDangKy from "./dangky";
 import ButtonDangNhap from "./dangnhap";
 import ButtonDangXuat from "./dangxuat";
-import UserAvatar from "../profile/avatar";
+import UserAvatar from "./avatar";
 
 export default class NavBar extends React.Component {
     isLoggedIn = (localStorage.getItem('access_token')) ? true : false;

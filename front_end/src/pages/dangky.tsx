@@ -1,8 +1,9 @@
 import React from "react";
-import { Form, Button, Alert, Modal } from "react-bootstrap";
+import { Form, Button, Alert, Modal, Image } from "react-bootstrap";
 import apiCaller from "../utils/apiCaller";
 import { Redirect } from "react-router-dom";
 import NavBar from "../components/navbar/navbar";
+import RegisterImage from "../images/Register Image.jpg"
 
 interface LoginScreenState {
     email: string;
@@ -118,8 +119,21 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
+                <div style={{marginRight: 60, marginTop: 20}}>
+                    <div style={{marginLeft: 20}}>
+                        <p style={{fontSize: 44}}>Never forget a thing</p>
+                        <p style={{fontSize: 20}}>
+                            From groceries to picking up the kids, we help you remember it all,<br></br>
+                            anytime, anywhere
+                        </p>
+                    </div>
+                    <Image
+                        src={RegisterImage}
+                        rounded
+                        style={{height: '45vh'}}
+                    />
+                </div>
                 <Form style={{width: 540}}>
-                    <h1 style={{marginBottom: 50, textAlign: 'center'}}>Sign Up</h1>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" placeholder="asdasd@gmail.com" value={this.state.email} onChange={this.onChangeEmail.bind(this)} />
