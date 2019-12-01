@@ -11,6 +11,7 @@ import PageAdmin from "./pages/admin";
 import PageFeedback from "./pages/feedback";
 import PageForgotPassword from "./pages/forgotpassword";
 import PageNewPassword from "./pages/newpassword";
+import Page404 from "./pages/404";
 
 const AppRouter = () => {
     return (
@@ -26,6 +27,7 @@ const AppRouter = () => {
                 <Route path="/feedback" component={PageFeedback} />
                 <Route path="/forgotpassword" component={PageForgotPassword} />
                 <Route path="/newpassword" component={PageNewPassword} />
+                <Route path="*" component={Page404} />
             </Switch>
         </HashRouter>
     );
