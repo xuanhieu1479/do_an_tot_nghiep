@@ -93,6 +93,7 @@ export default class PageDangKy extends React.Component<any, LoginScreenState> {
                 const { statusCode, data } = response;
                 if (statusCode === 200) {
                     localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('selected_bg', '0');
                     this.setState({show: true, isFetching: false});
                 } else {
                     this.setState({errorMessage: data.message, isFetching: false});

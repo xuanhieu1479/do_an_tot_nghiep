@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import { SplitButton, Dropdown } from "react-bootstrap";
 import jwt_decode from 'jwt-decode';
 import TaskType from "../models/task_type";
 import SideBar from "../components/sidebar/sidebar";
@@ -19,9 +20,18 @@ interface PageHomeState {
     makehoach: string;
     taskType: TaskType[];
     doneLoadTaskType: boolean;
+    selectedWallpaper: number;
 }
 
 export default class PageHome extends React.Component<any, PageHomeState> {
+    private wallpaperList = [
+        'http://getwallpapers.com/wallpaper/full/4/d/8/448468.jpg', //Fruit
+        'https://wallpapercave.com/wp/AumsrZG.jpg', //Beach
+        'https://wallpaperbro.com/img/256160.jpg', //Forest
+        'http://www.trendingroot.com/wp-content/uploads/2018/11/Cold-Winter-Pine-Forest-Lake-Photography-HD-Wallpaper-1920x1080.jpg', //Snow
+        'https://images5.alphacoders.com/495/thumb-1920-495521.jpg', //Starry Night
+    ]
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -33,6 +43,7 @@ export default class PageHome extends React.Component<any, PageHomeState> {
             makehoach: '',
             taskType: [],
             doneLoadTaskType: false,
+            selectedWallpaper: +(localStorage.getItem('selected_bg')!),
         }
     }
 
@@ -73,6 +84,11 @@ export default class PageHome extends React.Component<any, PageHomeState> {
         this.setState({doneLoadTaskType: false});
     }
 
+    onChangeBackground(event: any) {
+        this.setState({selectedWallpaper: event});
+        localStorage.setItem('selected_bg', event);
+    }
+
     loadTaskPriority() {
         apiCaller(process.env.REACT_APP_DOMAIN + 'api/mucdouutien', 'GET').then(            
             response => {
@@ -103,30 +119,46 @@ export default class PageHome extends React.Component<any, PageHomeState> {
                 <SideBar 
                     mainContent=
                     {
-                        <div style={{height: '100%'}}>
-                            <div style={{marginBottom: 20}}>
-                                <ButtonAddTask showModal={this.showAddModal.bind(this)} isDisabled={!this.state.doneLoadTaskType} />
+                        <div style={{height: '100%', backgroundImage: 'url(' + this.wallpaperList[this.state.selectedWallpaper] + ')'}}>
+                            <div style={{height: '100%', paddingTop: 20, paddingLeft: 40}}>
+                                <div style={{marginBottom: 20}}>
+                                    <ButtonAddTask showModal={this.showAddModal.bind(this)} isDisabled={!this.state.doneLoadTaskType} />
+                                    <SplitButton
+                                        title='Background'
+                                        variant='outline-primary'
+                                        size='sm'
+                                        id='split-button-id'
+                                        key='split-button-key'
+                                        style={{marginLeft: 20}}
+                                    >
+                                        <Dropdown.Item eventKey="0" onSelect={this.onChangeBackground.bind(this)}>Fruit</Dropdown.Item>
+                                        <Dropdown.Item eventKey="1" onSelect={this.onChangeBackground.bind(this)}>Beach</Dropdown.Item>
+                                        <Dropdown.Item eventKey="2" onSelect={this.onChangeBackground.bind(this)}>Forest</Dropdown.Item>
+                                        <Dropdown.Item eventKey="3" onSelect={this.onChangeBackground.bind(this)}>Snow</Dropdown.Item>
+                                        <Dropdown.Item eventKey="4" onSelect={this.onChangeBackground.bind(this)}>Starry Night</Dropdown.Item>
+                                    </SplitButton>
+                                </div>
+                                <TaskDeck 
+                                    doneLoadTask={this.state.doneLoadTask}
+                                    setLoadTaskDone={this.setLoadTaskDone.bind(this)}
+                                    showModal={this.showUpdateModal.bind(this)}
+                                />
+                                <TaskModal 
+                                    isAddingTask={this.state.isAddingTask}
+                                    show={this.state.showModal}
+                                    setLoadTaskUndone={this.setLoadTaskUndone.bind(this)}
+                                    hideModal={this.hideModal.bind(this)}
+                                    makehoach={this.state.makehoach}
+                                    showTypeModal={this.showTypeModal.bind(this)}
+                                    taskType={this.state.taskType}
+                                />
+                                <TaskTypeModal 
+                                    show={this.state.showTypeModal}
+                                    hideModal={this.hideTypeModal.bind(this)}
+                                    taskTypeList={this.state.taskType}
+                                    setLoadTaskTypeUndone={this.setLoadTaskTypeUndone.bind(this)}
+                                />
                             </div>
-                            <TaskDeck 
-                                doneLoadTask={this.state.doneLoadTask}
-                                setLoadTaskDone={this.setLoadTaskDone.bind(this)}
-                                showModal={this.showUpdateModal.bind(this)}
-                            />
-                            <TaskModal 
-                                isAddingTask={this.state.isAddingTask}
-                                show={this.state.showModal}
-                                setLoadTaskUndone={this.setLoadTaskUndone.bind(this)}
-                                hideModal={this.hideModal.bind(this)}
-                                makehoach={this.state.makehoach}
-                                showTypeModal={this.showTypeModal.bind(this)}
-                                taskType={this.state.taskType}
-                            />
-                            <TaskTypeModal 
-                                show={this.state.showTypeModal}
-                                hideModal={this.hideTypeModal.bind(this)}
-                                taskTypeList={this.state.taskType}
-                                setLoadTaskTypeUndone={this.setLoadTaskTypeUndone.bind(this)}
-                            />
                         </div>
                     }
                     activeTab="#home"

@@ -16,6 +16,8 @@ export default class SideBar extends React.Component<SideBarProps, any> {
             sidebarDocked: mql.matches,
             sidebarOpen: false
         };
+
+        this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     }
 
     UNSAFE_componentWillMount() {
@@ -38,10 +40,6 @@ export default class SideBar extends React.Component<SideBarProps, any> {
         const sideBarCustomStyle = {
             root: {
                 'marginTop': '56px',
-            },
-            content: {
-                'marginTop': '20px',
-                'marginLeft': '40px',
             }
         }
 
