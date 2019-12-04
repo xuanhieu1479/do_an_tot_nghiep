@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command('command:tasknotification')->everyMinute();
-        // $schedule->command('command:tasksms')->everyMinute();
+        $schedule->command('command:tasksms')->everyMinute();
     }
 
     /**
