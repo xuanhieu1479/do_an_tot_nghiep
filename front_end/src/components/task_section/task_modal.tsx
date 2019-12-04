@@ -285,9 +285,20 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                                     >
                                         {(mucdouutien) ? 
                                             mucdouutien.map((mdut :string, index: number) => {
-                                                return (
-                                                    <option key={index}>{mdut}</option>
-                                                );
+                                                switch (mdut) {
+                                                    case "Low":
+                                                            return (<option key={index}>{mdut + " (+7 Days)"}</option>);
+                                                    case "Below Average":
+                                                            return (<option key={index}>{mdut + " (+3 Days)"}</option>);
+                                                    case "Average":
+                                                            return (<option key={index}>{mdut + " (+1 Day)"}</option>);
+                                                    case "High":
+                                                            return (<option key={index}>{mdut + " (+4 Hours)"}</option>);
+                                                    case "Critical":
+                                                            return (<option key={index}>{mdut + " (+1 Hour)"}</option>);
+                                                    default:
+                                                            return (<option key={index}>{mdut}</option>);
+                                                }
                                             })
                                             :
                                             <div></div>
