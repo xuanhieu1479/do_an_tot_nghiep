@@ -303,7 +303,7 @@ export default class PageProfile extends React.Component<any, ProfileScreenState
 
                     <Modal show={this.state.showModal} onHide={this.hideModal.bind(this)}>
                         <Modal.Header>
-                            <Modal.Title>{'Update ' + this.state.successMessage + ' Succesfull'}</Modal.Title>
+                            <Modal.Title>{'Update ' + this.state.successMessage + ' Successful'}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>Press the button below to return to home page or click outside to keep updating your information.</Modal.Body>
                         <Modal.Footer>
