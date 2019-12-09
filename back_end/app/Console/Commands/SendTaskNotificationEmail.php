@@ -56,19 +56,19 @@ class SendTaskNotificationEmail extends Command
             $beforeHour;
             switch($kh->mauutien) {
                 case 0: 
-                    $beforeHour = '+7 day';
+                    $beforeHour = '+1 hour';
                     break;
                 case 1:
-                    $beforeHour = '+3 day';
+                    $beforeHour = '+2 hour';
                     break;
                 case 2:
-                    $beforeHour = '+1 day';
-                    break;
-                case 3:
                     $beforeHour = '+4 hour';
                     break;
+                case 3:
+                    $beforeHour = '+8 hour';
+                    break;
                 default:
-                    $beforeHour = '+1 hour';
+                    $beforeHour = '+1 day';
                     break;
             }
 

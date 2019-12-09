@@ -263,7 +263,12 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
 
     render(): React.ReactNode {        
 
-        let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];           
+        let mucdouutien = (localStorage.getItem('mucdouutien')) ? JSON.parse(localStorage.getItem('mucdouutien')!).mucdouutien : [];
+        mucdouutien[0] += " (+1 Hour)";
+        mucdouutien[1] += " (+2 Hours)";
+        mucdouutien[2] += " (+4 Hours)";
+        mucdouutien[3] += " (+8 Hours)";
+        mucdouutien[4] += " (+1 Day)";
         
         return(
             <Modal centered show={this.props.show} onHide={this.hideThisModal.bind(this)}>
@@ -280,22 +285,22 @@ export default class TaskModal extends React.Component<TaskModalProps, TaskModal
                                 <Form.Group as={Col} controlId="formGridPrioritiy">
                                     <Form.Label>Priority</Form.Label>
                                     <Form.Control as="select" 
-                                        onChange={this.onChangeMaUuTien.bind(this)} 
+                                        onChange={this.onChangeMaUuTien.bind(this)}
                                         value={mucdouutien[this.state.mauutien]}
                                     >
                                         {(mucdouutien) ? 
                                             mucdouutien.map((mdut :string, index: number) => {
                                                 switch (mdut) {
                                                     case "Low":
-                                                            return (<option key={index}>{mdut + " (+7 Days)"}</option>);
-                                                    case "Below Average":
-                                                            return (<option key={index}>{mdut + " (+3 Days)"}</option>);
-                                                    case "Average":
-                                                            return (<option key={index}>{mdut + " (+1 Day)"}</option>);
-                                                    case "High":
-                                                            return (<option key={index}>{mdut + " (+4 Hours)"}</option>);
-                                                    case "Critical":
                                                             return (<option key={index}>{mdut + " (+1 Hour)"}</option>);
+                                                    case "Below Average":
+                                                            return (<option key={index}>{mdut + " (+2 Hours)"}</option>);
+                                                    case "Average":
+                                                            return (<option key={index}>{mdut + " (+4 Hours)"}</option>);
+                                                    case "High":
+                                                            return (<option key={index}>{mdut + " (+8 Hours)"}</option>);
+                                                    case "Critical":
+                                                            return (<option key={index}>{mdut + " (+1 Day)"}</option>);
                                                     default:
                                                             return (<option key={index}>{mdut}</option>);
                                                 }
