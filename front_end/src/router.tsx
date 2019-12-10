@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; //Test Git Commit Laptop
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { HashRouter, Route, Switch } from "react-router-dom";
 import PageFront from "./pages/front"; 
